@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import examLogo from "@/assets/exam-logo.png";
+import examLogo from "@/assets/Thai Logo.png";
 
 const Index = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -56,7 +56,7 @@ const Index = () => {
 
       {/* Logo */}
       <div className="mb-12 animate-fade-in">
-        <img src={examLogo} alt="Logo" className="w-32 h-32 md:w-40 md:h-40 drop-shadow-glow" />
+        <img src={examLogo} alt="Logo" className="h-32 md:h-40 drop-shadow-glow" />
       </div>
 
       {/* Main Clock Display */}
