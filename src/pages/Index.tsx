@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import examLogo from "@/assets/thai-logo.png";
+import examThaiLogo from "@/assets/thai-logo.png";
+import examEnglishLogo from "@/assets/eng-logo.png";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -13,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Plus, Minus } from "lucide-react";
+import { Settings, Plus, Minus, Globe } from "lucide-react";
 
 interface ExamInfo {
   course: string;
@@ -24,10 +25,13 @@ interface ExamInfo {
   remarks: string;
 }
 
+type Language = "th" | "en";
+
 const Index = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [fontSize, setFontSize] = useState(5); // 1=small, 2=medium, 3=large, 4=extra large, 5=huge
+  const [language, setLanguage] = useState<Language>("th");
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -61,8 +65,9 @@ const Index = () => {
   };
 
   const formatDate = (date: Date) => {
-    const days = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
-    const months = [
+    const daysTh = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
+    const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const monthsTh = [
       "มกราคม",
       "กุมภาพันธ์",
       "มีนาคม",
@@ -76,13 +81,67 @@ const Index = () => {
       "พฤศจิกายน",
       "ธันวาคม",
     ];
+    const monthsEn = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
 
+    const days = language === "th" ? daysTh : daysEn;
+    const months = language === "th" ? monthsTh : monthsEn;
     const dayName = days[date.getDay()];
     const day = date.getDate();
     const month = months[date.getMonth()];
-    const year = date.getFullYear() + 543; // แปลงเป็น พ.ศ.
+    const year = language === "th" ? date.getFullYear() + 543 : date.getFullYear();
 
-    return `วัน${dayName}ที่ ${day} ${month} ${year}`;
+    if (language === "th") {
+      return `วัน${dayName}ที่ ${day} ${month} ${year}`;
+    } else {
+      return `${month} ${day}, ${year}`;
+    }
+  };
+
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === "th" ? "en" : "th"));
+  };
+
+  const getTranslation = (key: string) => {
+    const translations: Record<string, { th: string; en: string }> = {
+      examInfo: { th: "ข้อมูลการสอบ", en: "Exam Information" },
+      examInfoDesc: {
+        th: "กรอกข้อมูลเกี่ยวกับการสอบ (ข้อมูลที่ไม่กรอกจะไม่แสดง)",
+        en: "Enter exam information (empty fields will not be displayed)"
+      },
+      course: { th: "รหัสวิชา/ชื่อวิชา", en: "Course Code/Name" },
+      lecture: { th: "หมู่บรรยาย", en: "Lecture Section" },
+      lab: { th: "หมู่ปฏิบัติ", en: "Lab Section" },
+      examTime: { th: "เวลาสอบ", en: "Exam Time" },
+      examRoom: { th: "ห้องสอบ", en: "Exam Room" },
+      remarks: { th: "หมายเหตุ", en: "Remarks" },
+      cancel: { th: "ยกเลิก", en: "Cancel" },
+      confirm: { th: "ยืนยัน", en: "Confirm" },
+      footer: { th: "นาฬิกาดิจิทัลสำหรับห้องสอบ", en: "Digital Clock for Exam Room" },
+      decreaseFont: { th: "ลดขนาดตัวอักษร", en: "Decrease Font Size" },
+      increaseFont: { th: "เพิ่มขนาดตัวอักษร", en: "Increase Font Size" },
+      settings: { th: "ตั้งค่าข้อมูลการสอบ", en: "Information Settings" },
+      changeLanguage: { th: "เปลี่ยนภาษา", en: "Change Language" },
+      coursePlaceholder: { th: "เช่น CS101 Computer Programming", en: "e.g. CS101 Computer Programming" },
+      lecturePlaceholder: { th: "เช่น 01", en: "e.g. 01" },
+      labPlaceholder: { th: "เช่น 001", en: "e.g. 001" },
+      timePlaceholder: { th: "เช่น 09:00 - 12:00", en: "e.g. 09:00 - 12:00" },
+      roomPlaceholder: { th: "เช่น EN101", en: "e.g. EN101" },
+      remarksPlaceholder: { th: "ข้อมูลเพิ่มเติม", en: "Additional information" },
+    };
+    return translations[key]?.[language] || key;
   };
 
   const handleInputChange = (field: keyof ExamInfo, value: string) => {
@@ -139,7 +198,7 @@ const Index = () => {
             onClick={decreaseFontSize}
             disabled={fontSize === 1}
             className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80 disabled:opacity-50"
-            title="ลดขนาดตัวอักษร"
+            title={getTranslation("decreaseFont")}
           >
             <Minus className="h-5 w-5" />
           </Button>
@@ -149,93 +208,106 @@ const Index = () => {
             onClick={increaseFontSize}
             disabled={fontSize === 5}
             className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80 disabled:opacity-50"
-            title="เพิ่มขนาดตัวอักษร"
+            title={getTranslation("increaseFont")}
           >
             <Plus className="h-5 w-5" />
           </Button>
         </div>
+
+        {/* Language Toggle Button */}
+        <Button
+          variant="outline"
+          onClick={toggleLanguage}
+          className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80"
+          title={getTranslation("changeLanguage")}
+        >
+          <div className="flex items-center gap-1">
+            <Globe className="h-4 w-4" />
+            <span className="text-xs font-semibold">{language.toUpperCase()}</span>
+          </div>
+        </Button>
 
         {/* Settings Button */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              size="icon"
               className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80"
-              title="ตั้งค่าข้อมูลการสอบ"
+              title={getTranslation("settings")}
             >
               <Settings className="h-5 w-5" />
+              <span>{getTranslation("settings")}</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>ข้อมูลการสอบ</DialogTitle>
+              <DialogTitle>{getTranslation("examInfo")}</DialogTitle>
               <DialogDescription>
-                กรอกข้อมูลเกี่ยวกับการสอบ (ข้อมูลที่ไม่กรอกจะไม่แสดง)
+                {getTranslation("examInfoDesc")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="course">รหัสวิชา/ชื่อวิชา</Label>
+                <Label htmlFor="course">{getTranslation("course")}</Label>
                 <Input
                   id="course"
                   value={formData.course}
                   onChange={(e) => handleInputChange("course", e.target.value)}
-                  placeholder="เช่น CS101 Computer Programming"
+                  placeholder={getTranslation("coursePlaceholder")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lecture">หมู่บรรยาย</Label>
+                <Label htmlFor="lecture">{getTranslation("lecture")}</Label>
                 <Input
                   id="lecture"
                   value={formData.lecture}
                   onChange={(e) => handleInputChange("lecture", e.target.value)}
-                  placeholder="เช่น 01"
+                  placeholder={getTranslation("lecturePlaceholder")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lab">หมู่ปฏิบัติ</Label>
+                <Label htmlFor="lab">{getTranslation("lab")}</Label>
                 <Input
                   id="lab"
                   value={formData.lab}
                   onChange={(e) => handleInputChange("lab", e.target.value)}
-                  placeholder="เช่น 001"
+                  placeholder={getTranslation("labPlaceholder")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="time">เวลาสอบ</Label>
+                <Label htmlFor="time">{getTranslation("examTime")}</Label>
                 <Input
                   id="time"
                   value={formData.time}
                   onChange={(e) => handleInputChange("time", e.target.value)}
-                  placeholder="เช่น 09:00 - 12:00"
+                  placeholder={getTranslation("timePlaceholder")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="examRoom">ห้องสอบ</Label>
+                <Label htmlFor="examRoom">{getTranslation("examRoom")}</Label>
                 <Input
                   id="examRoom"
                   value={formData.examRoom}
                   onChange={(e) => handleInputChange("examRoom", e.target.value)}
-                  placeholder="เช่น EN101"
+                  placeholder={getTranslation("roomPlaceholder")}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="remarks">หมายเหตุ</Label>
+                <Label htmlFor="remarks">{getTranslation("remarks")}</Label>
                 <Textarea
                   id="remarks"
                   value={formData.remarks}
                   onChange={(e) => handleInputChange("remarks", e.target.value)}
-                  placeholder="ข้อมูลเพิ่มเติม"
+                  placeholder={getTranslation("remarksPlaceholder")}
                   rows={3}
                 />
               </div>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={handleCancel}>
-                ยกเลิก
+                {getTranslation("cancel")}
               </Button>
-              <Button onClick={handleConfirm}>ยืนยัน</Button>
+              <Button onClick={handleConfirm}>{getTranslation("confirm")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -243,7 +315,8 @@ const Index = () => {
 
       {/* Logo */}
       <div className="mb-4 animate-fade-in">
-        <img src={examLogo} alt="Logo" className="h-20 md:h-24 drop-shadow-glow" />
+        {/* <img src={examThaiLogo} alt="Logo" className="h-20 md:h-24 drop-shadow-glow" /> */}
+        <img src={language === "th" ? examThaiLogo : examEnglishLogo} alt="Logo" className="h-20 md:h-24 drop-shadow-glow" />
       </div>
 
       {/* Main Clock Display */}
@@ -294,37 +367,37 @@ const Index = () => {
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-3 ${fontSizeClasses.examInfo} transition-all duration-300`}>
               {examInfo.course && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">รหัสวิชา/ชื่อวิชา:</span>
+                  <span className="font-semibold text-primary">{getTranslation("course")}:</span>
                   <span className="text-foreground/90">{examInfo.course}</span>
                 </div>
               )}
               {examInfo.lecture && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">หมู่บรรยาย:</span>
+                  <span className="font-semibold text-primary">{getTranslation("lecture")}:</span>
                   <span className="text-foreground/90">{examInfo.lecture}</span>
                 </div>
               )}
               {examInfo.lab && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">หมู่ปฏิบัติ:</span>
+                  <span className="font-semibold text-primary">{getTranslation("lab")}:</span>
                   <span className="text-foreground/90">{examInfo.lab}</span>
                 </div>
               )}
               {examInfo.time && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">เวลาสอบ:</span>
+                  <span className="font-semibold text-primary">{getTranslation("examTime")}:</span>
                   <span className="text-foreground/90">{examInfo.time}</span>
                 </div>
               )}
               {examInfo.examRoom && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">ห้องสอบ:</span>
+                  <span className="font-semibold text-primary">{getTranslation("examRoom")}:</span>
                   <span className="text-foreground/90">{examInfo.examRoom}</span>
                 </div>
               )}
               {examInfo.remarks && (
                 <div className="flex gap-2 md:col-span-2">
-                  <span className="font-semibold text-primary">หมายเหตุ:</span>
+                  <span className="font-semibold text-primary">{getTranslation("remarks")}:</span>
                   <span className="text-foreground/90">{examInfo.remarks}</span>
                 </div>
               )}
@@ -336,7 +409,7 @@ const Index = () => {
       {/* Footer */}
       <div className="mt-4 text-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
         <p className="text-muted-foreground text-xs md:text-sm">
-          นาฬิกาดิจิทัลสำหรับห้องสอบ
+          {getTranslation("footer")}
         </p>
       </div>
     </div>
