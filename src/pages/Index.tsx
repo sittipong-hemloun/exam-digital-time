@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import examLogo from "@/assets/Thai Logo.png";
+import examLogo from "@/assets/thai-logo.png";
 
 const Index = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
