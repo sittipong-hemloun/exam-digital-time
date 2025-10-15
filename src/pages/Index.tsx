@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Plus, Minus, Globe, Sun, Moon } from "lucide-react";
+import { Settings, Plus, Minus, Globe, Sun, Moon, Maximize, Minimize } from "lucide-react";
 
 interface ExamInfo {
   course: string;
@@ -34,6 +34,7 @@ const Index = () => {
   const [fontSize, setFontSize] = useState(5); // 1=small, 2=medium, 3=large, 4=extra large, 5=huge
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("light");
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -57,6 +58,15 @@ const Index = () => {
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
 
   const formatTime = (date: Date) => {
@@ -120,6 +130,18 @@ const Index = () => {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
+  const toggleFullscreen = async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch (err) {
+      console.error("Error toggling fullscreen:", err);
+    }
+  };
+
   const getTranslation = (key: string) => {
     const translations: Record<string, { th: string; en: string }> = {
       examInfo: { th: "ข้อมูลการสอบ", en: "Exam Information" },
@@ -141,6 +163,8 @@ const Index = () => {
       settings: { th: "ตั้งค่าข้อมูลการสอบ", en: "Information Settings" },
       changeLanguage: { th: "เปลี่ยนภาษา", en: "Change Language" },
       changeTheme: { th: "เปลี่ยนธีม", en: "Change Theme" },
+      fullscreen: { th: "เต็มหน้าจอ", en: "Fullscreen" },
+      exitFullscreen: { th: "ออกจากเต็มหน้าจอ", en: "Exit Fullscreen" },
       coursePlaceholder: { th: "เช่น CS101 Computer Programming", en: "e.g. CS101 Computer Programming" },
       lecturePlaceholder: { th: "เช่น 01", en: "e.g. 01" },
       labPlaceholder: { th: "เช่น 001", en: "e.g. 001" },
@@ -272,6 +296,27 @@ const Index = () => {
             <Globe className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
             <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{language === "th" ? "TH" : "EN"}</span>
           </div>
+        </Button>
+
+
+        {/* Fullscreen Toggle Button */}
+        <Button
+          variant="outline"
+          onClick={toggleFullscreen}
+          className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
+          title={isFullscreen ? getTranslation("exitFullscreen") : getTranslation("fullscreen")}
+        >
+          {isFullscreen ? (
+            <div className="flex items-center gap-1">
+              <Minimize className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
+              <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{getTranslation("exitFullscreen")}</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <Maximize className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
+              <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{getTranslation("fullscreen")}</span>
+            </div>
+          )}
         </Button>
 
         {/* Settings Button */}
