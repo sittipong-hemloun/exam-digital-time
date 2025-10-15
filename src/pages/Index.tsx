@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Plus, Minus, Globe } from "lucide-react";
+import { Settings, Plus, Minus, Globe, Sun, Moon } from "lucide-react";
 
 interface ExamInfo {
   course: string;
@@ -26,12 +26,14 @@ interface ExamInfo {
 }
 
 type Language = "th" | "en";
+type Theme = "light" | "dark";
 
 const Index = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [fontSize, setFontSize] = useState(5); // 1=small, 2=medium, 3=large, 4=extra large, 5=huge
   const [language, setLanguage] = useState<Language>("th");
+  const [theme, setTheme] = useState<Theme>("light");
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -114,6 +116,10 @@ const Index = () => {
     setLanguage((prev) => (prev === "th" ? "en" : "th"));
   };
 
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
   const getTranslation = (key: string) => {
     const translations: Record<string, { th: string; en: string }> = {
       examInfo: { th: "ข้อมูลการสอบ", en: "Exam Information" },
@@ -134,6 +140,7 @@ const Index = () => {
       increaseFont: { th: "เพิ่มขนาดตัวอักษร", en: "Increase Font Size" },
       settings: { th: "ตั้งค่าข้อมูลการสอบ", en: "Information Settings" },
       changeLanguage: { th: "เปลี่ยนภาษา", en: "Change Language" },
+      changeTheme: { th: "เปลี่ยนธีม", en: "Change Theme" },
       coursePlaceholder: { th: "เช่น CS101 Computer Programming", en: "e.g. CS101 Computer Programming" },
       lecturePlaceholder: { th: "เช่น 01", en: "e.g. 01" },
       labPlaceholder: { th: "เช่น 001", en: "e.g. 001" },
@@ -177,15 +184,44 @@ const Index = () => {
     return sizes[fontSize as keyof typeof sizes];
   };
 
+  const getThemeClasses = () => {
+    if (theme === "light") {
+      return {
+        background: "bg-gradient-to-br from-blue-50 via-white to-green-50",
+        decorativeGlow1: "bg-blue-400/20",
+        decorativeGlow2: "bg-green-400/20",
+        card: "bg-white/10",
+        cardBorder: "border-gray-200",
+        text: "text-gray-900",
+        textMuted: "text-gray-600",
+        textPrimary: "text-green-600",
+        gradient: "from-blue-600 to-green-600",
+      };
+    }
+    // Dark theme (default)
+    return {
+      background: "bg-gradient-background",
+      decorativeGlow1: "bg-primary/10",
+      decorativeGlow2: "bg-accent-green/10",
+      card: "bg-card/50",
+      cardBorder: "border-border",
+      text: "text-foreground",
+      textMuted: "text-muted-foreground",
+      textPrimary: "text-primary",
+      gradient: "from-primary to-accent-green",
+    };
+  };
+
   const { hours, minutes, seconds } = formatTime(currentTime);
   const fontSizeClasses = getFontSizeClasses();
+  const themeClasses = getThemeClasses();
 
   return (
-    <div className="min-h-screen bg-gradient-background flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className={`min-h-screen ${themeClasses.background} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-glow"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-green/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: "1s" }}></div>
+        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${themeClasses.decorativeGlow1} rounded-full blur-3xl animate-pulse-glow transition-colors duration-500`}></div>
+        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 ${themeClasses.decorativeGlow2} rounded-full blur-3xl animate-pulse-glow transition-colors duration-500`} style={{ animationDelay: "1s" }}></div>
       </div>
 
       {/* Control Buttons */}
@@ -197,33 +233,44 @@ const Index = () => {
             size="icon"
             onClick={decreaseFontSize}
             disabled={fontSize === 1}
-            className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80 disabled:opacity-50"
+            className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg disabled:opacity-50 transition-all duration-300`}
             title={getTranslation("decreaseFont")}
           >
-            <Minus className="h-5 w-5" />
+            <Minus className={`${theme === "dark" ? "text-foreground" : "text-gray-900"} h-5 w-5 transition-colors duration-500`} />
           </Button>
           <Button
             variant="outline"
             size="icon"
             onClick={increaseFontSize}
             disabled={fontSize === 5}
-            className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80 disabled:opacity-50"
+            className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg disabled:opacity-50 transition-all duration-300`}
             title={getTranslation("increaseFont")}
           >
-            <Plus className="h-5 w-5" />
+            <Plus className={`${theme === "dark" ? "text-foreground" : "text-gray-900"} h-5 w-5 transition-colors duration-500`} />
           </Button>
         </div>
+
+        {/* Theme Toggle Button */}
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={toggleTheme}
+          className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
+          title={getTranslation("changeTheme")}
+        >
+          {theme === "dark" ? <Sun className={`h-5 w-5 text-yellow-400 transition-colors duration-500`} /> : <Moon className={`h-5 w-5 ${theme === "light" ? "text-gray-900" : "text-foreground"} transition-colors duration-500`} />}
+        </Button>
 
         {/* Language Toggle Button */}
         <Button
           variant="outline"
           onClick={toggleLanguage}
-          className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80"
+          className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
           title={getTranslation("changeLanguage")}
         >
           <div className="flex items-center gap-1">
-            <Globe className="h-4 w-4" />
-            <span className="text-xs font-semibold">{language.toUpperCase()}</span>
+            <Globe className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
+            <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{language === "th" ? "TH" : "EN"}</span>
           </div>
         </Button>
 
@@ -232,11 +279,12 @@ const Index = () => {
           <DialogTrigger asChild>
             <Button
               variant="outline"
-              className="rounded-full bg-card/50 backdrop-blur-xl border-border hover:bg-card/80"
+              className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
               title={getTranslation("settings")}
             >
-              <Settings className="h-5 w-5" />
-              <span>{getTranslation("settings")}</span>
+              <Settings className={`${theme === "dark" ? "text-foreground" : "text-gray-900"} h-5 w-5 transition-colors duration-500`} />
+              <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}
+              >{getTranslation("settings")}</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
@@ -321,31 +369,31 @@ const Index = () => {
 
       {/* Main Clock Display */}
       <div className="relative z-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-        <div className="bg-card/50 backdrop-blur-xl rounded-3xl p-6 md:p-12 shadow-glow border border-border">
+        <div className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-12 shadow-glow border ${themeClasses.cardBorder} transition-colors duration-500`}>
           {/* Time Display */}
           <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 md:mb-6">
             <div className="text-center">
-              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-primary bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
+              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-to-r ${themeClasses.gradient} bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
                 {hours}
               </div>
             </div>
 
-            <div className={`${fontSizeClasses.time} font-mono font-bold text-primary`}>
+            <div className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary} transition-colors duration-500`}>
               :
             </div>
 
             <div className="text-center">
-              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-primary bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
+              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-to-r ${themeClasses.gradient} bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
                 {minutes}
               </div>
             </div>
 
-            <div className={`${fontSizeClasses.time} font-mono font-bold text-primary`}>
+            <div className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary} transition-colors duration-500`}>
               :
             </div>
 
             <div className="text-center">
-              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-primary bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
+              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-to-r ${themeClasses.gradient} bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
                 {seconds}
               </div>
             </div>
@@ -353,7 +401,7 @@ const Index = () => {
 
           {/* Date Display */}
           <div className="text-center">
-            <p className={`${fontSizeClasses.date} text-foreground/80 font-medium transition-all duration-300`}>
+            <p className={`${fontSizeClasses.date} ${themeClasses.text} opacity-80 font-medium transition-all duration-300`}>
               {formatDate(currentTime)}
             </p>
           </div>
@@ -363,42 +411,42 @@ const Index = () => {
       {/* Exam Info Display - Only show fields with values */}
       {(examInfo.course || examInfo.lecture || examInfo.lab || examInfo.time || examInfo.examRoom || examInfo.remarks) && (
         <div className="relative z-10 mt-4 animate-fade-in w-full max-w-4xl">
-          <div className="bg-card/50 backdrop-blur-xl rounded-2xl p-4 md:p-6 shadow-glow border border-border">
+          <div className={`${themeClasses.card} backdrop-blur-xl rounded-2xl p-4 md:p-6 shadow-glow border ${themeClasses.cardBorder} transition-colors duration-500`}>
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-3 ${fontSizeClasses.examInfo} transition-all duration-300`}>
               {examInfo.course && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">{getTranslation("course")}:</span>
-                  <span className="text-foreground/90">{examInfo.course}</span>
+                  <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("course")}:</span>
+                  <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.course}</span>
                 </div>
               )}
               {examInfo.lecture && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">{getTranslation("lecture")}:</span>
-                  <span className="text-foreground/90">{examInfo.lecture}</span>
+                  <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lecture")}:</span>
+                  <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.lecture}</span>
                 </div>
               )}
               {examInfo.lab && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">{getTranslation("lab")}:</span>
-                  <span className="text-foreground/90">{examInfo.lab}</span>
+                  <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lab")}:</span>
+                  <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.lab}</span>
                 </div>
               )}
               {examInfo.time && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">{getTranslation("examTime")}:</span>
-                  <span className="text-foreground/90">{examInfo.time}</span>
+                  <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examTime")}:</span>
+                  <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.time}</span>
                 </div>
               )}
               {examInfo.examRoom && (
                 <div className="flex gap-2">
-                  <span className="font-semibold text-primary">{getTranslation("examRoom")}:</span>
-                  <span className="text-foreground/90">{examInfo.examRoom}</span>
+                  <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examRoom")}:</span>
+                  <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.examRoom}</span>
                 </div>
               )}
               {examInfo.remarks && (
                 <div className="flex gap-2 md:col-span-2">
-                  <span className="font-semibold text-primary">{getTranslation("remarks")}:</span>
-                  <span className="text-foreground/90">{examInfo.remarks}</span>
+                  <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("remarks")}:</span>
+                  <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.remarks}</span>
                 </div>
               )}
             </div>
@@ -406,12 +454,6 @@ const Index = () => {
         </div>
       )}
 
-      {/* Footer */}
-      <div className="mt-4 text-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
-        <p className="text-muted-foreground text-xs md:text-sm">
-          {getTranslation("footer")}
-        </p>
-      </div>
     </div>
   );
 };
