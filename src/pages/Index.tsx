@@ -294,7 +294,7 @@ const Index = () => {
         >
           <div className="flex items-center gap-1">
             <Globe className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
-            <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{language === "th" ? "TH" : "EN"}</span>
+            <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{language === "th" ? "ไทย" : "EN"}</span>
           </div>
         </Button>
 
