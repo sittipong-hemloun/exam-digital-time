@@ -53,18 +53,18 @@ const Index = () => {
     remarks: "",
   });
 
-  // Fetch initial time from timeapi.io (more stable alternative)
+  // Fetch initial time from timeapi.io (Thailand timezone)
   useEffect(() => {
     const fetchWorldTime = async () => {
       try {
-        // Try timeapi.io first (no rate limits, very stable)
-        const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=UTC');
+        // Try timeapi.io first (no rate limits, very stable) - Thailand timezone
+        const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Bangkok');
         if (response.ok) {
           const data = await response.json();
           const apiTime = new Date(data.dateTime);
           setServerTime(apiTime);
           setCurrentTime(apiTime);
-          console.log('Time synced from timeapi.io:', apiTime.toISOString());
+          console.log('Time synced from timeapi.io (Thailand):', apiTime.toISOString());
           return;
         }
       } catch (error) {
@@ -72,18 +72,18 @@ const Index = () => {
       }
 
       try {
-        // Fallback to worldclockapi.com
-        const response = await fetch('https://worldclockapi.com/api/json/utc/now');
+        // Fallback to worldtimeapi.org with Bangkok timezone
+        const response = await fetch('https://worldtimeapi.org/api/timezone/Asia/Bangkok');
         if (response.ok) {
           const data = await response.json();
-          const apiTime = new Date(data.currentDateTime);
+          const apiTime = new Date(data.datetime);
           setServerTime(apiTime);
           setCurrentTime(apiTime);
-          console.log('Time synced from worldclockapi.com:', apiTime.toISOString());
+          console.log('Time synced from worldtimeapi.org (Thailand):', apiTime.toISOString());
           return;
         }
       } catch (error) {
-        console.warn('worldclockapi.com failed, using local time', error);
+        console.warn('worldtimeapi.org failed, using local time', error);
       }
 
       // Final fallback to local time
