@@ -35,7 +35,7 @@ const Index = () => {
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("light");
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [timeOffset, setTimeOffset] = useState(0); // Offset in milliseconds from UTC
+  const [serverTime, setServerTime] = useState<Date | null>(null); // Store the server time directly
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -53,41 +53,46 @@ const Index = () => {
     remarks: "",
   });
 
-  // Fetch time from World Time API
+  // Fetch initial time from World Time API
   useEffect(() => {
     const fetchWorldTime = async () => {
       try {
         const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
         if (response.ok) {
           const data = await response.json();
-          const serverTime = new Date(data.datetime);
-          const localTime = new Date();
-          const offset = serverTime.getTime() - localTime.getTime();
-          setTimeOffset(offset);
+          const apiTime = new Date(data.datetime);
+          setServerTime(apiTime);
+          setCurrentTime(apiTime);
         }
       } catch (error) {
         console.error('Failed to fetch world time, using local time:', error);
-        setTimeOffset(0); // Fallback to local time
+        setServerTime(new Date()); // Fallback to local time
+        setCurrentTime(new Date());
       }
     };
 
     fetchWorldTime();
-    // Refresh time offset every 10 minutes
-    const offsetInterval = setInterval(fetchWorldTime, 10 * 60 * 1000);
+    // Refresh server time every 10 minutes to stay synchronized
+    const syncInterval = setInterval(fetchWorldTime, 10 * 60 * 1000);
 
-    return () => clearInterval(offsetInterval);
+    return () => clearInterval(syncInterval);
   }, []);
 
-  // Update time every second
+  // Update time every second based on server time
   useEffect(() => {
+    if (!serverTime) return;
+
+    const startTime = serverTime.getTime();
+    const startTimestamp = Date.now();
+
     const timer = setInterval(() => {
-      const now = new Date();
-      const adjustedTime = new Date(now.getTime() + timeOffset);
-      setCurrentTime(adjustedTime);
+      const elapsed = Date.now() - startTimestamp;
+      const newTime = new Date(startTime + elapsed);
+      setCurrentTime(newTime);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeOffset]);
+  }, [serverTime]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
