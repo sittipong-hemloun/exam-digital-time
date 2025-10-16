@@ -53,22 +53,43 @@ const Index = () => {
     remarks: "",
   });
 
-  // Fetch initial time from World Time API
+  // Fetch initial time from timeapi.io (more stable alternative)
   useEffect(() => {
     const fetchWorldTime = async () => {
       try {
-        const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+        // Try timeapi.io first (no rate limits, very stable)
+        const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=UTC');
         if (response.ok) {
           const data = await response.json();
-          const apiTime = new Date(data.datetime);
+          const apiTime = new Date(data.dateTime);
           setServerTime(apiTime);
           setCurrentTime(apiTime);
+          console.log('Time synced from timeapi.io:', apiTime.toISOString());
+          return;
         }
       } catch (error) {
-        console.error('Failed to fetch world time, using local time:', error);
-        setServerTime(new Date()); // Fallback to local time
-        setCurrentTime(new Date());
+        console.warn('timeapi.io failed, trying backup...', error);
       }
+
+      try {
+        // Fallback to worldclockapi.com
+        const response = await fetch('https://worldclockapi.com/api/json/utc/now');
+        if (response.ok) {
+          const data = await response.json();
+          const apiTime = new Date(data.currentDateTime);
+          setServerTime(apiTime);
+          setCurrentTime(apiTime);
+          console.log('Time synced from worldclockapi.com:', apiTime.toISOString());
+          return;
+        }
+      } catch (error) {
+        console.warn('worldclockapi.com failed, using local time', error);
+      }
+
+      // Final fallback to local time
+      console.warn('All time APIs failed, using local system time');
+      setServerTime(new Date());
+      setCurrentTime(new Date());
     };
 
     fetchWorldTime();
