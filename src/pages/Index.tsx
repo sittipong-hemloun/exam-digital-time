@@ -35,6 +35,7 @@ const Index = () => {
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("light");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [timeOffset, setTimeOffset] = useState(0); // Offset in milliseconds from UTC
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -52,13 +53,41 @@ const Index = () => {
     remarks: "",
   });
 
+  // Fetch time from World Time API
+  useEffect(() => {
+    const fetchWorldTime = async () => {
+      try {
+        const response = await fetch('https://worldtimeapi.org/api/timezone/Etc/UTC');
+        if (response.ok) {
+          const data = await response.json();
+          const serverTime = new Date(data.datetime);
+          const localTime = new Date();
+          const offset = serverTime.getTime() - localTime.getTime();
+          setTimeOffset(offset);
+        }
+      } catch (error) {
+        console.error('Failed to fetch world time, using local time:', error);
+        setTimeOffset(0); // Fallback to local time
+      }
+    };
+
+    fetchWorldTime();
+    // Refresh time offset every 10 minutes
+    const offsetInterval = setInterval(fetchWorldTime, 10 * 60 * 1000);
+
+    return () => clearInterval(offsetInterval);
+  }, []);
+
+  // Update time every second
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date());
+      const now = new Date();
+      const adjustedTime = new Date(now.getTime() + timeOffset);
+      setCurrentTime(adjustedTime);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [timeOffset]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
