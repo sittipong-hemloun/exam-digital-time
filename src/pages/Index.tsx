@@ -485,7 +485,7 @@ const Index = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-glow border ${themeClasses.cardBorder} flex flex-col items-center gap-4`}>
             <Loader2 className={`h-12 w-12 ${themeClasses.textPrimary} animate-spin`} />
-            <p className={`${themeClasses.text} text-lg md:text-2xl font-medium`}>
+            <p className={`${themeClasses.text} text-lg md:text-2xl font-medium text-white`}>
               {getTranslation("loadingTime")}
             </p>
           </div>
