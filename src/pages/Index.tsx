@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings, Plus, Minus, Globe, Sun, Moon, Maximize, Minimize } from "lucide-react";
+import { Settings, Plus, Minus, Globe, Sun, Moon, Maximize, Minimize, Loader2, Wifi, WifiOff } from "lucide-react";
 
 interface ExamInfo {
   course: string;
@@ -36,6 +36,8 @@ const Index = () => {
   const [theme, setTheme] = useState<Theme>("light");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [serverTime, setServerTime] = useState<Date | null>(null); // Store the server time directly
+  const [isLoadingTime, setIsLoadingTime] = useState(true); // Loading state for time sync
+  const [timeSource, setTimeSource] = useState<'api' | 'local' | null>(null); // Track time source
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -56,6 +58,8 @@ const Index = () => {
   // Fetch initial time from timeapi.io (Thailand timezone)
   useEffect(() => {
     const fetchWorldTime = async () => {
+      setIsLoadingTime(true);
+
       try {
         // Try timeapi.io first (no rate limits, very stable) - Thailand timezone
         const response = await fetch('https://timeapi.io/api/time/current/zone?timeZone=Asia/Bangkok');
@@ -64,6 +68,8 @@ const Index = () => {
           const apiTime = new Date(data.dateTime);
           setServerTime(apiTime);
           setCurrentTime(apiTime);
+          setTimeSource('api');
+          setIsLoadingTime(false);
           console.log('Time synced from timeapi.io (Thailand):', apiTime.toISOString());
           return;
         }
@@ -79,6 +85,8 @@ const Index = () => {
           const apiTime = new Date(data.datetime);
           setServerTime(apiTime);
           setCurrentTime(apiTime);
+          setTimeSource('api');
+          setIsLoadingTime(false);
           console.log('Time synced from worldtimeapi.org (Thailand):', apiTime.toISOString());
           return;
         }
@@ -90,6 +98,8 @@ const Index = () => {
       console.warn('All time APIs failed, using local system time');
       setServerTime(new Date());
       setCurrentTime(new Date());
+      setTimeSource('local');
+      setIsLoadingTime(false);
     };
 
     fetchWorldTime();
@@ -215,6 +225,9 @@ const Index = () => {
       footer: { th: "นาฬิกาดิจิทัลสำหรับห้องสอบ", en: "Digital Clock for Exam Room" },
       decreaseFont: { th: "ลดขนาดตัวอักษร", en: "Decrease Font Size" },
       increaseFont: { th: "เพิ่มขนาดตัวอักษร", en: "Increase Font Size" },
+      loadingTime: { th: "กำลังเชื่อมต่อเวลาสากลจากภายนอก...", en: "Connecting to external time server..." },
+      usingLocalTime: { th: "⚠️ ใช้เวลาจากระบบเครื่อง", en: "⚠️ Using local system time" },
+      usingApiTime: { th: "✓ ใช้เวลาสากลจาก API", en: "✓ Using external time API" },
       settings: { th: "ตั้งค่าข้อมูลการสอบ", en: "Information Settings" },
       changeLanguage: { th: "เปลี่ยนภาษา", en: "Change Language" },
       changeTheme: { th: "เปลี่ยนธีม", en: "Change Theme" },
@@ -466,6 +479,41 @@ const Index = () => {
         {/* <img src={examThaiLogo} alt="Logo" className="h-20 md:h-24 drop-shadow-glow" /> */}
         <img src={language === "th" ? examThaiLogo : examEnglishLogo} alt="Logo" className="h-20 md:h-24 drop-shadow-glow" />
       </div>
+
+      {/* Loading Overlay */}
+      {isLoadingTime && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-8 md:p-12 shadow-glow border ${themeClasses.cardBorder} flex flex-col items-center gap-4`}>
+            <Loader2 className={`h-12 w-12 ${themeClasses.textPrimary} animate-spin`} />
+            <p className={`${themeClasses.text} text-lg md:text-2xl font-medium`}>
+              {getTranslation("loadingTime")}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Time Source Indicator */}
+      {!isLoadingTime && timeSource && (
+        <div className="absolute top-4 left-4 z-20">
+          <div className={`${themeClasses.card} backdrop-blur-xl rounded-full px-4 py-2 border ${themeClasses.cardBorder} flex items-center gap-2 transition-all duration-300`}>
+            {timeSource === 'api' ? (
+              <>
+                <Wifi className={`h-4 w-4 text-green-500`} />
+                <span className={`${themeClasses.text} text-sm font-medium hidden sm:inline-block`}>
+                  {getTranslation("usingApiTime")}
+                </span>
+              </>
+            ) : (
+              <>
+                <WifiOff className={`h-4 w-4 text-yellow-500`} />
+                <span className={`${themeClasses.text} text-sm font-medium hidden sm:inline-block`}>
+                  {getTranslation("usingLocalTime")}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Main Clock Display */}
       <div className="relative z-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
