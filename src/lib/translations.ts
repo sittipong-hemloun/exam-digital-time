@@ -39,6 +39,7 @@ const translations: TranslationMap = {
   timePlaceholder: { th: "เช่น 09:00 - 12:00", en: "e.g. 09:00 - 12:00" },
   roomPlaceholder: { th: "เช่น EN101", en: "e.g. EN101" },
   remarksPlaceholder: { th: "ข้อมูลเพิ่มเติม", en: "Additional information" },
+  feedback: { th: "โปรดให้คะแนนเว็บนี้", en: "Rate This Website" },
 };
 
 /**

@@ -8,6 +8,7 @@ import { ClockDisplay } from "@/components/ClockDisplay";
 import { ControlButtons } from "@/components/ControlButtons";
 import { SettingsDialog } from "@/components/SettingsDialog";
 import { ExamInfoDisplay } from "@/components/ExamInfoDisplay";
+import { FeedbackButton } from "@/components/FeedbackButton";
 
 // Custom Hooks
 import { useTimeSync } from "@/hooks/useTimeSync";
@@ -152,6 +153,13 @@ export default function Home() {
         language={language}
         theme={theme}
         themeClasses={themeClasses}
+      />
+
+      {/* Feedback Button */}
+      <FeedbackButton
+        language={language}
+        theme={theme}
+        googleFormUrl="https://docs.google.com/forms/d/e/1FAIpQLSdaURXq1amwJvATGI3wSHn3BAPlVrD_M_zppIeQ5jpoX251GQ/viewform"
       />
 
     </div>
