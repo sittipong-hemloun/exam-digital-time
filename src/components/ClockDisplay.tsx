@@ -4,7 +4,7 @@
 
 import { formatTime, formatDate } from "@/lib/timeUtils";
 import { getFontSizeClasses } from "@/lib/themeConstants";
-import { type Language } from "@/lib/translations";
+import { getTranslation, type Language } from "@/lib/translations";
 import type { Theme, ThemeClasses } from "@/lib/themeConstants";
 
 interface ClockDisplayProps {
@@ -27,9 +27,9 @@ export function ClockDisplay({
 
   return (
     <div className="relative z-10">
-      <div className={` p-8 md:p-16 transition-colors duration-500`}>
+      <div className={`p-2 md:p-3 transition-colors duration-500`}>
         {/* Time Display */}
-        <div className="flex items-center justify-center gap-2 md:gap-4 mb-6 md:mb-8">
+        <div className="flex items-center justify-center gap-2 md:gap-4 mb-3 md:mb-4">
           <div className="text-center">
             <div
               className={`${fontSizeClasses.time} font-mono font-bold  ${themeClasses.textPrimary} drop-shadow-lg`}
@@ -73,6 +73,22 @@ export function ClockDisplay({
             className={`${fontSizeClasses.date} ${themeClasses.text} opacity-80 font-medium transition-all duration-300`}
           >
             {formatDate(currentTime, language)}
+          </p>
+        </div>
+
+        <hr className="mt-3"/>
+
+        {/* Exam Rules */}
+        <div className="mt-3 text-center">
+          <p
+            className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-80 font-thin transition-all duration-300`}
+          >
+            {getTranslation("examRuleSubmission", language)}
+          </p>
+          <p
+            className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-80 font-thin transition-all duration-300`}
+          >
+            {getTranslation("examRuleCommunication", language)}
           </p>
         </div>
       </div>
