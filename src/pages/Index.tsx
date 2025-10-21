@@ -267,11 +267,11 @@ const Index = () => {
 
   const getFontSizeClasses = () => {
     const sizes = {
-      1: { time: "text-5xl md:text-7xl", date: "text-base md:text-xl", examInfo: "text-xs md:text-sm" },
-      2: { time: "text-6xl md:text-8xl", date: "text-lg md:text-2xl", examInfo: "text-sm md:text-base" },
-      3: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-lg" },
-      4: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-xl" },
-      5: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-2xl" },
+      1: { time: "text-5xl md:text-7xl", date: "text-base md:text-xl", examInfo: "text-xs md:text-xl" },
+      2: { time: "text-6xl md:text-8xl", date: "text-lg md:text-2xl", examInfo: "text-sm md:text-2xl" },
+      3: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-3xl" },
+      4: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-4xl" },
+      5: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-5xl" }
     };
     return sizes[fontSize as keyof typeof sizes];
   };
@@ -521,7 +521,7 @@ const Index = () => {
           {/* Time Display */}
           <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 md:mb-6">
             <div className="text-center">
-              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-to-r ${themeClasses.gradient} bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
+              <div className={`${fontSizeClasses.time} font-mono font-bold  ${themeClasses.textPrimary} drop-shadow-lg`}>
                 {hours}
               </div>
             </div>
@@ -531,7 +531,7 @@ const Index = () => {
             </div>
 
             <div className="text-center">
-              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-to-r ${themeClasses.gradient} bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
+              <div className={`${fontSizeClasses.time} font-mono font-bold  ${themeClasses.textPrimary} drop-shadow-lg`}>
                 {minutes}
               </div>
             </div>
@@ -541,7 +541,7 @@ const Index = () => {
             </div>
 
             <div className="text-center">
-              <div className={`${fontSizeClasses.time} font-mono font-bold bg-gradient-to-r ${themeClasses.gradient} bg-clip-text text-transparent drop-shadow-lg transition-all duration-300`}>
+              <div className={`${fontSizeClasses.time} font-mono font-bold  ${themeClasses.textPrimary} drop-shadow-lg`}>
                 {seconds}
               </div>
             </div>
@@ -558,41 +558,41 @@ const Index = () => {
 
       {/* Exam Info Display - Only show fields with values */}
       {(examInfo.course || examInfo.lecture || examInfo.lab || examInfo.time || examInfo.examRoom || examInfo.remarks) && (
-        <div className="relative z-10 mt-4 animate-fade-in w-full max-w-4xl">
+        <div className="relative z-10 mt-4 animate-fade-in w-full">
           <div className={`${themeClasses.card} backdrop-blur-xl rounded-2xl p-4 md:p-6 shadow-glow border ${themeClasses.cardBorder} transition-colors duration-500`}>
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-3 ${fontSizeClasses.examInfo} transition-all duration-300`}>
+            <div className={`grid grid-cols-1 md:grid-cols-12 gap-3 ${fontSizeClasses.examInfo} transition-all duration-300`}>
               {examInfo.course && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 col-span-full">
                   <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("course")}:</span>
                   <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.course}</span>
                 </div>
               )}
               {examInfo.lecture && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 col-span-6">
                   <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lecture")}:</span>
                   <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.lecture}</span>
                 </div>
               )}
               {examInfo.lab && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 col-span-6">
                   <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lab")}:</span>
                   <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.lab}</span>
                 </div>
               )}
               {examInfo.time && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 col-span-6">
                   <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examTime")}:</span>
                   <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.time}</span>
                 </div>
               )}
               {examInfo.examRoom && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 col-span-6">
                   <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examRoom")}:</span>
                   <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.examRoom}</span>
                 </div>
               )}
               {examInfo.remarks && (
-                <div className="flex gap-2 md:col-span-2">
+                <div className="flex gap-2 md:col-span-12">
                   <span className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("remarks")}:</span>
                   <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>{examInfo.remarks}</span>
                 </div>
