@@ -32,7 +32,7 @@ export function FeedbackButton({
       title={getTranslation("feedback", language)}
     >
       <MessageCircle className="h-5 w-5" />
-      <span className="font-medium hidden sm:inline-block text-lg">
+      <span className="font-medium hidden sm:inline-block text-2xl">
         {getTranslation("feedback", language)}
       </span>
     </button>
