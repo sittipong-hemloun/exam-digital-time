@@ -76,7 +76,7 @@ export function ClockDisplay({
           </p>
         </div>
 
-        <hr className="mt-3"/>
+        <div className={`h-1 ${theme === "dark" ? "bg-gradient-to-r from-transparent via-green-500/30 to-transparent" : "bg-gradient-to-r from-transparent via-green-400/20 to-transparent"} mt-3`}></div>
 
         {/* Exam Rules */}
         <div className="mt-3 text-center">
