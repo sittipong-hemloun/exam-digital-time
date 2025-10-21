@@ -33,10 +33,10 @@ type Theme = "light" | "dark";
 
 export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [fontSize, setFontSize] = useState(5); // 1=small, 2=medium, 3=large, 4=extra large, 5=huge
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
+  const [fontSize, setFontSize] = useState(3); // 1=small, 2=medium, 3=large, 4=extra large, 5=huge
   const [language, setLanguage] = useState<Language>("th");
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMounted, setIsMounted] = useState(false); // Track if component is mounted on client
   const [timeOffset, setTimeOffset] = useState(0); // Offset between server time and client time
@@ -127,6 +127,19 @@ export default function Home() {
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);
+
+  // Auto-enter fullscreen on mount
+  useEffect(() => {
+    if (isMounted && !document.fullscreenElement) {
+      try {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.warn("Failed to request fullscreen:", err);
+        });
+      } catch (err) {
+        console.warn("Error requesting fullscreen:", err);
+      }
+    }
+  }, [isMounted]);
 
   const formatTime = (date: Date) => {
     const hours = date.getHours().toString().padStart(2, "0");
@@ -258,11 +271,11 @@ export default function Home() {
 
   const getFontSizeClasses = () => {
     const sizes = {
-      1: { time: "text-5xl md:text-7xl", date: "text-base md:text-xl", examInfo: "text-xs md:text-xl" },
-      2: { time: "text-6xl md:text-8xl", date: "text-lg md:text-2xl", examInfo: "text-sm md:text-2xl" },
-      3: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-3xl" },
-      4: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-4xl" },
-      5: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-5xl" }
+      1: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-3xl" },
+      2: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-4xl" },
+      3: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-5xl" },
+      4: { time: "text-[10rem] md:text-[16rem]", date: "text-4xl md:text-6xl", examInfo: "text-2xl md:text-6xl" },
+      5: { time: "text-[12rem] md:text-[20rem]", date: "text-5xl md:text-7xl", examInfo: "text-3xl md:text-7xl" }
     };
     return sizes[fontSize as keyof typeof sizes];
   };
@@ -322,8 +335,8 @@ export default function Home() {
     <div className={`min-h-screen ${themeClasses.background} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${themeClasses.decorativeGlow1} rounded-full blur-3xl animate-pulse-glow transition-colors duration-500`}></div>
-        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 ${themeClasses.decorativeGlow2} rounded-full blur-3xl animate-pulse-glow transition-colors duration-500`} style={{ animationDelay: "1s" }}></div>
+        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${themeClasses.decorativeGlow1} rounded-full blur-3xl transition-colors duration-500`}></div>
+        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`} style={{ animationDelay: "1s" }}></div>
       </div>
 
       {/* Control Buttons */}
@@ -410,75 +423,81 @@ export default function Home() {
               >{getTranslation("settings")}</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className={`sm:max-w-[700px] text-lg ${themeClasses.background} ${themeClasses.text} transition-colors duration-500`}>
             <DialogHeader>
-              <DialogTitle>{getTranslation("examInfo")}</DialogTitle>
-              <DialogDescription>
+              <DialogTitle className={`text-2xl ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examInfo")}</DialogTitle>
+              <DialogDescription className={`text-base ${themeClasses.textMuted} transition-colors duration-500`}>
                 {getTranslation("examInfoDesc")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
-                <Label htmlFor="course">{getTranslation("course")}</Label>
+                <Label htmlFor="course" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("course")}</Label>
                 <Input
                   id="course"
                   value={formData.course}
                   onChange={(e) => handleInputChange("course", e.target.value)}
                   placeholder={getTranslation("coursePlaceholder")}
+                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lecture">{getTranslation("lecture")}</Label>
+                <Label htmlFor="lecture" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lecture")}</Label>
                 <Input
                   id="lecture"
                   value={formData.lecture}
                   onChange={(e) => handleInputChange("lecture", e.target.value)}
                   placeholder={getTranslation("lecturePlaceholder")}
+                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lab">{getTranslation("lab")}</Label>
+                <Label htmlFor="lab" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lab")}</Label>
                 <Input
                   id="lab"
                   value={formData.lab}
                   onChange={(e) => handleInputChange("lab", e.target.value)}
                   placeholder={getTranslation("labPlaceholder")}
+                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="time">{getTranslation("examTime")}</Label>
+                <Label htmlFor="time" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examTime")}</Label>
                 <Input
                   id="time"
                   value={formData.time}
                   onChange={(e) => handleInputChange("time", e.target.value)}
                   placeholder={getTranslation("timePlaceholder")}
+                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="examRoom">{getTranslation("examRoom")}</Label>
+                <Label htmlFor="examRoom" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examRoom")}</Label>
                 <Input
                   id="examRoom"
                   value={formData.examRoom}
                   onChange={(e) => handleInputChange("examRoom", e.target.value)}
                   placeholder={getTranslation("roomPlaceholder")}
+                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="remarks">{getTranslation("remarks")}</Label>
+                <Label htmlFor="remarks" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("remarks")}</Label>
                 <Textarea
                   id="remarks"
                   value={formData.remarks}
                   onChange={(e) => handleInputChange("remarks", e.target.value)}
                   placeholder={getTranslation("remarksPlaceholder")}
                   rows={3}
+                  className={`text-lg ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
                 />
               </div>
             </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={handleCancel}>
+            <DialogFooter className="text-lg">
+              <Button variant="outline" onClick={handleCancel} className={`text-base ${themeClasses.text} border ${themeClasses.cardBorder} hover:${themeClasses.card} hover:shadow-lg transition-all duration-500 text-white`}>
                 {getTranslation("cancel")}
               </Button>
-              <Button onClick={handleConfirm}>{getTranslation("confirm")}</Button>
+              <Button onClick={handleConfirm} className={`text-base ${themeClasses.gradient} text-black hover:opacity-90 transition-all duration-500`}>{getTranslation("confirm")}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
