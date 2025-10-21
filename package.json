@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:iis": "next build && npm run copy:webconfig",
+    "copy:webconfig": "cp web.config out/web.config",
     "start": "next start",
     "lint": "next lint",
     "preview": "next start"
