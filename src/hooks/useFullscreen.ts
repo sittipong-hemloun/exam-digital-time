@@ -8,6 +8,19 @@ export const useFullscreen = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
+    // Check if fullscreen API is supported (only on client side)
+    const isSupported = !!(
+      document.fullscreenEnabled ||
+      (document as any).webkitFullscreenEnabled ||
+      (document as any).mozFullScreenEnabled ||
+      (document as any).msFullscreenEnabled
+    );
+
+    if (!isSupported) {
+      console.warn("Fullscreen API is not supported on this browser");
+      return;
+    }
+
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
       console.log("Fullscreen state:", !!document.fullscreenElement);
@@ -32,7 +45,19 @@ export const useFullscreen = () => {
     };
   }, []);
 
+  const isFullscreenSupported = () => !!(
+    document.fullscreenEnabled ||
+    (document as any).webkitFullscreenEnabled ||
+    (document as any).mozFullScreenEnabled ||
+    (document as any).msFullscreenEnabled
+  );
+
   const toggleFullscreen = async () => {
+    if (!isFullscreenSupported()) {
+      console.warn("Fullscreen API is not supported on this browser");
+      return;
+    }
+
     try {
       // Use document.fullscreenElement as the source of truth
       if (document.fullscreenElement) {
@@ -51,16 +76,28 @@ export const useFullscreen = () => {
     }
   };
 
-  const enterFullscreen = () => {
-    if (!document.fullscreenElement) {
-      console.log("Auto-entering fullscreen...");
-      document.documentElement.requestFullscreen().catch((err) => {
-        console.warn("Failed to request fullscreen:", err);
-      });
+  const enterFullscreen = async () => {
+    if (!isFullscreenSupported()) {
+      console.warn("Fullscreen API is not supported on this browser");
+      return;
+    }
+
+    try {
+      if (!document.fullscreenElement) {
+        console.log("Auto-entering fullscreen...");
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (err) {
+      console.warn("Failed to request fullscreen:", err);
     }
   };
 
   const exitFullscreen = async () => {
+    if (!isFullscreenSupported()) {
+      console.warn("Fullscreen API is not supported on this browser");
+      return;
+    }
+
     try {
       if (document.fullscreenElement) {
         console.log("Exiting fullscreen...");

@@ -12,6 +12,9 @@ export interface FormattedTime {
  * Format a date to HH:MM:SS format
  */
 export const formatTime = (date: Date): FormattedTime => {
+  if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+    return { hours: "--", minutes: "--", seconds: "--" };
+  }
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const seconds = date.getSeconds().toString().padStart(2, "0");
@@ -22,6 +25,10 @@ export const formatTime = (date: Date): FormattedTime => {
  * Format a date to localized date string
  */
 export const formatDate = (date: Date, language: "th" | "en"): string => {
+  if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+    return language === "th" ? "วันที่ไม่ระบุ" : "No date";
+  }
+
   const daysTh = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthsTh = [

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 // Components
 import { Logo } from "@/components/Logo";
@@ -37,24 +37,43 @@ export default function Home() {
     setIsMounted(true);
   }, []);
 
-  // Event Handlers
-  const handleToggleTheme = () => setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  const handleToggleLanguage = () => setLanguage((prev) => (prev === "th" ? "en" : "th"));
-  const handleIncreaseFontSize = () => fontSize < 5 && setFontSize(fontSize + 1);
-  const handleDecreaseFontSize = () => fontSize > 1 && setFontSize(fontSize - 1);
+  // Event Handlers (memoized to prevent unnecessary re-renders)
+  const handleToggleTheme = useCallback(
+    () => setTheme((prev) => (prev === "dark" ? "light" : "dark")),
+    []
+  );
 
-  // Dialog Handlers with Fullscreen
-  const handleConfirmWithFullscreen = () => {
+  const handleToggleLanguage = useCallback(
+    () => setLanguage((prev) => (prev === "th" ? "en" : "th")),
+    []
+  );
+
+  const handleIncreaseFontSize = useCallback(
+    () => setFontSize((prev) => (prev < 5 ? prev + 1 : prev)),
+    []
+  );
+
+  const handleDecreaseFontSize = useCallback(
+    () => setFontSize((prev) => (prev > 1 ? prev - 1 : prev)),
+    []
+  );
+
+  // Dialog Handlers with Fullscreen (memoized)
+  const handleConfirmWithFullscreen = useCallback(async () => {
     handleConfirm();
     setIsDialogOpen(false);
-    setTimeout(() => enterFullscreen(), 100);
-  };
+    // Wait for DOM to update before requesting fullscreen
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await enterFullscreen();
+  }, [handleConfirm, enterFullscreen]);
 
-  const handleCancelWithFullscreen = () => {
+  const handleCancelWithFullscreen = useCallback(async () => {
     handleCancel();
     setIsDialogOpen(false);
-    setTimeout(() => enterFullscreen(), 100);
-  };
+    // Wait for DOM to update before requesting fullscreen
+    await new Promise(resolve => setTimeout(resolve, 100));
+    await enterFullscreen();
+  }, [handleCancel, enterFullscreen]);
 
   const fontSizeClasses = getFontSizeClasses(fontSize);
   const themeClasses = getThemeClasses(theme);

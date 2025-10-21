@@ -2,7 +2,7 @@
  * Tests for useTimeSync hook
  */
 
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act } from '@testing-library/react';
 import { useTimeSync } from '../useTimeSync';
 
 // Mock the timeUtils
@@ -38,7 +38,9 @@ describe('useTimeSync', () => {
     const initialTime = result.current.currentTime.getTime();
 
     // Fast-forward 1 second
-    jest.advanceTimersByTime(1000);
+    await act(async () => {
+      jest.advanceTimersByTime(1000);
+    });
 
     await waitFor(() => {
       const newTime = result.current.currentTime.getTime();
