@@ -1,0 +1,148 @@
+/**
+ * Control buttons component for exam clock
+ */
+
+import { Button } from "@/components/ui/button";
+import { Settings, Plus, Minus, Globe, Sun, Moon, Maximize, Minimize } from "lucide-react";
+import { getTranslation, type Language } from "@/lib/translations";
+import type { Theme } from "@/lib/themeConstants";
+
+interface ControlButtonsProps {
+  theme: Theme;
+  language: Language;
+  fontSize: number;
+  isFullscreen: boolean;
+  onDecreaseFontSize: () => void;
+  onIncreaseFontSize: () => void;
+  onToggleTheme: () => void;
+  onToggleLanguage: () => void;
+  onToggleFullscreen: () => void;
+  onOpenSettings: () => void;
+}
+
+const getButtonBgClasses = (theme: Theme): string => {
+  return theme === "dark" ? "bg-white/5 hover:bg-white/10" : "bg-black/5 hover:bg-black/10";
+};
+
+const getTextColor = (theme: Theme): string => {
+  return theme === "dark" ? "text-foreground" : "text-gray-900";
+};
+
+export function ControlButtons({
+  theme,
+  language,
+  fontSize,
+  isFullscreen,
+  onDecreaseFontSize,
+  onIncreaseFontSize,
+  onToggleTheme,
+  onToggleLanguage,
+  onToggleFullscreen,
+  onOpenSettings,
+}: ControlButtonsProps) {
+  const buttonBg = getButtonBgClasses(theme);
+  const textColor = getTextColor(theme);
+
+  return (
+    <div className="absolute top-6 right-6 z-20 flex gap-3">
+      {/* Font Size Controls */}
+      <div
+        className={`flex gap-2 backdrop-blur-lg rounded-full px-3 py-2 border border-white/20 ${
+          theme === "dark" ? "bg-white/5" : "bg-black/5"
+        } transition-colors duration-500`}
+      >
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onDecreaseFontSize}
+          disabled={fontSize === 1}
+          className={`rounded-full h-9 w-9 ${theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/10"} ${textColor} disabled:opacity-30`}
+          title={getTranslation("decreaseFont", language)}
+        >
+          <Minus className="h-5 w-5" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={onIncreaseFontSize}
+          disabled={fontSize === 5}
+          className={`rounded-full h-9 w-9 ${theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/10"} ${textColor} disabled:opacity-30`}
+          title={getTranslation("increaseFont", language)}
+        >
+          <Plus className="h-5 w-5" />
+        </Button>
+      </div>
+
+      {/* Theme Toggle Button */}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={onToggleTheme}
+        className={`rounded-full h-14 w-14 ${buttonBg} ${
+          theme === "dark" ? "text-yellow-400" : textColor
+        } border border-white/20 backdrop-blur-lg`}
+        title={getTranslation("changeTheme", language)}
+      >
+        {theme === "dark" ? (
+          <Sun className="h-5 w-5" />
+        ) : (
+          <Moon className="h-5 w-5" />
+        )}
+      </Button>
+
+      {/* Language Toggle Button */}
+      <Button
+        variant="ghost"
+        onClick={onToggleLanguage}
+        className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border border-white/20 backdrop-blur-lg flex items-center`}
+        title={getTranslation("changeLanguage", language)}
+      >
+        <Globe className="h-5 w-5" />
+        <span className="font-medium hidden sm:inline-block text-lg">
+          {language === "th" ? "ไทย" : "EN"}
+        </span>
+      </Button>
+
+      {/* Fullscreen Toggle Button */}
+      <Button
+        variant="ghost"
+        onClick={onToggleFullscreen}
+        className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border border-white/20 backdrop-blur-lg flex items-center`}
+        title={
+          isFullscreen
+            ? getTranslation("exitFullscreen", language)
+            : getTranslation("fullscreen", language)
+        }
+      >
+        {isFullscreen ? (
+          <>
+            <Minimize className="h-5 w-5" />
+            <span className="font-medium hidden sm:inline-block text-lg">
+              {getTranslation("exitFullscreen", language)}
+            </span>
+          </>
+        ) : (
+          <>
+            <Maximize className="h-5 w-5" />
+            <span className="font-medium hidden sm:inline-block text-lg">
+              {getTranslation("fullscreen", language)}
+            </span>
+          </>
+        )}
+      </Button>
+
+      {/* Settings Button */}
+      <Button
+        variant="ghost"
+        onClick={onOpenSettings}
+        className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border border-white/20 backdrop-blur-lg flex items-center`}
+        title={getTranslation("settings", language)}
+      >
+        <Settings className="h-5 w-5" />
+        <span className="font-medium hidden sm:inline-block text-lg">
+          {getTranslation("settings", language)}
+        </span>
+      </Button>
+    </div>
+  );
+}

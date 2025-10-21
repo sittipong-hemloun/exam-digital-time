@@ -1,0 +1,25 @@
+/**
+ * Logo component for exam clock
+ */
+
+import Image from "next/image";
+import examThaiLogo from "@/assets/thai-logo.png";
+import examEnglishLogo from "@/assets/eng-logo.png";
+import type { Language } from "@/lib/translations";
+
+interface LogoProps {
+  language: Language;
+}
+
+export function Logo({ language }: LogoProps) {
+  return (
+    <div className="mb-8">
+      <Image
+        src={language === "th" ? examThaiLogo : examEnglishLogo}
+        alt="Logo"
+        className="h-20 md:h-24 drop-shadow-2xl w-auto filter brightness-110"
+        priority
+      />
+    </div>
+  );
+}
