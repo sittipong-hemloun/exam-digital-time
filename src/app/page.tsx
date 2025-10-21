@@ -39,6 +39,7 @@ export default function Home() {
   const [theme, setTheme] = useState<Theme>("light");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMounted, setIsMounted] = useState(false); // Track if component is mounted on client
+  const [timeOffset, setTimeOffset] = useState(0); // Offset between server time and client time
   const [examInfo, setExamInfo] = useState<ExamInfo>({
     course: "",
     lecture: "",
@@ -56,17 +57,67 @@ export default function Home() {
     remarks: "",
   });
 
-  // Set mounted state on client and start clock
+  // Set mounted state on client and sync time
   useEffect(() => {
     setIsMounted(true);
 
-    // Update time every second using server's local time
+    // Sync time with server using HTTP Date header
+    const syncServerTime = async (timeoutMs = 3000) => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+        // Make HEAD request to get server time from Date header
+        const res = await fetch(window.location.href, {
+          method: 'HEAD',
+          cache: 'no-store',
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
+
+        const serverDateHeader = res.headers.get('Date');
+        if (!serverDateHeader) {
+          console.warn('No Date header found in response');
+          setTimeOffset(0);
+          return false;
+        }
+
+        const serverTime = new Date(serverDateHeader).getTime();
+        const clientTime = Date.now();
+        const offset = serverTime - clientTime;
+
+        setTimeOffset(offset);
+        console.log('Time synced with server. Offset:', offset, 'ms');
+        return true;
+      } catch (error) {
+        console.warn('Failed to sync with server time:', error);
+        setTimeOffset(0);
+        return false;
+      }
+    };
+
+    // Initial sync with server time
+    syncServerTime();
+
+    // Re-sync every 10 minutes to maintain accuracy
+    const syncInterval = setInterval(() => {
+      syncServerTime();
+    }, 10 * 60 * 1000);
+
+    return () => {
+      clearInterval(syncInterval);
+    };
+  }, []);
+
+  // Update displayed time every second with offset
+  useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date());
+      setCurrentTime(new Date(Date.now() + timeOffset));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [timeOffset]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
