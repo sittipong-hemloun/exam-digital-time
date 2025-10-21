@@ -254,11 +254,27 @@ export default function Home() {
   const handleConfirm = () => {
     setExamInfo(formData);
     setIsDialogOpen(false);
+    // Request fullscreen after dialog closes
+    setTimeout(() => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.warn("Failed to request fullscreen:", err);
+        });
+      }
+    }, 100);
   };
 
   const handleCancel = () => {
     setFormData(examInfo);
     setIsDialogOpen(false);
+    // Request fullscreen after dialog closes
+    setTimeout(() => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.warn("Failed to request fullscreen:", err);
+        });
+      }
+    }, 100);
   };
 
   const increaseFontSize = () => {
@@ -271,11 +287,11 @@ export default function Home() {
 
   const getFontSizeClasses = () => {
     const sizes = {
-      1: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-3xl" },
-      2: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-4xl" },
-      3: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-5xl" },
-      4: { time: "text-[10rem] md:text-[16rem]", date: "text-4xl md:text-6xl", examInfo: "text-2xl md:text-6xl" },
-      5: { time: "text-[12rem] md:text-[20rem]", date: "text-5xl md:text-7xl", examInfo: "text-3xl md:text-7xl" }
+      1: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-4xl" },
+      2: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-5xl" },
+      3: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-6xl" },
+      4: { time: "text-[10rem] md:text-[16rem]", date: "text-4xl md:text-6xl", examInfo: "text-2xl md:text-7xl" },
+      5: { time: "text-[12rem] md:text-[20rem]", date: "text-5xl md:text-7xl", examInfo: "text-3xl md:text-8xl" }
     };
     return sizes[fontSize as keyof typeof sizes];
   };
@@ -335,78 +351,76 @@ export default function Home() {
     <div className={`min-h-screen ${themeClasses.background} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}>
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${themeClasses.decorativeGlow1} rounded-full blur-3xl transition-colors duration-500`}></div>
-        <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`} style={{ animationDelay: "1s" }}></div>
+        <div className={`absolute top-1/4 left-1/2 w-[500px] h-[500px] ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`}></div>
+        <div className={`absolute bottom-1/4 right-1/2 w-[500px] h-[500px] ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`} style={{ animationDelay: "1s" }}></div>
       </div>
 
       {/* Control Buttons */}
-      <div className="absolute top-4 right-4 z-20 flex gap-2">
+      <div className="absolute top-6 right-6 z-20 flex gap-3">
         {/* Font Size Controls */}
-        <div className="flex gap-1">
+        <div className={`flex gap-2 backdrop-blur-lg rounded-full px-3 py-2 border border-white/20 ${theme === "dark" ? "bg-white/5" : "bg-black/5"} transition-colors duration-500`}>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={decreaseFontSize}
             disabled={fontSize === 1}
-            className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg disabled:opacity-50 transition-all duration-300`}
+            className={`rounded-full h-9 w-9 ${theme === "dark" ? "hover:bg-white/10 text-foreground" : "hover:bg-black/10 text-gray-900"} disabled:opacity-30`}
             title={getTranslation("decreaseFont")}
           >
-            <Minus className={`${theme === "dark" ? "text-foreground" : "text-gray-900"} h-5 w-5 transition-colors duration-500`} />
+            <Minus className="h-5 w-5" />
           </Button>
           <Button
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={increaseFontSize}
             disabled={fontSize === 5}
-            className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg disabled:opacity-50 transition-all duration-300`}
+            className={`rounded-full h-9 w-9 ${theme === "dark" ? "hover:bg-white/10 text-foreground" : "hover:bg-black/10 text-gray-900"} disabled:opacity-30`}
             title={getTranslation("increaseFont")}
           >
-            <Plus className={`${theme === "dark" ? "text-foreground" : "text-gray-900"} h-5 w-5 transition-colors duration-500`} />
+            <Plus className="h-5 w-5" />
           </Button>
         </div>
 
         {/* Theme Toggle Button */}
         <Button
-          variant="outline"
+          variant="ghost"
           size="icon"
           onClick={toggleTheme}
-          className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
+          className={`rounded-full h-14 w-14 ${theme === "dark" ? "bg-white/5 hover:bg-white/10 text-yellow-400" : "bg-black/5 hover:bg-black/10 text-gray-900"} border border-white/20 backdrop-blur-lg`}
           title={getTranslation("changeTheme")}
         >
-          {theme === "dark" ? <Sun className={`h-5 w-5 text-yellow-400 transition-colors duration-500`} /> : <Moon className={`h-5 w-5 ${theme === "light" ? "text-gray-900" : "text-foreground"} transition-colors duration-500`} />}
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
 
         {/* Language Toggle Button */}
         <Button
-          variant="outline"
+          variant="ghost"
           onClick={toggleLanguage}
-          className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
+          className={`rounded-full px-4 h-14 gap-2 ${theme === "dark" ? "bg-white/5 hover:bg-white/10 text-foreground" : "bg-black/5 hover:bg-black/10 text-gray-900"} border border-white/20 backdrop-blur-lg flex items-center`}
           title={getTranslation("changeLanguage")}
         >
-          <div className="flex items-center gap-1">
-            <Globe className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
-            <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{language === "th" ? "ไทย" : "EN"}</span>
-          </div>
+          <Globe className="h-5 w-5" />
+          <span className="font-medium hidden sm:inline-block text-lg">{language === "th" ? "ไทย" : "EN"}</span>
         </Button>
 
 
         {/* Fullscreen Toggle Button */}
         <Button
-          variant="outline"
+          variant="ghost"
           onClick={toggleFullscreen}
-          className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
+          className={`rounded-full px-4 h-14 gap-2 ${theme === "dark" ? "bg-white/5 hover:bg-white/10 text-foreground" : "bg-black/5 hover:bg-black/10 text-gray-900"} border border-white/20 backdrop-blur-lg flex items-center`}
           title={isFullscreen ? getTranslation("exitFullscreen") : getTranslation("fullscreen")}
         >
           {isFullscreen ? (
-            <div className="flex items-center gap-1">
-              <Minimize className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
-              <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{getTranslation("exitFullscreen")}</span>
-            </div>
+            <>
+              <Minimize className="h-5 w-5" />
+              <span className="font-medium hidden sm:inline-block text-lg">{getTranslation("exitFullscreen")}</span>
+            </>
           ) : (
-            <div className="flex items-center gap-1">
-              <Maximize className={`h-5 w-5 ${theme === "dark" ? "text-foreground" : "text-gray-900"} transition-colors duration-500`} />
-              <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}>{getTranslation("fullscreen")}</span>
-            </div>
+            <>
+              <Maximize className="h-5 w-5" />
+              <span className="font-medium hidden sm:inline-block text-lg">{getTranslation("fullscreen")}</span>
+            </>
           )}
         </Button>
 
@@ -414,110 +428,118 @@ export default function Home() {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
-              variant="outline"
-              className={`rounded-full ${themeClasses.card} backdrop-blur-xl border hover:${themeClasses.card} hover:shadow-lg transition-all duration-300`}
+              variant="ghost"
+              className={`rounded-full px-4 h-14 gap-2 ${theme === "dark" ? "bg-white/5 hover:bg-white/10 text-foreground" : "bg-black/5 hover:bg-black/10 text-gray-900"} border border-white/20 backdrop-blur-lg flex items-center`}
               title={getTranslation("settings")}
             >
-              <Settings className={`${theme === "dark" ? "text-foreground" : "text-gray-900"} h-5 w-5 transition-colors duration-500`} />
-              <span className={`${themeClasses.text} ml-2 font-medium hidden sm:inline-block transition-colors duration-500`}
-              >{getTranslation("settings")}</span>
+              <Settings className="h-5 w-5" />
+              <span className="font-medium hidden sm:inline-block text-lg">{getTranslation("settings")}</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className={`sm:max-w-[700px] text-lg ${themeClasses.background} ${themeClasses.text} transition-colors duration-500`}>
+          <DialogContent className={`sm:max-w-[700px] text-lg ${themeClasses.background} ${themeClasses.text} transition-colors duration-500 rounded-2xl shadow-2xl`}>
             <DialogHeader>
               <DialogTitle className={`text-2xl ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examInfo")}</DialogTitle>
               <DialogDescription className={`text-base ${themeClasses.textMuted} transition-colors duration-500`}>
                 {getTranslation("examInfoDesc")}
               </DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-5 py-6">
               <div className="grid gap-2">
-                <Label htmlFor="course" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("course")}</Label>
+                <Label htmlFor="course" className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("course")}</Label>
                 <Input
                   id="course"
                   value={formData.course}
                   onChange={(e) => handleInputChange("course", e.target.value)}
                   placeholder={getTranslation("coursePlaceholder")}
-                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
+                  className={`text-lg h-11 rounded-lg ${theme === "dark" ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800" : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"} transition-colors duration-300`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lecture" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lecture")}</Label>
+                <Label htmlFor="lecture" className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lecture")}</Label>
                 <Input
                   id="lecture"
                   value={formData.lecture}
                   onChange={(e) => handleInputChange("lecture", e.target.value)}
                   placeholder={getTranslation("lecturePlaceholder")}
-                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
+                  className={`text-lg h-11 rounded-lg ${theme === "dark" ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800" : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"} transition-colors duration-300`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lab" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lab")}</Label>
+                <Label htmlFor="lab" className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("lab")}</Label>
                 <Input
                   id="lab"
                   value={formData.lab}
                   onChange={(e) => handleInputChange("lab", e.target.value)}
                   placeholder={getTranslation("labPlaceholder")}
-                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
+                  className={`text-lg h-11 rounded-lg ${theme === "dark" ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800" : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"} transition-colors duration-300`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="time" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examTime")}</Label>
+                <Label htmlFor="time" className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examTime")}</Label>
                 <Input
                   id="time"
                   value={formData.time}
                   onChange={(e) => handleInputChange("time", e.target.value)}
                   placeholder={getTranslation("timePlaceholder")}
-                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
+                  className={`text-lg h-11 rounded-lg ${theme === "dark" ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800" : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"} transition-colors duration-300`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="examRoom" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examRoom")}</Label>
+                <Label htmlFor="examRoom" className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("examRoom")}</Label>
                 <Input
                   id="examRoom"
                   value={formData.examRoom}
                   onChange={(e) => handleInputChange("examRoom", e.target.value)}
                   placeholder={getTranslation("roomPlaceholder")}
-                  className={`text-lg h-10 ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
+                  className={`text-lg h-11 rounded-lg ${theme === "dark" ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800" : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"} transition-colors duration-300`}
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="remarks" className={`text-lg ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("remarks")}</Label>
+                <Label htmlFor="remarks" className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}>{getTranslation("remarks")}</Label>
                 <Textarea
                   id="remarks"
                   value={formData.remarks}
                   onChange={(e) => handleInputChange("remarks", e.target.value)}
                   placeholder={getTranslation("remarksPlaceholder")}
                   rows={3}
-                  className={`text-lg ${theme === "dark" ? "bg-black text-white border-gray-600" : "bg-white text-gray-900 border-gray-300"} transition-colors duration-500`}
+                  className={`text-lg rounded-lg ${theme === "dark" ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800" : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"} transition-colors duration-300`}
                 />
               </div>
             </div>
-            <DialogFooter className="text-lg">
-              <Button variant="outline" onClick={handleCancel} className={`text-base ${themeClasses.text} border ${themeClasses.cardBorder} hover:${themeClasses.card} hover:shadow-lg transition-all duration-500 text-white`}>
+            <DialogFooter className="text-lg pt-4 gap-3">
+              <Button
+                variant="outline"
+                onClick={handleCancel}
+                className={`text-base px-6 h-11 rounded-lg ${theme === "dark" ? "border-gray-700 hover:bg-black" : "border-gray-300 hover:bg-gray-100"} transition-all duration-300`}
+              >
                 {getTranslation("cancel")}
               </Button>
-              <Button onClick={handleConfirm} className={`text-base ${themeClasses.gradient} text-black hover:opacity-90 transition-all duration-500`}>{getTranslation("confirm")}</Button>
+              <Button
+                onClick={handleConfirm}
+                className={`text-base px-8 h-11 rounded-lg bg-gradient-to-r ${themeClasses.gradient} text-white font-semibold hover:opacity-95 shadow-lg hover:shadow-xl transition-all duration-300`}
+              >
+                {getTranslation("confirm")}
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
       {/* Logo */}
-      <div className="mb-4 animate-fade-in">
+      <div className="mb-8">
         <Image
           src={language === "th" ? examThaiLogo : examEnglishLogo}
           alt="Logo"
-          className="h-20 md:h-24 drop-shadow-glow w-auto"
+          className="h-20 md:h-24 drop-shadow-2xl w-auto filter brightness-110"
           priority
         />
       </div>
 
       {/* Main Clock Display */}
-      <div className="relative z-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-        <div className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-12 shadow-glow border ${themeClasses.cardBorder} transition-colors duration-500`}>
+      <div className="relative z-10">
+        <div className={` p-8 md:p-16 transition-colors duration-500`}>
           {/* Time Display */}
-          <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 md:mb-6">
+          <div className="flex items-center justify-center gap-2 md:gap-4 mb-6 md:mb-8">
             <div className="text-center">
               <div className={`${fontSizeClasses.time} font-mono font-bold  ${themeClasses.textPrimary} drop-shadow-lg`}>
                 {hours}
@@ -556,8 +578,8 @@ export default function Home() {
 
       {/* Exam Info Display - Only show fields with values */}
       {(examInfo.course || examInfo.lecture || examInfo.lab || examInfo.time || examInfo.examRoom || examInfo.remarks) && (
-        <div className="relative z-10 mt-4 animate-fade-in w-full">
-          <div className={`${themeClasses.card} backdrop-blur-xl rounded-2xl p-4 md:p-6 shadow-glow border ${themeClasses.cardBorder} transition-colors duration-500`}>
+        <div className="relative z-10 mt-8 w-full max-w-7xl mx-auto px-4">
+          <div className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border ${themeClasses.cardBorder} transition-colors duration-500`}>
             <div className={`grid grid-cols-1 md:grid-cols-12 gap-3 ${fontSizeClasses.examInfo} transition-all duration-300`}>
               {examInfo.course && (
                 <div className="flex gap-2 col-span-full">
