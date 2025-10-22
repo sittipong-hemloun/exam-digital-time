@@ -174,7 +174,7 @@ export function SettingsDialog({
           <Button
             variant="outline"
             onClick={onCancel}
-            className={`text-base px-6 h-11 rounded-lg ${
+            className={`text-base px-6 h-11 rounded-lg text-white ${
               theme === "dark"
                 ? "border-gray-700 hover:bg-black"
                 : "border-gray-300 hover:bg-gray-100"
