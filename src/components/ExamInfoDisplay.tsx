@@ -1,7 +1,9 @@
 /**
  * Exam information display component
+ * Optimized with React.memo to prevent unnecessary re-renders
  */
 
+import { memo, useMemo } from "react";
 import { getFontSizeClasses } from "@/lib/themeConstants";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { ThemeClasses } from "@/lib/themeConstants";
@@ -15,7 +17,7 @@ interface ExamInfoDisplayProps {
   hasExamInfo: boolean;
 }
 
-export function ExamInfoDisplay({
+export const ExamInfoDisplay = memo(function ExamInfoDisplay({
   examInfo,
   fontSize,
   language,
@@ -26,7 +28,10 @@ export function ExamInfoDisplay({
     return null;
   }
 
-  const fontSizeClasses = getFontSizeClasses(fontSize);
+  const fontSizeClasses = useMemo(
+    () => getFontSizeClasses(fontSize),
+    [fontSize]
+  );
 
   return (
     <div className="relative z-10 mt-8 w-full max-w-7xl mx-auto px-4">
@@ -112,4 +117,4 @@ export function ExamInfoDisplay({
       </div>
     </div>
   );
-}
+});

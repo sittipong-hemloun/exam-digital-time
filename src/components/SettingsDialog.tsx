@@ -1,7 +1,9 @@
 /**
  * Settings dialog component for exam information
+ * Optimized with React.memo and useMemo to prevent unnecessary re-renders
  */
 
+import { memo, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +32,7 @@ interface SettingsDialogProps {
   themeClasses: ThemeClasses;
 }
 
-export function SettingsDialog({
+export const SettingsDialog = memo(function SettingsDialog({
   isOpen,
   onOpenChange,
   formData,
@@ -41,11 +43,15 @@ export function SettingsDialog({
   theme,
   themeClasses,
 }: SettingsDialogProps) {
-  const inputClasses = `text-2xl h-11 rounded-lg ${
-    theme === "dark"
-      ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800"
-      : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"
-  } transition-colors duration-300`;
+  const inputClasses = useMemo(
+    () =>
+      `text-2xl h-11 rounded-lg ${
+        theme === "dark"
+          ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800"
+          : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"
+      } transition-colors duration-300`,
+    [theme]
+  );
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -194,4 +200,4 @@ export function SettingsDialog({
       </DialogContent>
     </Dialog>
   );
-}
+});

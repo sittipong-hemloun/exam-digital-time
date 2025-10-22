@@ -1,7 +1,9 @@
 /**
  * Feedback button component linking to Google Form
+ * Optimized with React.memo and useCallback to prevent unnecessary re-renders
  */
 
+import { memo, useCallback } from "react";
 import { MessageCircle } from "lucide-react";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { Theme } from "@/lib/themeConstants";
@@ -12,14 +14,14 @@ interface FeedbackButtonProps {
   googleFormUrl?: string;
 }
 
-export function FeedbackButton({
+export const FeedbackButton = memo(function FeedbackButton({
   language,
   theme,
   googleFormUrl = "https://docs.google.com/forms/d/e/1FAIpQLSdaURXq1amwJvATGI3wSHn3BAPlVrD_M_zppIeQ5jpoX251GQ/viewform",
 }: FeedbackButtonProps) {
-  const handleFeedbackClick = () => {
+  const handleFeedbackClick = useCallback(() => {
     window.open(googleFormUrl, "_blank", "noopener,noreferrer");
-  };
+  }, [googleFormUrl]);
 
   return (
     <button
@@ -32,9 +34,9 @@ export function FeedbackButton({
       title={getTranslation("feedback", language)}
     >
       <MessageCircle className="h-5 w-5" />
-      <span className="font-medium hidden sm:inline-block text-2xl">
+      <span className="font-medium hidden sm:inline-block text-md">
         {getTranslation("feedback", language)}
       </span>
     </button>
   );
-}
+});

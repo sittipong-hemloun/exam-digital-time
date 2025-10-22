@@ -88,20 +88,5 @@ export const useFullscreen = () => {
     }
   };
 
-  const exitFullscreen = async (): Promise<void> => {
-    if (!isFullscreenSupported()) {
-      console.warn("Fullscreen API is not supported on this browser");
-      return;
-    }
-
-    try {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-      }
-    } catch (err: unknown) {
-      console.error("Error exiting fullscreen:", err);
-    }
-  };
-
-  return { isFullscreen, toggleFullscreen, enterFullscreen, exitFullscreen };
+  return { isFullscreen, toggleFullscreen, enterFullscreen };
 };

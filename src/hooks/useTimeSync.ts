@@ -1,5 +1,6 @@
 /**
  * Custom hook for time synchronization with server
+ * Optimized to minimize re-renders and improve performance
  */
 
 import { useEffect, useState, useRef } from "react";
@@ -7,14 +8,13 @@ import { syncServerTime } from "@/lib/timeUtils";
 
 export const useTimeSync = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [timeOffset, setTimeOffset] = useState(0);
   const timeOffsetRef = useRef(0);
+  const lastSecondRef = useRef(-1);
 
   // Initialize and sync time with server
   useEffect(() => {
     const initializeTime = async () => {
       const offset = await syncServerTime();
-      setTimeOffset(offset);
       timeOffsetRef.current = offset;
     };
 
@@ -24,7 +24,6 @@ export const useTimeSync = () => {
     const syncInterval = setInterval(
       async () => {
         const offset = await syncServerTime();
-        setTimeOffset(offset);
         timeOffsetRef.current = offset;
       },
       10 * 60 * 1000
@@ -34,13 +33,21 @@ export const useTimeSync = () => {
   }, []);
 
   // Update displayed time every second with offset (using ref to avoid recreating interval)
+  // Only update state when the second actually changes (not every 1000ms)
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentTime(new Date(Date.now() + timeOffsetRef.current));
-    }, 1000);
+      const now = new Date(Date.now() + timeOffsetRef.current);
+      const currentSecond = now.getSeconds();
+
+      // Only update state when second changes to avoid unnecessary re-renders
+      if (currentSecond !== lastSecondRef.current) {
+        lastSecondRef.current = currentSecond;
+        setCurrentTime(now);
+      }
+    }, 100); // Check more frequently but update state less often
 
     return () => clearInterval(timer);
   }, []);
 
-  return { currentTime, timeOffset };
+  return { currentTime };
 };

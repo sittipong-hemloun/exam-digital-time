@@ -1,7 +1,9 @@
 /**
  * Logo component for exam clock
+ * Optimized with React.memo to prevent unnecessary re-renders
  */
 
+import { memo } from "react";
 import Image from "next/image";
 import examThaiLogo from "@/assets/thai-logo.png";
 import examEnglishLogo from "@/assets/eng-logo.png";
@@ -11,7 +13,7 @@ interface LogoProps {
   language: Language;
 }
 
-export function Logo({ language }: LogoProps) {
+export const Logo = memo(function Logo({ language }: LogoProps) {
   return (
     <div className="mb-8">
       <Image
@@ -22,4 +24,4 @@ export function Logo({ language }: LogoProps) {
       />
     </div>
   );
-}
+});
