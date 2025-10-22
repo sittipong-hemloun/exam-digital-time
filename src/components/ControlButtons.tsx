@@ -91,17 +91,33 @@ export function ControlButtons({
       </Button>
 
       {/* Language Toggle Button */}
-      <Button
-        variant="ghost"
-        onClick={onToggleLanguage}
-        className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border border-white/20 backdrop-blur-lg flex items-center`}
-        title={getTranslation("changeLanguage", language)}
-      >
-        <Globe className="h-5 w-5" />
-        <span className="font-medium hidden sm:inline-block text-lg">
-          {language === "th" ? "ไทย" : "EN"}
-        </span>
-      </Button>
+      <div className={`rounded-full px-2 py-2 backdrop-blur-lg border border-white/20 ${buttonBg} flex items-center gap-1`}>
+        <Button
+          variant="ghost"
+          onClick={onToggleLanguage}
+          className={`rounded-full px-3 h-10 gap-2 ${textColor} hover:bg-white/10 flex items-center font-medium transition-all duration-300 ${
+            language === "th" ? `${theme === "dark" ? "bg-white/10" : "bg-black/10"}` : ""
+          }`}
+          title={getTranslation("changeLanguage", language)}
+        >
+          <span className="text-lg">🇹🇭</span>
+          <span className="hidden sm:inline-block text-sm font-semibold">ไทย</span>
+        </Button>
+
+        <div className={`h-6 w-px ${theme === "dark" ? "bg-white/10" : "bg-black/10"}`}></div>
+
+        <Button
+          variant="ghost"
+          onClick={onToggleLanguage}
+          className={`rounded-full px-3 h-10 gap-2 ${textColor} hover:bg-white/10 flex items-center font-medium transition-all duration-300 ${
+            language === "en" ? `${theme === "dark" ? "bg-white/10" : "bg-black/10"}` : ""
+          }`}
+          title={getTranslation("changeLanguage", language)}
+        >
+          <span className="text-lg">🇬🇧</span>
+          <span className="hidden sm:inline-block text-sm font-semibold">EN</span>
+        </Button>
+      </div>
 
       {/* Fullscreen Toggle Button */}
       <Button
