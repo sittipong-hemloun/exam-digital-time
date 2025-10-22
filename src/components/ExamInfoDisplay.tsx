@@ -24,14 +24,14 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
   themeClasses,
   hasExamInfo,
 }: ExamInfoDisplayProps) {
-  if (!hasExamInfo) {
-    return null;
-  }
-
   const fontSizeClasses = useMemo(
     () => getFontSizeClasses(fontSize),
     [fontSize]
   );
+
+  if (!hasExamInfo) {
+    return null;
+  }
 
   return (
     <div className="relative z-10 mt-8 w-full max-w-8xl mx-auto px-4">
