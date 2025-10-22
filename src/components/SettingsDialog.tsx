@@ -43,7 +43,7 @@ export function SettingsDialog({
   theme,
   themeClasses,
 }: SettingsDialogProps) {
-  const inputClasses = `text-lg h-11 rounded-lg ${
+  const inputClasses = `text-2xl h-11 rounded-lg ${
     theme === "dark"
       ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800"
       : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"
@@ -52,22 +52,22 @@ export function SettingsDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
-        className={`sm:max-w-[700px] text-lg ${themeClasses.background} ${themeClasses.text} transition-colors duration-500 rounded-2xl shadow-2xl`}
+        className={`sm:max-w-[700px] text-2xl ${themeClasses.background} ${themeClasses.text} transition-colors duration-500 rounded-2xl shadow-2xl`}
       >
         <DialogHeader>
-          <DialogTitle className={`text-2xl ${themeClasses.textPrimary} transition-colors duration-500`}>
+          <DialogTitle className={`text-4xl ${themeClasses.textPrimary} transition-colors duration-500`}>
             {getTranslation("examInfo", language)}
           </DialogTitle>
           <DialogDescription className={`text-base ${themeClasses.textMuted} transition-colors duration-500`}>
             {getTranslation("examInfoDesc", language)}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-5 py-6">
+        <div className="grid gap-5 py-3">
           {/* Course */}
           <div className="grid gap-2">
             <Label
               htmlFor="course"
-              className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
               {getTranslation("course", language)}
             </Label>
@@ -84,7 +84,7 @@ export function SettingsDialog({
           <div className="grid gap-2">
             <Label
               htmlFor="lecture"
-              className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
               {getTranslation("lecture", language)}
             </Label>
@@ -101,7 +101,7 @@ export function SettingsDialog({
           <div className="grid gap-2">
             <Label
               htmlFor="lab"
-              className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
               {getTranslation("lab", language)}
             </Label>
@@ -118,7 +118,7 @@ export function SettingsDialog({
           <div className="grid gap-2">
             <Label
               htmlFor="time"
-              className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
               {getTranslation("examTime", language)}
             </Label>
@@ -135,7 +135,7 @@ export function SettingsDialog({
           <div className="grid gap-2">
             <Label
               htmlFor="examRoom"
-              className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
               {getTranslation("examRoom", language)}
             </Label>
@@ -152,7 +152,7 @@ export function SettingsDialog({
           <div className="grid gap-2">
             <Label
               htmlFor="remarks"
-              className={`text-lg font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
               {getTranslation("remarks", language)}
             </Label>
@@ -162,7 +162,7 @@ export function SettingsDialog({
               onChange={(e) => onInputChange("remarks", e.target.value)}
               placeholder={getTranslation("remarksPlaceholder", language)}
               rows={3}
-              className={`text-lg rounded-lg ${
+              className={`rounded-lg ${
                 theme === "dark"
                   ? "bg-black text-white border border-gray-700 focus:border-primary focus:bg-gray-800"
                   : "bg-gray-50/80 text-gray-900 border border-gray-300 focus:border-green-600 focus:bg-white"
@@ -170,7 +170,7 @@ export function SettingsDialog({
             />
           </div>
         </div>
-        <DialogFooter className="text-lg pt-4 gap-3">
+        <DialogFooter className="text-2xl gap-3">
           <Button
             variant="outline"
             onClick={onCancel}
