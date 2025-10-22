@@ -5,7 +5,8 @@
 import { useState } from "react";
 
 export interface ExamInfo {
-  course: string;
+  courseCode: string;
+  courseName: string;
   lecture: string;
   lab: string;
   time: string;
@@ -14,7 +15,8 @@ export interface ExamInfo {
 }
 
 const initialExamInfo: ExamInfo = {
-  course: "",
+  courseCode: "",
+  courseName: "",
   lecture: "",
   lab: "",
   time: "",
@@ -42,7 +44,8 @@ export const useExamInfo = () => {
 
   const hasExamInfo = () => {
     return !!(
-      examInfo.course ||
+      examInfo.courseCode ||
+      examInfo.courseName ||
       examInfo.lecture ||
       examInfo.lab ||
       examInfo.time ||

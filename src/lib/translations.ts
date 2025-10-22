@@ -17,7 +17,8 @@ const translations: TranslationMap = {
     th: "กรอกข้อมูลเกี่ยวกับการสอบ (ข้อมูลที่ไม่กรอกจะไม่แสดง)",
     en: "Enter exam information (empty fields will not be displayed)",
   },
-  course: { th: "รหัสวิชา/ชื่อวิชา", en: "Course Code/Name" },
+  courseCode: { th: "รหัสวิชา", en: "Course Code" },
+  courseName: { th: "ชื่อวิชา", en: "Course Name" },
   lecture: { th: "หมู่บรรยาย", en: "Lecture Section" },
   lab: { th: "หมู่ปฏิบัติ", en: "Lab Section" },
   examTime: { th: "เวลาสอบ", en: "Exam Time" },
@@ -33,9 +34,13 @@ const translations: TranslationMap = {
   changeTheme: { th: "เปลี่ยนธีม", en: "Change Theme" },
   fullscreen: { th: "เต็มหน้าจอ", en: "Fullscreen" },
   exitFullscreen: { th: "ออกจากเต็มหน้าจอ", en: "Exit Fullscreen" },
-  coursePlaceholder: {
-    th: "เช่น CS101 Computer Programming",
-    en: "e.g. CS101 Computer Programming",
+  courseCodePlaceholder: {
+    th: "เช่น CS101",
+    en: "e.g. CS101",
+  },
+  courseNamePlaceholder: {
+    th: "เช่น Computer Programming",
+    en: "e.g. Computer Programming",
   },
   lecturePlaceholder: { th: "เช่น 01", en: "e.g. 01" },
   labPlaceholder: { th: "เช่น 001", en: "e.g. 001" },

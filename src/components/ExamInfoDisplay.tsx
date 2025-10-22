@@ -39,17 +39,29 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
         className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border ${themeClasses.cardBorder} transition-colors duration-500`}
       >
         <div
-          className={`grid grid-cols-1 md:grid-cols-12 gap-3 ${fontSizeClasses.examInfo} transition-all duration-300`}
+          className={`grid grid-cols-1 md:grid-cols-12 gap-6 ${fontSizeClasses.examInfo} transition-all duration-300`}
         >
-          {examInfo.course && (
-            <div className="flex gap-2 col-span-full">
+          {examInfo.courseCode && (
+            <div className="flex gap-2 col-span-full md:col-span-full">
               <span
                 className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
               >
-                {getTranslation("course", language)}:
+                {getTranslation("courseCode", language)}:
               </span>
               <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
-                {examInfo.course}
+                {examInfo.courseCode}
+              </span>
+            </div>
+          )}
+          {examInfo.courseName && (
+            <div className="flex gap-2 col-span-full md:col-span-full">
+              <span
+                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+              >
+                {getTranslation("courseName", language)}:
+              </span>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+                {examInfo.courseName}
               </span>
             </div>
           )}

@@ -71,19 +71,36 @@ export const SettingsDialog = memo(function SettingsDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-5 py-3">
-          {/* Course */}
+          {/* Course Code */}
           <div className="grid gap-2">
             <Label
-              htmlFor="course"
+              htmlFor="courseCode"
               className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
             >
-              {getTranslation("course", language)}
+              {getTranslation("courseCode", language)}
             </Label>
             <Input
-              id="course"
-              value={formData.course}
-              onChange={(e) => onInputChange("course", e.target.value)}
-              placeholder={getTranslation("coursePlaceholder", language)}
+              id="courseCode"
+              value={formData.courseCode}
+              onChange={(e) => onInputChange("courseCode", e.target.value)}
+              placeholder={getTranslation("courseCodePlaceholder", language)}
+              className={inputClasses}
+            />
+          </div>
+
+          {/* Course Name */}
+          <div className="grid gap-2">
+            <Label
+              htmlFor="courseName"
+              className={`text-2xl font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+            >
+              {getTranslation("courseName", language)}
+            </Label>
+            <Input
+              id="courseName"
+              value={formData.courseName}
+              onChange={(e) => onInputChange("courseName", e.target.value)}
+              placeholder={getTranslation("courseNamePlaceholder", language)}
               className={inputClasses}
             />
           </div>
