@@ -15,11 +15,11 @@ interface LogoProps {
 
 export const Logo = memo(function Logo({ language }: LogoProps) {
   return (
-    <div className="mb-8">
+    <div className="mb-4">
       <Image
         src={language === "th" ? examThaiLogo : examEnglishLogo}
         alt="Logo"
-        className="h-20 md:h-24 drop-shadow-2xl w-auto filter brightness-110"
+        className="h-16 md:h-18 drop-shadow-2xl w-auto filter brightness-110"
         priority
       />
     </div>
