@@ -3,8 +3,9 @@
  */
 
 import { Button } from "@/components/ui/button";
-import { Settings, Plus, Minus, Globe, Sun, Moon, Maximize, Minimize } from "lucide-react";
+import { Settings, Plus, Minus, Sun, Moon, Maximize, Minimize } from "lucide-react";
 import { getTranslation, type Language } from "@/lib/translations";
+import { LanguageFlag } from "@/components/LanguageFlag";
 import type { Theme } from "@/lib/themeConstants";
 
 interface ControlButtonsProps {
@@ -90,7 +91,7 @@ export function ControlButtons({
         )}
       </Button>
 
-      {/* Language Toggle Button */}
+      {/* Language Toggle Button - SVG flags for universal browser support */}
       <div className={`rounded-full px-2 py-2 backdrop-blur-lg border border-white/20 ${buttonBg} flex items-center gap-1`}>
         <Button
           variant="ghost"
@@ -100,7 +101,7 @@ export function ControlButtons({
           }`}
           title={getTranslation("changeLanguage", language)}
         >
-          <span className="text-lg">🇹🇭</span>
+          <LanguageFlag language="th" className="w-5 h-4" />
           <span className="hidden sm:inline-block text-sm font-semibold">ไทย</span>
         </Button>
 
@@ -114,7 +115,7 @@ export function ControlButtons({
           }`}
           title={getTranslation("changeLanguage", language)}
         >
-          <span className="text-lg">🇬🇧</span>
+          <LanguageFlag language="en" className="w-5 h-4" />
           <span className="hidden sm:inline-block text-sm font-semibold">EN</span>
         </Button>
       </div>
