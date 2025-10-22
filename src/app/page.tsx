@@ -22,7 +22,7 @@ import type { Theme } from "@/lib/themeConstants";
 
 export default function Home() {
   // UI State
-  const [isDialogOpen, setIsDialogOpen] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [fontSize, setFontSize] = useState(3);
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("dark");
