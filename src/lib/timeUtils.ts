@@ -32,12 +32,32 @@ export const formatDate = (date: Date, language: "th" | "en"): string => {
   const daysTh = ["อาทิตย์", "จันทร์", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์"];
   const daysEn = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const monthsTh = [
-    "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน",
-    "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",
+    "มกราคม",
+    "กุมภาพันธ์",
+    "มีนาคม",
+    "เมษายน",
+    "พฤษภาคม",
+    "มิถุนายน",
+    "กรกฎาคม",
+    "สิงหาคม",
+    "กันยายน",
+    "ตุลาคม",
+    "พฤศจิกายน",
+    "ธันวาคม",
   ];
   const monthsEn = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const days = language === "th" ? daysTh : daysEn;
@@ -63,16 +83,16 @@ export const syncServerTime = async (timeoutMs = 3000): Promise<number> => {
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     const res = await fetch(window.location.href, {
-      method: 'HEAD',
-      cache: 'no-store',
-      signal: controller.signal
+      method: "HEAD",
+      cache: "no-store",
+      signal: controller.signal,
     });
 
     clearTimeout(timeoutId);
 
-    const serverDateHeader = res.headers.get('Date');
+    const serverDateHeader = res.headers.get("Date");
     if (!serverDateHeader) {
-      console.warn('No Date header found in response');
+      console.warn("No Date header found in response");
       return 0;
     }
 
@@ -80,10 +100,9 @@ export const syncServerTime = async (timeoutMs = 3000): Promise<number> => {
     const clientTime = Date.now();
     const offset = serverTime - clientTime;
 
-    console.log('Time synced with server. Offset:', offset, 'ms');
     return offset;
   } catch (error) {
-    console.warn('Failed to sync with server time:', error);
+    console.warn("Failed to sync with server time:", error);
     return 0;
   }
 };

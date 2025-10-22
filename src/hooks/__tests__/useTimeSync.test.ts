@@ -2,15 +2,15 @@
  * Tests for useTimeSync hook
  */
 
-import { renderHook, waitFor, act } from '@testing-library/react';
-import { useTimeSync } from '../useTimeSync';
+import { renderHook, waitFor, act } from "@testing-library/react";
+import { useTimeSync } from "../useTimeSync";
 
 // Mock the timeUtils
-jest.mock('@/lib/timeUtils', () => ({
+jest.mock("@/lib/timeUtils", () => ({
   syncServerTime: jest.fn().mockResolvedValue(0),
 }));
 
-describe('useTimeSync', () => {
+describe("useTimeSync", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
@@ -20,20 +20,20 @@ describe('useTimeSync', () => {
     jest.useRealTimers();
   });
 
-  it('should initialize with current time', () => {
+  it("should initialize with current time", () => {
     const { result } = renderHook(() => useTimeSync());
 
     expect(result.current.currentTime).toBeInstanceOf(Date);
   });
 
-  it('should have timeOffset property', () => {
+  it("should have timeOffset property", () => {
     const { result } = renderHook(() => useTimeSync());
 
-    expect(typeof result.current.timeOffset).toBe('number');
+    expect(typeof result.current.timeOffset).toBe("number");
   });
 
-  it('should update time every second', async () => {
-    const { result, rerender } = renderHook(() => useTimeSync());
+  it("should update time every second", async () => {
+    const { result } = renderHook(() => useTimeSync());
 
     const initialTime = result.current.currentTime.getTime();
 
@@ -49,30 +49,30 @@ describe('useTimeSync', () => {
     });
   });
 
-  it('should return currentTime as Date object', () => {
+  it("should return currentTime as Date object", () => {
     const { result } = renderHook(() => useTimeSync());
 
     expect(result.current.currentTime).toBeInstanceOf(Date);
-    expect(typeof result.current.currentTime.getTime).toBe('function');
+    expect(typeof result.current.currentTime.getTime).toBe("function");
   });
 
-  it('should have methods to get hours, minutes, seconds', () => {
+  it("should have methods to get hours, minutes, seconds", () => {
     const { result } = renderHook(() => useTimeSync());
 
     const time = result.current.currentTime;
-    expect(typeof time.getHours).toBe('function');
-    expect(typeof time.getMinutes).toBe('function');
-    expect(typeof time.getSeconds).toBe('function');
+    expect(typeof time.getHours).toBe("function");
+    expect(typeof time.getMinutes).toBe("function");
+    expect(typeof time.getSeconds).toBe("function");
   });
 
-  it('should initialize timeOffset', () => {
+  it("should initialize timeOffset", () => {
     const { result } = renderHook(() => useTimeSync());
 
-    expect(typeof result.current.timeOffset).toBe('number');
+    expect(typeof result.current.timeOffset).toBe("number");
   });
 
-  it('should cleanup timer on unmount', () => {
-    const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
+  it("should cleanup timer on unmount", () => {
+    const clearIntervalSpy = jest.spyOn(global, "clearInterval");
 
     const { unmount } = renderHook(() => useTimeSync());
 
@@ -83,7 +83,7 @@ describe('useTimeSync', () => {
     clearIntervalSpy.mockRestore();
   });
 
-  it('should return valid time values', () => {
+  it("should return valid time values", () => {
     const { result } = renderHook(() => useTimeSync());
 
     const time = result.current.currentTime;

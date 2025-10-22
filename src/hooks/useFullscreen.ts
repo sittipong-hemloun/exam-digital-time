@@ -11,9 +11,9 @@ export const useFullscreen = () => {
     // Check if fullscreen API is supported (only on client side)
     const isSupported = !!(
       document.fullscreenEnabled ||
-      (document as any).webkitFullscreenEnabled ||
-      (document as any).mozFullScreenEnabled ||
-      (document as any).msFullscreenEnabled
+      (document as unknown as Record<string, unknown>).webkitFullscreenEnabled ||
+      (document as unknown as Record<string, unknown>).mozFullScreenEnabled ||
+      (document as unknown as Record<string, unknown>).msFullscreenEnabled
     );
 
     if (!isSupported) {
@@ -21,16 +21,14 @@ export const useFullscreen = () => {
       return;
     }
 
-    const handleFullscreenChange = () => {
+    const handleFullscreenChange = (): void => {
       setIsFullscreen(!!document.fullscreenElement);
-      console.log("Fullscreen state:", !!document.fullscreenElement);
     };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent): void => {
       // Allow ESC key to exit fullscreen
       if (e.key === "Escape" && document.fullscreenElement) {
-        console.log("ESC pressed, exiting fullscreen");
-        document.exitFullscreen().catch((err) => {
+        document.exitFullscreen().catch((err: Error) => {
           console.error("Failed to exit fullscreen:", err);
         });
       }
@@ -45,14 +43,15 @@ export const useFullscreen = () => {
     };
   }, []);
 
-  const isFullscreenSupported = () => !!(
-    document.fullscreenEnabled ||
-    (document as any).webkitFullscreenEnabled ||
-    (document as any).mozFullScreenEnabled ||
-    (document as any).msFullscreenEnabled
-  );
+  const isFullscreenSupported = (): boolean =>
+    !!(
+      document.fullscreenEnabled ||
+      (document as unknown as Record<string, unknown>).webkitFullscreenEnabled ||
+      (document as unknown as Record<string, unknown>).mozFullScreenEnabled ||
+      (document as unknown as Record<string, unknown>).msFullscreenEnabled
+    );
 
-  const toggleFullscreen = async () => {
+  const toggleFullscreen = async (): Promise<void> => {
     if (!isFullscreenSupported()) {
       console.warn("Fullscreen API is not supported on this browser");
       return;
@@ -62,21 +61,19 @@ export const useFullscreen = () => {
       // Use document.fullscreenElement as the source of truth
       if (document.fullscreenElement) {
         // We're in fullscreen, exit it
-        console.log("Exiting fullscreen...");
         await document.exitFullscreen();
       } else {
         // We're not in fullscreen, enter it
-        console.log("Entering fullscreen...");
-        await document.documentElement.requestFullscreen().catch((err) => {
+        await document.documentElement.requestFullscreen().catch((err: Error) => {
           console.error("Failed to enter fullscreen:", err);
         });
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error toggling fullscreen:", err);
     }
   };
 
-  const enterFullscreen = async () => {
+  const enterFullscreen = async (): Promise<void> => {
     if (!isFullscreenSupported()) {
       console.warn("Fullscreen API is not supported on this browser");
       return;
@@ -84,15 +81,14 @@ export const useFullscreen = () => {
 
     try {
       if (!document.fullscreenElement) {
-        console.log("Auto-entering fullscreen...");
         await document.documentElement.requestFullscreen();
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.warn("Failed to request fullscreen:", err);
     }
   };
 
-  const exitFullscreen = async () => {
+  const exitFullscreen = async (): Promise<void> => {
     if (!isFullscreenSupported()) {
       console.warn("Fullscreen API is not supported on this browser");
       return;
@@ -100,10 +96,9 @@ export const useFullscreen = () => {
 
     try {
       if (document.fullscreenElement) {
-        console.log("Exiting fullscreen...");
         await document.exitFullscreen();
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error exiting fullscreen:", err);
     }
   };

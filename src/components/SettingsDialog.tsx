@@ -9,13 +9,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Settings } from "lucide-react";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { Theme, ThemeClasses } from "@/lib/themeConstants";
 import type { ExamInfo } from "@/hooks/useExamInfo";
@@ -55,10 +53,14 @@ export function SettingsDialog({
         className={`sm:max-w-[700px] text-2xl ${themeClasses.background} ${themeClasses.text} transition-colors duration-500 rounded-2xl shadow-2xl`}
       >
         <DialogHeader>
-          <DialogTitle className={`text-4xl ${themeClasses.textPrimary} transition-colors duration-500`}>
+          <DialogTitle
+            className={`text-4xl ${themeClasses.textPrimary} transition-colors duration-500`}
+          >
             {getTranslation("examInfo", language)}
           </DialogTitle>
-          <DialogDescription className={`text-base ${themeClasses.textMuted} transition-colors duration-500`}>
+          <DialogDescription
+            className={`text-base ${themeClasses.textMuted} transition-colors duration-500`}
+          >
             {getTranslation("examInfoDesc", language)}
           </DialogDescription>
         </DialogHeader>

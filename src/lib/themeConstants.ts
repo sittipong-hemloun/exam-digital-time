@@ -60,11 +60,36 @@ export const getThemeClasses = (theme: Theme): ThemeClasses => {
  */
 export const getFontSizeClasses = (fontSize: number): FontSizeClasses => {
   const sizes: Record<number, FontSizeClasses> = {
-    1: { time: "text-7xl md:text-9xl", date: "text-xl md:text-3xl", examInfo: "text-base md:text-4xl", rule: "text-sm md:text-2xl" },
-    2: { time: "text-8xl md:text-[12rem]", date: "text-2xl md:text-4xl", examInfo: "text-lg md:text-5xl", rule: "text-base md:text-3xl" },
-    3: { time: "text-9xl md:text-[14rem]", date: "text-3xl md:text-5xl", examInfo: "text-xl md:text-6xl", rule: "text-lg md:text-4xl" },
-    4: { time: "text-[10rem] md:text-[16rem]", date: "text-4xl md:text-6xl", examInfo: "text-2xl md:text-7xl", rule: "text-xl md:text-5xl" },
-    5: { time: "text-[12rem] md:text-[20rem]", date: "text-5xl md:text-7xl", examInfo: "text-3xl md:text-8xl", rule: "text-2xl md:text-6xl" }
+    1: {
+      time: "text-7xl md:text-9xl",
+      date: "text-xl md:text-3xl",
+      examInfo: "text-base md:text-4xl",
+      rule: "text-sm md:text-2xl",
+    },
+    2: {
+      time: "text-8xl md:text-[12rem]",
+      date: "text-2xl md:text-4xl",
+      examInfo: "text-lg md:text-5xl",
+      rule: "text-base md:text-3xl",
+    },
+    3: {
+      time: "text-9xl md:text-[14rem]",
+      date: "text-3xl md:text-5xl",
+      examInfo: "text-xl md:text-6xl",
+      rule: "text-lg md:text-4xl",
+    },
+    4: {
+      time: "text-[10rem] md:text-[16rem]",
+      date: "text-4xl md:text-6xl",
+      examInfo: "text-2xl md:text-7xl",
+      rule: "text-xl md:text-5xl",
+    },
+    5: {
+      time: "text-[12rem] md:text-[20rem]",
+      date: "text-5xl md:text-7xl",
+      examInfo: "text-3xl md:text-8xl",
+      rule: "text-2xl md:text-6xl",
+    },
   };
   return sizes[fontSize as keyof typeof sizes] || sizes[3];
 };
@@ -92,14 +117,15 @@ export const getButtonContainerClasses = (theme: Theme): string => {
  * Get button classes based on theme
  */
 export const getButtonClasses = (theme: Theme, size: "sm" | "md" | "lg" = "md"): string => {
-  const baseClasses = theme === "dark"
-    ? "bg-white/5 hover:bg-white/10 text-foreground"
-    : "bg-black/5 hover:bg-black/10 text-gray-900";
+  const baseClasses =
+    theme === "dark"
+      ? "bg-white/5 hover:bg-white/10 text-foreground"
+      : "bg-black/5 hover:bg-black/10 text-gray-900";
 
   const sizeClasses = {
     sm: "h-9 w-9",
     md: "px-4 h-10 gap-2",
-    lg: "px-4 h-14 gap-2"
+    lg: "px-4 h-14 gap-2",
   };
 
   return `rounded-full ${sizeClasses[size]} ${baseClasses} border border-white/20 backdrop-blur-lg flex items-center`;

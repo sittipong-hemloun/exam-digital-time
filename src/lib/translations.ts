@@ -15,7 +15,7 @@ const translations: TranslationMap = {
   examInfo: { th: "ข้อมูลการสอบ", en: "Exam Information" },
   examInfoDesc: {
     th: "กรอกข้อมูลเกี่ยวกับการสอบ (ข้อมูลที่ไม่กรอกจะไม่แสดง)",
-    en: "Enter exam information (empty fields will not be displayed)"
+    en: "Enter exam information (empty fields will not be displayed)",
   },
   course: { th: "รหัสวิชา/ชื่อวิชา", en: "Course Code/Name" },
   lecture: { th: "หมู่บรรยาย", en: "Lecture Section" },
@@ -33,7 +33,10 @@ const translations: TranslationMap = {
   changeTheme: { th: "เปลี่ยนธีม", en: "Change Theme" },
   fullscreen: { th: "เต็มหน้าจอ", en: "Fullscreen" },
   exitFullscreen: { th: "ออกจากเต็มหน้าจอ", en: "Exit Fullscreen" },
-  coursePlaceholder: { th: "เช่น CS101 Computer Programming", en: "e.g. CS101 Computer Programming" },
+  coursePlaceholder: {
+    th: "เช่น CS101 Computer Programming",
+    en: "e.g. CS101 Computer Programming",
+  },
   lecturePlaceholder: { th: "เช่น 01", en: "e.g. 01" },
   labPlaceholder: { th: "เช่น 001", en: "e.g. 001" },
   timePlaceholder: { th: "เช่น 09:00 - 12:00", en: "e.g. 09:00 - 12:00" },
@@ -43,11 +46,11 @@ const translations: TranslationMap = {
   examRules: { th: "กฎกติกาการสอบ", en: "Exam Rules" },
   examRuleSubmission: {
     th: "นิสิตสามารถส่งข้อสอบได้เมื่อเวลาผ่านไป 1 ชั่วโมง",
-    en: "Students can submit the exam papers after 1 hour of the starting time of the exam."
+    en: "Students can submit the exam papers after 1 hour of the starting time of the exam.",
   },
   examRuleCommunication: {
     th: "ไม่อนุญาตให้นำเครื่องมือสื่อสารทุกชนิดเข้าห้องสอบ",
-    en: "Communication devices of any kind are not allowed into the exam room."
+    en: "Communication devices of any kind are not allowed into the exam room.",
   },
 };
 

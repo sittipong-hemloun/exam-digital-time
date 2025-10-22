@@ -21,11 +21,14 @@ export const useTimeSync = () => {
     initializeTime();
 
     // Re-sync every 10 minutes to maintain accuracy
-    const syncInterval = setInterval(async () => {
-      const offset = await syncServerTime();
-      setTimeOffset(offset);
-      timeOffsetRef.current = offset;
-    }, 10 * 60 * 1000);
+    const syncInterval = setInterval(
+      async () => {
+        const offset = await syncServerTime();
+        setTimeOffset(offset);
+        timeOffsetRef.current = offset;
+      },
+      10 * 60 * 1000
+    );
 
     return () => clearInterval(syncInterval);
   }, []);

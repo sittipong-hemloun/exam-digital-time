@@ -84,15 +84,13 @@ export function ControlButtons({
         } border border-white/20 backdrop-blur-lg`}
         title={getTranslation("changeTheme", language)}
       >
-        {theme === "dark" ? (
-          <Sun className="h-5 w-5" />
-        ) : (
-          <Moon className="h-5 w-5" />
-        )}
+        {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
       </Button>
 
       {/* Language Toggle Button - SVG flags for universal browser support */}
-      <div className={`rounded-full px-2 py-2 backdrop-blur-lg border border-white/20 ${buttonBg} flex items-center gap-1`}>
+      <div
+        className={`rounded-full px-2 py-2 backdrop-blur-lg border border-white/20 ${buttonBg} flex items-center gap-1`}
+      >
         <Button
           variant="ghost"
           onClick={onToggleLanguage}
