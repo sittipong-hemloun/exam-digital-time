@@ -48,7 +48,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("courseCode", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.courseCode}
               </span>
             </div>
@@ -60,7 +60,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("courseName", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.courseName}
               </span>
             </div>
@@ -72,7 +72,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("lecture", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.lecture}
               </span>
             </div>
@@ -84,7 +84,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("lab", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.lab}
               </span>
             </div>
@@ -96,7 +96,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("examTime", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.time}
               </span>
             </div>
@@ -108,7 +108,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("examRoom", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.examRoom}
               </span>
             </div>
@@ -120,7 +120,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("remarks", language)}:
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500`}>
+              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
                 {examInfo.remarks}
               </span>
             </div>
