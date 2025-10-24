@@ -34,7 +34,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
   }
 
   return (
-    <div className="relative z-10 mt-8 w-full max-w-8xl mx-auto px-4">
+    <div className="relative z-10 w-full max-w-8xl mx-auto px-4">
       <div
         className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border ${themeClasses.cardBorder} transition-colors duration-500`}
       >

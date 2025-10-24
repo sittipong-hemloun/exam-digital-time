@@ -15,7 +15,7 @@ interface LogoProps {
 
 export const Logo = memo(function Logo({ language }: LogoProps) {
   return (
-    <div className="mb-4">
+    <div className="">
       <Image
         src={language === "th" ? examThaiLogo : examEnglishLogo}
         alt="Logo"
