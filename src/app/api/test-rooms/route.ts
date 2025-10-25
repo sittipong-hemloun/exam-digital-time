@@ -1,10 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { validateRoomQuery } from "@/lib/validators";
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get("q") || "";
+    const rawQuery = searchParams.get("q") || "";
+
+    // Validate and sanitize the search query
+    const queryValidation = validateRoomQuery(rawQuery);
+    if (!queryValidation.isValid) {
+      return NextResponse.json(
+        { error: queryValidation.error || "Invalid search query" },
+        { status: 400 }
+      );
+    }
+    const query = queryValidation.value || "";
 
     // Get today's date in Thai format (e.g., "20 ต.ค. 68")
     const now = new Date();
@@ -25,50 +36,48 @@ export async function GET(request: Request) {
     const thaiYear = now.getFullYear() + 543;
     const thaiDate = `${now.getDate()} ${thaiMonths[now.getMonth()]} ${String(thaiYear).slice(-2)}`;
 
-    // Get latest sm_yr and sm_sem using raw SQL
-    const latestResult = await prisma.$queryRaw<
-      Array<{ sm_yr: string; sm_sem: string }>
-    >`
-      SELECT TOP 1 sm_yr, sm_sem FROM dbo.test_table
-      ORDER BY sm_yr DESC, sm_sem DESC
-    `;
+    // Get latest semester using Prisma ORM with orderBy
+    const latestRecord = await prisma.test_table.findFirst({
+      where: {
+        date_test: thaiDate,
+      },
+      select: {
+        sm_yr: true,
+        sm_sem: true,
+      },
+      orderBy: [{ sm_yr: "desc" }, { sm_sem: "desc" }],
+    });
 
-    if (!latestResult || latestResult.length === 0) {
+    if (!latestRecord) {
       return NextResponse.json(
         { error: "No records found in test_table" },
         { status: 404 }
       );
     }
 
-    const latestRecord = latestResult[0];
+    // Fetch distinct rooms using Prisma ORM
+    // Get all matching records and extract distinct room_test values
+    const testRecords = await prisma.test_table.findMany({
+      where: {
+        sm_yr: latestRecord.sm_yr,
+        sm_sem: latestRecord.sm_sem,
+        date_test: thaiDate,
+        ...(query && {
+          room_test: {
+            contains: query,
+          },
+        }),
+      },
+      select: {
+        room_test: true,
+      },
+      orderBy: {
+        room_test: "asc",
+      },
+      distinct: ["room_test"],
+    });
 
-    // Fetch rooms matching the latest semester and today's date using raw SQL
-    let roomsResult: Array<{ room_test: string | null }>;
-
-    if (query) {
-      roomsResult = await prisma.$queryRaw<
-        Array<{ room_test: string | null }>
-      >`
-        SELECT DISTINCT room_test FROM dbo.test_table
-        WHERE sm_yr = ${latestRecord.sm_yr}
-        AND sm_sem = ${latestRecord.sm_sem}
-        AND date_test = ${thaiDate}
-        AND room_test LIKE ${'%' + query + '%'}
-        ORDER BY room_test ASC
-      `;
-    } else {
-      roomsResult = await prisma.$queryRaw<
-        Array<{ room_test: string | null }>
-      >`
-        SELECT DISTINCT room_test FROM dbo.test_table
-        WHERE sm_yr = ${latestRecord.sm_yr}
-        AND sm_sem = ${latestRecord.sm_sem}
-        AND date_test = ${thaiDate}
-        ORDER BY room_test ASC
-      `;
-    }
-
-    const roomList = roomsResult
+    const roomList = testRecords
       .map((r) => r.room_test)
       .filter((r) => r !== null) as string[];
 

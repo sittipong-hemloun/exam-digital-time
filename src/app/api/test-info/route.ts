@@ -1,5 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import {
+  validateDateTest,
+  validateRoomTest,
+  validateSmYear,
+  validateSmSem,
+} from "@/lib/validators";
 
 export interface TestInfo {
   nno: number;
@@ -25,33 +31,82 @@ export interface TestInfo {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const dateTest = searchParams.get("date_test");
-    const roomTest = searchParams.get("room_test");
-    const smYr = searchParams.get("sm_yr");
-    const smSem = searchParams.get("sm_sem");
+    const rawDateTest = searchParams.get("date_test");
+    const rawRoomTest = searchParams.get("room_test");
+    const rawSmYr = searchParams.get("sm_yr");
+    const rawSmSem = searchParams.get("sm_sem");
 
-    if (!dateTest || !roomTest || !smYr || !smSem) {
+    // Validate all required parameters
+    const dateValidation = validateDateTest(rawDateTest || "");
+    if (!dateValidation.isValid) {
       return NextResponse.json(
-        {
-          error: "Missing required parameters: date_test, room_test, sm_yr, sm_sem",
-        },
+        { error: `Invalid date_test: ${dateValidation.error}` },
         { status: 400 }
       );
     }
 
-    // Search for test records matching the criteria using raw SQL
-    const testRecords = await prisma.$queryRaw<TestInfo[]>`
-      SELECT
-        nno, sm_sem, sm_yr, sm_test, cs_code, course_nam, course_name,
-        date_test, time_test, time_am_pm, sec_lec1, sec_lab1, room_test,
-        build, count_person, person1, id_start, id_stop
-      FROM dbo.test_table
-      WHERE date_test = ${dateTest}
-        AND room_test = ${roomTest}
-        AND sm_yr = ${smYr}
-        AND sm_sem = ${smSem}
-      ORDER BY nno ASC
-    `;
+    const roomValidation = validateRoomTest(rawRoomTest || "");
+    if (!roomValidation.isValid) {
+      return NextResponse.json(
+        { error: `Invalid room_test: ${roomValidation.error}` },
+        { status: 400 }
+      );
+    }
+
+    const yearValidation = validateSmYear(rawSmYr || "");
+    if (!yearValidation.isValid) {
+      return NextResponse.json(
+        { error: `Invalid sm_yr: ${yearValidation.error}` },
+        { status: 400 }
+      );
+    }
+
+    const semValidation = validateSmSem(rawSmSem || "");
+    if (!semValidation.isValid) {
+      return NextResponse.json(
+        { error: `Invalid sm_sem: ${semValidation.error}` },
+        { status: 400 }
+      );
+    }
+
+    // Use validated values
+    const dateTest = dateValidation.value;
+    const roomTest = roomValidation.value;
+    const smYr = yearValidation.value;
+    const smSem = semValidation.value;
+
+    // Search for test records using Prisma ORM instead of raw SQL
+    const testRecords = await prisma.test_table.findMany({
+      where: {
+        date_test: dateTest,
+        room_test: roomTest,
+        sm_yr: smYr,
+        sm_sem: smSem,
+      },
+      select: {
+        nno: true,
+        sm_sem: true,
+        sm_yr: true,
+        sm_test: true,
+        cs_code: true,
+        course_nam: true,
+        course_name: true,
+        date_test: true,
+        time_test: true,
+        time_am_pm: true,
+        sec_lec1: true,
+        sec_lab1: true,
+        room_test: true,
+        build: true,
+        count_person: true,
+        person1: true,
+        id_start: true,
+        id_stop: true,
+      },
+      orderBy: {
+        nno: "asc",
+      },
+    });
 
     if (testRecords.length === 0) {
       return NextResponse.json(
