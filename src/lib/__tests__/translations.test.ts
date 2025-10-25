@@ -27,29 +27,33 @@ describe("translations", () => {
     });
 
     it("should return correct form labels in Thai", () => {
-      expect(getTranslation("course", "th")).toBe("รหัสวิชา/ชื่อวิชา");
+      expect(getTranslation("courseCode", "th")).toBe("รหัสวิชา");
+      expect(getTranslation("courseName", "th")).toBe("ชื่อวิชา");
       expect(getTranslation("lecture", "th")).toBe("หมู่บรรยาย");
       expect(getTranslation("lab", "th")).toBe("หมู่ปฏิบัติ");
       expect(getTranslation("examRoom", "th")).toBe("ห้องสอบ");
     });
 
     it("should return correct form labels in English", () => {
-      expect(getTranslation("course", "en")).toBe("Course Code/Name");
+      expect(getTranslation("courseCode", "en")).toBe("Course Code");
+      expect(getTranslation("courseName", "en")).toBe("Course Name");
       expect(getTranslation("lecture", "en")).toBe("Lecture Section");
       expect(getTranslation("lab", "en")).toBe("Lab Section");
       expect(getTranslation("examRoom", "en")).toBe("Exam Room");
     });
 
     it("should return correct placeholder text in Thai", () => {
-      const result = getTranslation("coursePlaceholder", "th");
-      expect(result).toContain("CS101");
-      expect(result).toContain("Computer Programming");
+      const codeResult = getTranslation("courseCodePlaceholder", "th");
+      const nameResult = getTranslation("courseNamePlaceholder", "th");
+      expect(codeResult).toContain("CS101");
+      expect(nameResult).toContain("Computer Programming");
     });
 
     it("should return correct placeholder text in English", () => {
-      const result = getTranslation("coursePlaceholder", "en");
-      expect(result).toContain("CS101");
-      expect(result).toContain("Computer Programming");
+      const codeResult = getTranslation("courseCodePlaceholder", "en");
+      const nameResult = getTranslation("courseNamePlaceholder", "en");
+      expect(codeResult).toContain("CS101");
+      expect(nameResult).toContain("Computer Programming");
     });
 
     it("should return the key itself if translation does not exist", () => {

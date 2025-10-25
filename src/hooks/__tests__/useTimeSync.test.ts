@@ -26,10 +26,10 @@ describe("useTimeSync", () => {
     expect(result.current.currentTime).toBeInstanceOf(Date);
   });
 
-  it("should have timeOffset property", () => {
+  it("should have currentTime property", () => {
     const { result } = renderHook(() => useTimeSync());
 
-    expect(typeof result.current.timeOffset).toBe("number");
+    expect(result.current.currentTime).toBeInstanceOf(Date);
   });
 
   it("should update time every second", async () => {
@@ -65,10 +65,10 @@ describe("useTimeSync", () => {
     expect(typeof time.getSeconds).toBe("function");
   });
 
-  it("should initialize timeOffset", () => {
+  it("should return only currentTime property", () => {
     const { result } = renderHook(() => useTimeSync());
 
-    expect(typeof result.current.timeOffset).toBe("number");
+    expect(Object.keys(result.current)).toEqual(["currentTime"]);
   });
 
   it("should cleanup timer on unmount", () => {

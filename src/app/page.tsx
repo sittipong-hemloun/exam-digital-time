@@ -6,7 +6,7 @@ import { useEffect, useState, useCallback } from "react";
 import { Logo } from "@/components/Logo";
 import { ClockDisplay } from "@/components/ClockDisplay";
 import { ControlButtons } from "@/components/ControlButtons";
-import { SettingsDialog } from "@/components/SettingsDialog";
+import { AutocompleteSettingsDialog } from "@/components/AutocompleteSettingsDialog";
 import { ExamInfoDisplay } from "@/components/ExamInfoDisplay";
 import { FeedbackButton } from "@/components/FeedbackButton";
 
@@ -19,6 +19,7 @@ import { useExamInfo } from "@/hooks/useExamInfo";
 import { getThemeClasses, getFontSizeClasses } from "@/lib/themeConstants";
 import type { Language } from "@/lib/translations";
 import type { Theme } from "@/lib/themeConstants";
+import type { TestInfo } from "@/app/api/test-info/route";
 
 export default function Home() {
   // UI State
@@ -27,16 +28,35 @@ export default function Home() {
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("dark");
   const [isMounted, setIsMounted] = useState(false);
+  const [latestSemester, setLatestSemester] = useState<{
+    sm_yr: string;
+    sm_sem: string;
+    date_test: string;
+  } | null>(null);
 
   // Custom Hooks
   const { currentTime } = useTimeSync();
   const { isFullscreen, toggleFullscreen, enterFullscreen } = useFullscreen();
-  const { examInfo, formData, handleInputChange, handleConfirm, handleCancel, hasExamInfo } =
-    useExamInfo();
+  const { examInfo, applyTestInfo } = useExamInfo();
 
-  // Initialize mounted state on client
+  // Initialize mounted state on client and fetch latest semester
   useEffect(() => {
     setIsMounted(true);
+
+    // Fetch latest semester info
+    const fetchLatestSemester = async () => {
+      try {
+        const response = await fetch("/api/test-rooms");
+        if (response.ok) {
+          const data = await response.json();
+          setLatestSemester(data.latestSemester);
+        }
+      } catch (error) {
+        console.error("Error fetching latest semester:", error);
+      }
+    };
+
+    fetchLatestSemester();
   }, []);
 
   // Event Handlers (memoized to prevent unnecessary re-renders)
@@ -61,21 +81,25 @@ export default function Home() {
   );
 
   // Dialog Handlers with Fullscreen (memoized)
-  const handleConfirmWithFullscreen = useCallback(async () => {
-    handleConfirm();
-    setIsDialogOpen(false);
-    // Wait for DOM to update before requesting fullscreen
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    await enterFullscreen();
-  }, [handleConfirm, enterFullscreen]);
+  const handleConfirmWithFullscreen = useCallback(
+    async (testInfo: TestInfo | null = null) => {
+      if (testInfo) {
+        applyTestInfo(testInfo);
+      }
+      setIsDialogOpen(false);
+      // Wait for DOM to update before requesting fullscreen
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      await enterFullscreen();
+    },
+    [applyTestInfo, enterFullscreen]
+  );
 
   const handleCancelWithFullscreen = useCallback(async () => {
-    handleCancel();
     setIsDialogOpen(false);
     // Wait for DOM to update before requesting fullscreen
     await new Promise((resolve) => setTimeout(resolve, 100));
     await enterFullscreen();
-  }, [handleCancel, enterFullscreen]);
+  }, [enterFullscreen]);
 
   const fontSizeClasses = getFontSizeClasses(fontSize);
   const themeClasses = getThemeClasses(theme);
@@ -170,20 +194,27 @@ export default function Home() {
         fontSize={fontSize}
         language={language}
         themeClasses={themeClasses}
-        hasExamInfo={hasExamInfo()}
+        hasExamInfo={!!(
+          examInfo.courseCode ||
+          examInfo.courseName ||
+          examInfo.lecture ||
+          examInfo.lab ||
+          examInfo.time ||
+          examInfo.examRoom ||
+          examInfo.remarks
+        )}
       />
 
-      {/* Settings Dialog */}
-      <SettingsDialog
+      {/* Autocomplete Settings Dialog */}
+      <AutocompleteSettingsDialog
         isOpen={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        formData={formData}
-        onInputChange={handleInputChange}
         onConfirm={handleConfirmWithFullscreen}
         onCancel={handleCancelWithFullscreen}
         language={language}
         theme={theme}
         themeClasses={themeClasses}
+        latestSemester={latestSemester || undefined}
       />
 
       {/* Feedback Button */}
