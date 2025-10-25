@@ -1,13 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  // basePath: '/exam-digital-time', // Removed for local development
+  // Removed: output: 'export'
+  // Now using default server mode to support API routes
+  // This allows /api/* routes to work on IIS with Node.js
+
+  // basePath: '/exam-digital-time', // Uncomment if deploying to subdirectory
   images: {
     unoptimized: true,
   },
   trailingSlash: true,
-  // Since we're using static export, we can't use API routes
-  // The client will fetch time directly from external APIs
   reactStrictMode: false,
 };
 
