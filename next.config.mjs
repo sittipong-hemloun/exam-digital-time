@@ -8,8 +8,13 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  trailingSlash: true,
+  // trailingSlash: true, // Disabled - causes issues with API routes on HTTPS proxy
   reactStrictMode: false,
+
+  // Skip trailing slash redirects for API routes
+  async redirects() {
+    return [];
+  },
 };
 
 export default nextConfig;
