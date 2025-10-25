@@ -76,12 +76,19 @@ export const formatDate = (date: Date, language: "th" | "en"): string => {
 
 /**
  * Sync time with server using HTTP Date header
+ * For static exports, falls back to no time offset since server time is unavailable
  */
 export const syncServerTime = async (timeoutMs = 3000): Promise<number> => {
+  // Skip syncing if we're in a static export environment (no server endpoint available)
+  if (typeof window === "undefined") {
+    return 0;
+  }
+
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+    // Try to fetch with a minimal endpoint - if it fails, we'll use client time
     const res = await fetch(window.location.href, {
       method: "HEAD",
       cache: "no-store",
@@ -102,7 +109,15 @@ export const syncServerTime = async (timeoutMs = 3000): Promise<number> => {
 
     return offset;
   } catch (error) {
-    console.warn("Failed to sync with server time:", error);
+    // Handle AbortError separately as it's expected when timeout occurs
+    if (error instanceof DOMException && error.name === "AbortError") {
+      console.warn("Server time sync request timed out - using client time");
+    } else if (error instanceof TypeError) {
+      // Network errors or CORS issues are common in static deployments
+      console.warn("Unable to sync with server time - using client time");
+    } else {
+      console.warn("Failed to sync with server time:", error);
+    }
     return 0;
   }
 };
