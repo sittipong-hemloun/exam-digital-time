@@ -46,10 +46,18 @@ export default function Home() {
     // Fetch latest semester info
     const fetchLatestSemester = async () => {
       try {
-        const response = await fetch("/api/test-rooms");
+        // Use relative path to work with both IIS and direct localhost access
+        const response = await fetch("/api/test-rooms", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+        });
         if (response.ok) {
           const data = await response.json();
           setLatestSemester(data.latestSemester);
+        } else {
+          console.warn("API returned non-ok status:", response.status);
         }
       } catch (error) {
         console.error("Error fetching latest semester:", error);

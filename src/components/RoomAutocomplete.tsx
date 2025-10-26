@@ -1,6 +1,7 @@
 import { memo, useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ScrollableContainer } from "@/components/ScrollableContainer";
 
 interface RoomAutocompleteProps {
   value: string;
@@ -115,25 +116,35 @@ export const RoomAutocomplete = memo(function RoomAutocomplete({
         {/* Autocomplete Dropdown */}
         {isOpen && suggestions.length > 0 && (
           <div
-            className={`absolute top-full left-0 right-0 mt-1 rounded-lg border max-h-60 overflow-y-auto z-50 ${
+            className={`absolute top-full left-0 right-0 mt-1 rounded-lg border z-50 ${
               theme === "dark"
                 ? "bg-gray-900 border-gray-700 text-white"
                 : "bg-white border-gray-300 text-gray-900"
             }`}
           >
-            {suggestions.map((room, index) => (
-              <div
-                key={index}
-                onClick={() => handleSelectSuggestion(room)}
-                className={`px-4 py-3 cursor-pointer ${
-                  theme === "dark"
-                    ? "hover:bg-gray-800"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                {room}
-              </div>
-            ))}
+            <ScrollableContainer
+              maxHeight="max-h-60"
+              theme={theme}
+              className={`${
+                theme === "dark"
+                  ? "bg-gray-900"
+                  : "bg-white"
+              }`}
+            >
+              {suggestions.map((room, index) => (
+                <div
+                  key={index}
+                  onClick={() => handleSelectSuggestion(room)}
+                  className={`px-4 py-3 cursor-pointer ${
+                    theme === "dark"
+                      ? "hover:bg-gray-800"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  {room}
+                </div>
+              ))}
+            </ScrollableContainer>
           </div>
         )}
 

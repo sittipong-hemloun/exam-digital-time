@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { ScrollableContainer } from "@/components/ScrollableContainer";
 import type { TestInfo } from "@/app/api/test-info/route";
 
 interface SelectTestInfoDialogProps {
@@ -54,8 +55,8 @@ export const SelectTestInfoDialog = memo(function SelectTestInfoDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="max-h-96 overflow-y-auto">
-          <div className="space-y-3">
+        <ScrollableContainer maxHeight="max-h-96" theme={theme}>
+          <div className="space-y-3 pr-2">
             {records.map((record) => (
               <div
                 key={record.nno}
@@ -109,7 +110,7 @@ export const SelectTestInfoDialog = memo(function SelectTestInfoDialog({
               </div>
             ))}
           </div>
-        </div>
+        </ScrollableContainer>
 
         <div className="flex justify-end gap-3 mt-6">
           <Button
