@@ -117,11 +117,6 @@ const ExamRulesDisplay = memo(function ExamRulesDisplay({
       >
         {getTranslation("examRuleSubmission", language)}
       </p>
-      <p
-        className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-80 font-thin`}
-      >
-        {getTranslation("examRuleCommunication", language)}
-      </p>
     </div>
   );
 });

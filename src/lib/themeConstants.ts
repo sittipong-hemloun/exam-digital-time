@@ -64,31 +64,31 @@ export const getFontSizeClasses = (fontSize: number): FontSizeClasses => {
       time: "text-7xl md:text-7xl",
       date: "text-xl md:text-2xl",
       examInfo: "text-base md:text-4xl",
-      rule: "text-sm md:text-2xl",
+      rule: "text-sm md:text-lg",
     },
     2: {
       time: "text-8xl md:text-[8rem]",
       date: "text-2xl md:text-3xl",
       examInfo: "text-lg md:text-5xl",
-      rule: "text-base md:text-3xl",
+      rule: "text-base md:text-xl",
     },
     3: {
       time: "text-9xl md:text-[9rem]",
       date: "text-3xl md:text-4xl",
       examInfo: "text-xl md:text-6xl",
-      rule: "text-lg md:text-4xl",
+      rule: "text-lg md:text-2xl",
     },
     4: {
       time: "text-[10rem] md:text-[10rem]",
       date: "text-4xl md:text-5xl",
       examInfo: "text-2xl md:text-7xl",
-      rule: "text-xl md:text-5xl",
+      rule: "text-xl md:text-3xl",
     },
     5: {
       time: "text-[12rem] md:text-[12rem]",
       date: "text-5xl md:text-6xl",
       examInfo: "text-3xl md:text-8xl",
-      rule: "text-2xl md:text-6xl",
+      rule: "text-2xl md:text-4xl",
     },
   };
   return sizes[fontSize as keyof typeof sizes] || sizes[3];
