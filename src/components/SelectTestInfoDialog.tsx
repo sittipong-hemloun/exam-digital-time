@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ScrollableContainer } from "@/components/ScrollableContainer";
-import type { TestInfo } from "@/app/api/test-info/route";
+import type { TestInfo } from "@/actions/examActions";
 
 interface SelectTestInfoDialogProps {
   isOpen: boolean;

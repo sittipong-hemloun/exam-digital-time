@@ -20,7 +20,8 @@ import { useExamInfo } from "@/hooks/useExamInfo";
 import { getThemeClasses, getFontSizeClasses } from "@/lib/themeConstants";
 import type { Language } from "@/lib/translations";
 import type { Theme } from "@/lib/themeConstants";
-import type { TestInfo } from "@/app/api/test-info/route";
+import type { TestInfo } from "@/actions/examActions";
+import { fetchRoomSuggestions } from "@/actions/examActions";
 
 export default function Home() {
   // UI State
@@ -44,21 +45,14 @@ export default function Home() {
   useEffect(() => {
     setIsMounted(true);
 
-    // Fetch latest semester info
+    // Fetch latest semester info via Server Action
     const fetchLatestSemester = async () => {
       try {
-        // Use relative path to work with both IIS and direct localhost access
-        const response = await fetch("/api/test-rooms", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setLatestSemester(data.latestSemester);
+        const result = await fetchRoomSuggestions("");
+        if (!result.error && result.latestSemester) {
+          setLatestSemester(result.latestSemester);
         } else {
-          console.warn("API returned non-ok status:", response.status);
+          console.warn("Failed to fetch latest semester:", result.error);
         }
       } catch (error) {
         console.error("Error fetching latest semester:", error);

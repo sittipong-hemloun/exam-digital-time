@@ -16,7 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { Theme, ThemeClasses } from "@/lib/themeConstants";
-import type { TestInfo } from "@/app/api/test-info/route";
+import type { TestInfo } from "@/actions/examActions";
+import { fetchExamInfo } from "@/actions/examActions";
 
 interface AutocompleteSettingsDialogProps {
   isOpen: boolean;
@@ -65,16 +66,23 @@ export const AutocompleteSettingsDialog = memo(
 
         setIsSearching(true);
         try {
-          const response = await fetch(
-            `/api/test-info?date_test=${encodeURIComponent(latestSemester.date_test)}&room_test=${encodeURIComponent(room)}&sm_yr=${encodeURIComponent(latestSemester.sm_yr)}&sm_sem=${encodeURIComponent(latestSemester.sm_sem)}`
+          const result = await fetchExamInfo(
+            latestSemester.date_test,
+            room,
+            latestSemester.sm_yr,
+            latestSemester.sm_sem
           );
 
-          if (!response.ok) {
-            throw new Error("Failed to fetch test data");
+          if (result.error) {
+            alert(
+              language === "th"
+                ? "ไม่พบข้อมูลสอบ"
+                : "No exam records found"
+            );
+            return;
           }
 
-          const data = await response.json();
-          const records = data.records || [];
+          const records = result.records || [];
 
           if (records.length === 0) {
             alert(

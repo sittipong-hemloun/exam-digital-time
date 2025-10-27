@@ -3,7 +3,8 @@
  */
 
 import { useState } from "react";
-import type { TestInfo } from "@/app/api/test-info/route";
+import type { TestInfo } from "@/actions/examActions";
+import { fetchExamInfo as fetchExamInfoAction } from "@/actions/examActions";
 
 export interface ExamInfo {
   courseCode: string;
@@ -58,7 +59,7 @@ export const useExamInfo = () => {
     );
   };
 
-  // Fetch exam data from database using room and date
+  // Fetch exam data from database using room and date via Server Action
   const fetchExamData = async (
     roomTest: string,
     dateTest: string,
@@ -70,19 +71,15 @@ export const useExamInfo = () => {
     setSearchResults([]);
 
     try {
-      const response = await fetch(
-        `/api/test-info?date_test=${encodeURIComponent(dateTest)}&room_test=${encodeURIComponent(roomTest)}&sm_yr=${encodeURIComponent(smYr)}&sm_sem=${encodeURIComponent(smSem)}`
-      );
+      const response = await fetchExamInfoAction(dateTest, roomTest, smYr, smSem);
 
-      if (!response.ok) {
-        const data = await response.json();
-        setError(data.error || "Failed to fetch exam data");
+      if (response.error) {
+        setError(response.error);
         return [];
       }
 
-      const data = await response.json();
-      setSearchResults(data.records || []);
-      return data.records || [];
+      setSearchResults(response.records || []);
+      return response.records || [];
     } catch (err) {
       const errorMsg =
         err instanceof Error ? err.message : "Unknown error occurred";

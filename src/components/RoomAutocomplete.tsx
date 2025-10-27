@@ -2,6 +2,7 @@ import { memo, useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollableContainer } from "@/components/ScrollableContainer";
+import { fetchRoomSuggestions } from "@/actions/examActions";
 
 interface RoomAutocompleteProps {
   value: string;
@@ -38,7 +39,7 @@ export const RoomAutocomplete = memo(function RoomAutocomplete({
   const [isLoading, setIsLoading] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // Fetch room suggestions
+  // Fetch room suggestions via Server Action
   useEffect(() => {
     const fetchSuggestions = async () => {
       if (!value.trim()) {
@@ -48,10 +49,9 @@ export const RoomAutocomplete = memo(function RoomAutocomplete({
 
       setIsLoading(true);
       try {
-        const response = await fetch(`/api/test-rooms?q=${encodeURIComponent(value)}`);
-        if (response.ok) {
-          const data = await response.json();
-          setSuggestions(data.rooms || []);
+        const result = await fetchRoomSuggestions(value);
+        if (!result.error) {
+          setSuggestions(result.rooms || []);
           setIsOpen(true);
         }
       } catch (error) {
