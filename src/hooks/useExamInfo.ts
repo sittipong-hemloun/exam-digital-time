@@ -97,12 +97,12 @@ export const useExamInfo = () => {
   const mapTestInfoToExamInfo = (testInfo: TestInfo): ExamInfo => {
     const timeStr = `${testInfo.time_test}${testInfo.time_am_pm ? " " + testInfo.time_am_pm : ""}`;
     return {
-      courseCode: testInfo.cs_code || "",
-      courseName: testInfo.course_name || testInfo.course_nam || "",
+      courseCode: testInfo.cs_code || "-",
+      courseName: testInfo.course_name || testInfo.course_nam || "-",
       lecture: testInfo.sec_lec1 || "",
-      lab: testInfo.sec_lab1 || "",
+      lab: testInfo.sec_lab1 === "0" ? "-" : testInfo.sec_lab1 || "-",
       time: timeStr,
-      examRoom: testInfo.room_test || "",
+      examRoom: testInfo.room_test || "-",
       remarks: "", // Let user fill in remarks manually
     };
   };
