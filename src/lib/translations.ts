@@ -54,8 +54,8 @@ const translations: TranslationMap = {
     en: "Students can submit the exam papers after 1 hour of the starting time of the exam.",
   },
   sourceAttribution: {
-    th: "คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2024). Retrieved from https://ms.src.ku.ac.th/time",
-    en: "Faculty of Management Sciences, Kasetsart University Sriracha Campus. (2024). Retrieved from https://ms.src.ku.ac.th/time",
+    th: "ที่มา: คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2024). Retrieved from https://ms.src.ku.ac.th/time",
+    en: "Source: Faculty of Management Sciences, Kasetsart University Sriracha Campus. (2024). Retrieved from https://ms.src.ku.ac.th/time",
   },
 };
 

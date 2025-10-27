@@ -39,7 +39,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
         className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border ${themeClasses.cardBorder} transition-colors duration-500`}
       >
         <div
-          className={`grid grid-cols-1 md:grid-cols-12 gap-6 ${fontSizeClasses.examInfo} transition-all duration-300`}
+          className={`grid grid-cols-1 md:grid-cols-12 gap-8 ${fontSizeClasses.examInfo} transition-all duration-300`}
         >
           {examInfo.courseCode && (
             <div className="flex gap-2 col-span-full md:col-span-full">
