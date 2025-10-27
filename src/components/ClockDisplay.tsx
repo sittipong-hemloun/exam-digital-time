@@ -32,7 +32,7 @@ const TimeDisplay = memo(function TimeDisplay({
   themeClasses: ThemeClasses;
 }) {
   return (
-    <div className="flex items-center justify-center gap-2 md:gap-4 mb-3 md:mb-4">
+    <div className="flex items-center justify-center gap-2 md:gap-4">
       <div className="text-center">
         <div
           className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary} drop-shadow-lg`}
@@ -117,11 +117,6 @@ const ExamRulesDisplay = memo(function ExamRulesDisplay({
       >
         {getTranslation("examRuleSubmission", language)}
       </p>
-      <p
-        className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-80 font-thin`}
-      >
-        {getTranslation("examRuleCommunication", language)}
-      </p>
     </div>
   );
 });
@@ -155,19 +150,19 @@ export const ClockDisplay = memo(function ClockDisplay({
   return (
     <div className="relative z-10">
       <div className={`p-2 md:p-3 transition-colors duration-500`}>
+        {/* Date Display */}
+        <DateDisplay
+          currentTime={currentTime}
+          language={language}
+          fontSizeClasses={fontSizeClasses}
+          themeClasses={themeClasses}
+        />
+
         {/* Time Display */}
         <TimeDisplay
           hours={hours}
           minutes={minutes}
           seconds={seconds}
-          fontSizeClasses={fontSizeClasses}
-          themeClasses={themeClasses}
-        />
-
-        {/* Date Display */}
-        <DateDisplay
-          currentTime={currentTime}
-          language={language}
           fontSizeClasses={fontSizeClasses}
           themeClasses={themeClasses}
         />

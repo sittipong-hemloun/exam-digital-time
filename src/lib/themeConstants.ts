@@ -61,34 +61,34 @@ export const getThemeClasses = (theme: Theme): ThemeClasses => {
 export const getFontSizeClasses = (fontSize: number): FontSizeClasses => {
   const sizes: Record<number, FontSizeClasses> = {
     1: {
-      time: "text-7xl md:text-7xl",
+      time: "text-7xl md:text-[6rem]",
       date: "text-xl md:text-2xl",
-      examInfo: "text-base md:text-4xl",
-      rule: "text-sm md:text-2xl",
+      examInfo: "text-base md:text-3xl",
+      rule: "text-sm md:text-lg",
     },
     2: {
-      time: "text-8xl md:text-[8rem]",
+      time: "text-8xl md:text-[7rem]",
       date: "text-2xl md:text-3xl",
-      examInfo: "text-lg md:text-5xl",
-      rule: "text-base md:text-3xl",
+      examInfo: "text-lg md:text-4xl",
+      rule: "text-base md:text-xl",
     },
     3: {
-      time: "text-9xl md:text-[9rem]",
+      time: "text-9xl md:text-[8rem]",
       date: "text-3xl md:text-4xl",
-      examInfo: "text-xl md:text-6xl",
-      rule: "text-lg md:text-4xl",
+      examInfo: "text-xl md:text-5xl",
+      rule: "text-lg md:text-2xl",
     },
     4: {
-      time: "text-[10rem] md:text-[10rem]",
+      time: "text-[10rem] md:text-[9rem]",
       date: "text-4xl md:text-5xl",
-      examInfo: "text-2xl md:text-7xl",
-      rule: "text-xl md:text-5xl",
+      examInfo: "text-2xl md:text-6xl",
+      rule: "text-xl md:text-3xl",
     },
     5: {
-      time: "text-[12rem] md:text-[12rem]",
+      time: "text-[12rem] md:text-[10rem]",
       date: "text-5xl md:text-6xl",
-      examInfo: "text-3xl md:text-8xl",
-      rule: "text-2xl md:text-6xl",
+      examInfo: "text-3xl md:text-7xl",
+      rule: "text-2xl md:text-4xl",
     },
   };
   return sizes[fontSize as keyof typeof sizes] || sizes[3];

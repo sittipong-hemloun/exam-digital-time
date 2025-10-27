@@ -9,6 +9,7 @@ import { ControlButtons } from "@/components/ControlButtons";
 import { AutocompleteSettingsDialog } from "@/components/AutocompleteSettingsDialog";
 import { ExamInfoDisplay } from "@/components/ExamInfoDisplay";
 import { FeedbackButton } from "@/components/FeedbackButton";
+import { Footer } from "@/components/Footer";
 
 // Custom Hooks
 import { useTimeSync } from "@/hooks/useTimeSync";
@@ -231,6 +232,9 @@ export default function Home() {
         theme={theme}
         googleFormUrl="https://docs.google.com/forms/d/e/1FAIpQLSdaURXq1amwJvATGI3wSHn3BAPlVrD_M_zppIeQ5jpoX251GQ/viewform"
       />
+
+      {/* Footer with Source Attribution */}
+      <Footer language={language} themeClasses={themeClasses} />
     </div>
   );
 }

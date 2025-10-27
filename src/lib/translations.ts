@@ -47,15 +47,15 @@ const translations: TranslationMap = {
   timePlaceholder: { th: "เช่น 09:00 - 12:00", en: "e.g. 09:00 - 12:00" },
   roomPlaceholder: { th: "เช่น EN101", en: "e.g. EN101" },
   remarksPlaceholder: { th: "ข้อมูลเพิ่มเติม", en: "Additional information" },
-  feedback: { th: "ให้คะแนนเว็บนี้", en: "Rate This Website" },
+  feedback: { th: "ให้คำแนะนำ", en: "Give Feedback" },
   examRules: { th: "กฎกติกาการสอบ", en: "Exam Rules" },
   examRuleSubmission: {
     th: "นิสิตสามารถส่งข้อสอบได้เมื่อเวลาผ่านไป 1 ชั่วโมง",
     en: "Students can submit the exam papers after 1 hour of the starting time of the exam.",
   },
-  examRuleCommunication: {
-    th: "ไม่อนุญาตให้นำเครื่องมือสื่อสารทุกชนิดเข้าห้องสอบ",
-    en: "Communication devices of any kind are not allowed into the exam room.",
+  sourceAttribution: {
+    th: "ที่มา: คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2024). Retrieved from https://ms.src.ku.ac.th/time",
+    en: "Source: Faculty of Management Sciences, Kasetsart University Sriracha Campus. (2024). Retrieved from https://ms.src.ku.ac.th/time",
   },
 };
 
