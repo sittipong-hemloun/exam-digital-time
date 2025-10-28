@@ -42,7 +42,7 @@ export default function Home() {
   const { currentTime } = useTimeSync();
   const { isFullscreen, toggleFullscreen, enterFullscreen } = useFullscreen();
   const { examInfo, applyTestInfo } = useExamInfo();
-  const { playCountdownAlert } = useNotificationSound({
+  const { playCountdownAlert, initialize: initializeSound } = useNotificationSound({
     enabled: true,
     volume: 1.0,
     language: language
@@ -96,12 +96,14 @@ export default function Home() {
       if (testInfo) {
         applyTestInfo(testInfo);
       }
+      // Initialize speech synthesis after user interaction
+      initializeSound();
       setIsDialogOpen(false);
       // Wait for DOM to update before requesting fullscreen
       await new Promise((resolve) => setTimeout(resolve, 100));
       await enterFullscreen();
     },
-    [applyTestInfo, enterFullscreen]
+    [applyTestInfo, enterFullscreen, initializeSound]
   );
 
   const handleCancelWithFullscreen = useCallback(async () => {

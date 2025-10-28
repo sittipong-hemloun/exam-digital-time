@@ -99,7 +99,7 @@ export const CountdownTimer = memo(function CountdownTimer({
       <div className="flex flex-col items-center gap-2">
         {/* Large Time Display */}
         <div
-          className={`${fontSizeClasses.rule} font-mono font-bold ${colorClasses.text} drop-shadow-lg transition-all duration-500`}
+          className={`${fontSizeClasses.date} font-mono font-bold ${colorClasses.text} drop-shadow-lg transition-all duration-500`}
         >
           {String(hours).padStart(2, "0")}:{String(minutes).padStart(2, "0")}:
           {String(seconds).padStart(2, "0")}
@@ -108,7 +108,7 @@ export const CountdownTimer = memo(function CountdownTimer({
         {/* Status Text */}
         <div className="text-center">
           <p
-            className={`text-lg ${themeClasses.text} opacity-70 font-medium transition-colors duration-500`}
+            className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-70 font-medium transition-colors duration-500`}
           >
             {countdown.status === "in-progress" &&
               getTranslation("examInProgress", language)}
@@ -133,7 +133,7 @@ export const CountdownTimer = memo(function CountdownTimer({
         {/* Progress Percentage */}
         <div className="mt-2 text-center">
           <p
-            className={`text-lg ${themeClasses.text} opacity-60 font-medium`}
+            className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-60 font-medium`}
           >
             {Math.round(countdown.progress)}% {getTranslation("elapsed", language)}
           </p>
@@ -145,7 +145,7 @@ export const CountdownTimer = memo(function CountdownTimer({
         <div
           className={`text-center px-3 py-1 rounded-lg bg-yellow-500/10 border border-yellow-500/30`}
         >
-          <p className="text-lg text-yellow-500 font-medium">
+          <p className={`${fontSizeClasses.rule} text-yellow-500 font-medium`}>
             {getTranslation("warningTimeRunningOut", language)}
           </p>
         </div>
@@ -155,7 +155,7 @@ export const CountdownTimer = memo(function CountdownTimer({
         <div
           className={`text-center px-3 py-1 rounded-lg bg-red-500/10 border border-red-500/30 animate-pulse`}
         >
-          <p className="text-lg text-red-500 font-medium">
+          <p className={`${fontSizeClasses.rule} text-red-500 font-medium`}>
             {getTranslation("criticalTimeLow", language)}
           </p>
         </div>

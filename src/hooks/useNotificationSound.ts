@@ -27,6 +27,25 @@ export const useNotificationSound = (
     return speechSynthesisRef.current;
   }, []);
 
+  // Initialize/warm up Speech Synthesis (call this on user interaction)
+  const initialize = useCallback(() => {
+    if (!enabled) return;
+
+    try {
+      const synth = getSpeechSynthesis();
+      if (!synth) return;
+
+      // Warm up speech synthesis by speaking a silent utterance
+      // This ensures the API is ready and browser allows audio
+      const utterance = new SpeechSynthesisUtterance("");
+      utterance.volume = 0;
+      synth.speak(utterance);
+      synth.cancel(); // Cancel immediately
+    } catch (error) {
+      console.error("Failed to initialize speech synthesis:", error);
+    }
+  }, [enabled, getSpeechSynthesis]);
+
   // Speak text using Text-to-Speech
   const speak = useCallback(
     (text: string) => {
@@ -102,5 +121,6 @@ export const useNotificationSound = (
   return {
     speak,
     playCountdownAlert,
+    initialize,
   };
 };

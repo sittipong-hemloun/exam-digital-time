@@ -94,18 +94,6 @@ export const SelectTestInfoDialog = memo(function SelectTestInfoDialog({
                     </div>
                     <div>{record.room_test || "-"}</div>
                   </div>
-                  <div>
-                    <div className={`font-semibold ${themeClasses.textPrimary}`}>
-                      {language === "th" ? "อาคาร" : "Building"}
-                    </div>
-                    <div>{record.build || "-"}</div>
-                  </div>
-                  <div>
-                    <div className={`font-semibold ${themeClasses.textPrimary}`}>
-                      {language === "th" ? "จำนวนคน" : "Count"}
-                    </div>
-                    <div>{record.count_person || "-"}</div>
-                  </div>
                 </div>
               </div>
             ))}
