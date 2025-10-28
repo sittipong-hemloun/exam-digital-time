@@ -196,34 +196,6 @@ export default function Home() {
               themeClasses={themeClasses}
             />
 
-            {/* Decorative Divider - Only shown when countdown is active */}
-            {examInfo.time && (
-              <div className="flex items-center justify-center">
-                {/* Vertical divider for desktop, horizontal for mobile */}
-                <div className="relative flex items-center justify-center">
-                  {/* Mobile: Horizontal Divider */}
-                  <div className="lg:hidden w-64 h-px relative">
-                    <div
-                      className={`absolute inset-0 ${theme === "dark" ? "bg-gradient-to-r from-transparent via-green-500/50 to-transparent" : "bg-gradient-to-r from-transparent via-green-600/40 to-transparent"}`}
-                    ></div>
-                  </div>
-
-                  {/* Desktop: Vertical Divider */}
-                  <div className="hidden lg:block h-64 w-px relative">
-                    <div
-                      className={`absolute inset-0 ${theme === "dark" ? "bg-gradient-to-b from-transparent via-green-500/50 to-transparent" : "bg-gradient-to-b from-transparent via-green-600/40 to-transparent"}`}
-                    ></div>
-                    {/* Glowing center dot */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                      <div
-                        className={`w-3 h-3 rounded-full ${theme === "dark" ? "bg-green-500" : "bg-green-600"} shadow-lg ${theme === "dark" ? "shadow-green-500/50" : "shadow-green-600/50"} animate-pulse`}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Countdown Timer - Only shown when exam time is set */}
             {examInfo.time && (
               <CountdownTimer
@@ -233,6 +205,7 @@ export default function Home() {
                 language={language}
                 themeClasses={themeClasses}
                 onAlert={playCountdownAlert}
+                theme={theme}
               />
             )}
           </div>
