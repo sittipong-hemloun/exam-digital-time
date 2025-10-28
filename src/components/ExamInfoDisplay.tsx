@@ -78,7 +78,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
             </div>
           )}
           {examInfo.lecture && (
-            <div className="flex flex-col gap-1 col-span-4">
+            <div className="flex flex-col gap-1 col-span-3">
               <span
                 className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
@@ -90,7 +90,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
             </div>
           )}
           {examInfo.lab && (
-            <div className="flex flex-col gap-1 col-span-4">
+            <div className="flex flex-col gap-1 col-span-3">
               <span
                 className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
@@ -102,7 +102,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
             </div>
           )}
           {examInfo.examRoom && (
-            <div className="flex flex-col gap-1 col-span-4">
+            <div className="flex flex-col gap-1 col-span-6">
               <span
                 className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >

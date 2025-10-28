@@ -19,32 +19,48 @@ interface CountdownTimerProps {
   onAlert?: (minutesLeft: number) => void;
 }
 
-// Color mapping for different states
+// Color mapping for different states with enhanced visual effects
 const getColorClasses = (
   color: CountdownColor
 ): {
   text: string;
+  textGlow: string;
   progress: string;
+  progressGradient: string;
   glow: string;
+  bgAccent: string;
+  animation: string;
 } => {
   switch (color) {
     case "green":
       return {
-        text: "text-green-500",
-        progress: "bg-green-500",
-        glow: "shadow-green-500/50",
+        text: "text-green-400",
+        textGlow: "drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]",
+        progress: "bg-gradient-to-r from-green-400 via-green-500 to-green-600",
+        progressGradient: "bg-green-500",
+        glow: "shadow-[0_0_15px_rgba(34,197,94,0.6)]",
+        bgAccent: "bg-green-500/10",
+        animation: "",
       };
     case "yellow":
       return {
-        text: "text-yellow-500",
-        progress: "bg-yellow-500",
-        glow: "shadow-yellow-500/50",
+        text: "text-yellow-400",
+        textGlow: "drop-shadow-[0_0_10px_rgba(234,179,8,0.6)]",
+        progress: "bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500",
+        progressGradient: "bg-yellow-500",
+        glow: "shadow-[0_0_20px_rgba(234,179,8,0.7)]",
+        bgAccent: "bg-yellow-500/10",
+        animation: "animate-pulse",
       };
     case "red":
       return {
-        text: "text-red-500",
-        progress: "bg-red-500",
-        glow: "shadow-red-500/50",
+        text: "text-red-400",
+        textGlow: "drop-shadow-[0_0_12px_rgba(239,68,68,0.8)]",
+        progress: "bg-gradient-to-r from-red-400 via-red-500 to-red-600",
+        progressGradient: "bg-red-500",
+        glow: "shadow-[0_0_25px_rgba(239,68,68,0.9)]",
+        bgAccent: "bg-red-500/10",
+        animation: "animate-pulse",
       };
   }
 };
@@ -100,9 +116,9 @@ export const CountdownTimer = memo(function CountdownTimer({
 
       {/* Countdown Display */}
       <div className="flex flex-col items-center gap-2">
-        {/* Large Time Display */}
+        {/* Large Time Display with Enhanced Glow */}
         <div
-          className={`${fontSizeClasses.date} font-mono font-bold ${colorClasses.text} drop-shadow-lg transition-all duration-500`}
+          className={`${fontSizeClasses.countdown} font-mono font-bold ${colorClasses.text} ${colorClasses.textGlow} ${colorClasses.animation} transition-all duration-500`}
         >
           {String(hours).padStart(2, "0")}:{String(minutes).padStart(2, "0")}:
           {String(seconds).padStart(2, "0")}
@@ -121,16 +137,20 @@ export const CountdownTimer = memo(function CountdownTimer({
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Progress Bar with Enhanced Effects */}
       <div className="w-full">
         {/* Progress Bar Container */}
         <div
-          className={`w-full h-3 ${themeClasses.cardBorder} border rounded-full overflow-hidden backdrop-blur-sm transition-all duration-500`}
+          className={`relative w-full h-4 ${themeClasses.cardBorder} border-2 rounded-full overflow-hidden backdrop-blur-sm transition-all duration-500 ${colorClasses.bgAccent}`}
         >
+          {/* Gradient Progress Bar with Glow */}
           <div
-            className={`h-full ${colorClasses.progress} transition-all duration-1000 ease-linear ${colorClasses.glow} shadow-lg`}
+            className={`h-full ${colorClasses.progress} transition-all duration-1000 ease-linear ${colorClasses.glow} relative overflow-hidden`}
             style={{ width: `${countdown.progress}%` }}
-          ></div>
+          >
+            {/* Shimmer Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+          </div>
         </div>
 
         {/* Progress Percentage */}
@@ -142,27 +162,6 @@ export const CountdownTimer = memo(function CountdownTimer({
           </p>
         </div>
       </div>
-
-      {/* Warning Messages */}
-      {countdown.color === "yellow" && (
-        <div
-          className={`text-center px-3 py-1 rounded-lg bg-yellow-500/10 border border-yellow-500/30`}
-        >
-          <p className={`${fontSizeClasses.rule} text-yellow-500 font-medium`}>
-            {getTranslation("warningTimeRunningOut", language)}
-          </p>
-        </div>
-      )}
-
-      {countdown.color === "red" && (
-        <div
-          className={`text-center px-3 py-1 rounded-lg bg-red-500/10 border border-red-500/30 animate-pulse`}
-        >
-          <p className={`${fontSizeClasses.rule} text-red-500 font-medium`}>
-            {getTranslation("criticalTimeLow", language)}
-          </p>
-        </div>
-      )}
     </div>
   );
 });

@@ -61,8 +61,6 @@ const translations: TranslationMap = {
   examInProgress: { th: "กำลังสอบ", en: "Exam in Progress" },
   examFinished: { th: "หมดเวลาสอบ", en: "Exam Finished" },
   elapsed: { th: "ผ่านไปแล้ว", en: "Elapsed" },
-  warningTimeRunningOut: { th: "เวลาใกล้หมดแล้ว", en: "Time Running Out" },
-  criticalTimeLow: { th: "เวลาใกล้หมดมาก!", en: "Critical: Time Almost Up!" },
   voiceAnnouncement30min: {
     th: "เหลือเวลาอีก 30 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
     en: "30 minutes remaining. Please check your answer sheet before submitting. Thank you.",
