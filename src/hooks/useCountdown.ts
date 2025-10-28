@@ -67,14 +67,20 @@ export const useCountdown = (config: CountdownConfig): CountdownResult => {
     const start = startTime.getTime();
     const end = endTime.getTime();
 
-    // Before exam starts
+    // Before exam starts - Show countdown until exam starts
     if (now < start) {
+      const remaining = start - now;
+      const totalSeconds = Math.floor(remaining / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
       return {
         status: "before-start",
         color: "green",
-        timeLeft: { hours: 0, minutes: 0, seconds: 0, totalSeconds: 0 },
+        timeLeft: { hours, minutes, seconds, totalSeconds },
         progress: 0,
-        isActive: false,
+        isActive: true, // Show the countdown even before exam starts
       };
     }
 

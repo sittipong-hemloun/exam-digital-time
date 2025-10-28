@@ -138,7 +138,9 @@ export const CountdownTimer = memo(function CountdownTimer({
           <p
             className={`${fontSizeClasses.date} ${themeClasses.text} font-medium`}
           >
-            {getTranslation("timeRemaining", language)}
+            {countdown.status === "before-start"
+              ? getTranslation("timeUntilExam", language)
+              : getTranslation("timeRemaining", language)}
           </p>
         </div>
 
@@ -157,6 +159,8 @@ export const CountdownTimer = memo(function CountdownTimer({
             <p
               className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-70 font-medium transition-colors duration-500`}
             >
+              {countdown.status === "before-start" &&
+                getTranslation("waitingForExam", language)}
               {countdown.status === "in-progress" &&
                 getTranslation("examInProgress", language)}
               {countdown.status === "finished" &&
@@ -165,31 +169,33 @@ export const CountdownTimer = memo(function CountdownTimer({
           </div>
         </div>
 
-        {/* Progress Bar with Enhanced Effects */}
-        <div className="w-full">
-          {/* Progress Bar Container */}
-          <div
-            className={`relative w-full h-4 ${themeClasses.cardBorder} border-2 rounded-full overflow-hidden backdrop-blur-sm transition-all duration-500 ${colorClasses.bgAccent}`}
-          >
-            {/* Gradient Progress Bar with Glow */}
+        {/* Progress Bar with Enhanced Effects - Only show during exam */}
+        {countdown.status === "in-progress" && (
+          <div className="w-full">
+            {/* Progress Bar Container */}
             <div
-              className={`h-full ${colorClasses.progress} transition-all duration-1000 ease-linear ${colorClasses.glow} relative overflow-hidden`}
-              style={{ width: `${countdown.progress}%` }}
+              className={`relative w-full h-4 ${themeClasses.cardBorder} border-2 rounded-full overflow-hidden backdrop-blur-sm transition-all duration-500 ${colorClasses.bgAccent}`}
             >
-              {/* Shimmer Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              {/* Gradient Progress Bar with Glow */}
+              <div
+                className={`h-full ${colorClasses.progress} transition-all duration-1000 ease-linear ${colorClasses.glow} relative overflow-hidden`}
+                style={{ width: `${countdown.progress}%` }}
+              >
+                {/* Shimmer Effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              </div>
+            </div>
+
+            {/* Progress Percentage */}
+            <div className="mt-2 text-center">
+              <p
+                className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-60 font-medium`}
+              >
+                {Math.round(countdown.progress)}% {getTranslation("elapsed", language)}
+              </p>
             </div>
           </div>
-
-          {/* Progress Percentage */}
-          <div className="mt-2 text-center">
-            <p
-              className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-60 font-medium`}
-            >
-              {Math.round(countdown.progress)}% {getTranslation("elapsed", language)}
-            </p>
-          </div>
-        </div>
+        )}
       </div>
     </>
   );

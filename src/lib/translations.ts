@@ -58,19 +58,23 @@ const translations: TranslationMap = {
     en: "Source: Faculty of Management Sciences, Kasetsart University Sriracha Campus. (2025). Retrieved from https://ms.src.ku.ac.th/time",
   },
   timeRemaining: { th: "เวลาที่เหลือ", en: "Time Remaining" },
+  timeUntilExam: { th: "เวลาจนถึงเริ่มสอบ", en: "Time Until Exam Starts" },
+  waitingForExam: { th: "รอเวลาสอบ", en: "Waiting for Exam" },
+  examStartsAt: { th: "เริ่มสอบเวลา", en: "Exam Starts at" },
   examInProgress: { th: "กำลังสอบ", en: "Exam in Progress" },
   examFinished: { th: "หมดเวลาสอบ", en: "Exam Finished" },
   elapsed: { th: "ผ่านไปแล้ว", en: "Elapsed" },
+  untilStart: { th: "จนกว่าจะเริ่ม", en: "Until Start" },
   voiceAnnouncement30min: {
-    th: "เหลือเวลาอีก 30 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
+    th: "เหลือเวลาอีก 30 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง",
     en: "30 minutes remaining. Please check your answer sheet before submitting. Thank you.",
   },
   voiceAnnouncement15min: {
-    th: "เหลือเวลาอีก 15 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
+    th: "เหลือเวลาอีก 15 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง",
     en: "15 minutes remaining. Please check your answer sheet before submitting. Thank you.",
   },
   voiceAnnouncement5min: {
-    th: "เหลือเวลาอีก 5 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
+    th: "เหลือเวลาอีก 5 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง",
     en: "5 minutes remaining. Please check your answer sheet before submitting. Thank you.",
   },
 };
