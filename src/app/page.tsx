@@ -81,12 +81,12 @@ export default function Home() {
   );
 
   const handleIncreaseFontSize = useCallback(
-    () => setFontSize((prev) => (prev < 5 ? prev + 1 : prev)),
+    () => setFontSize((prev) => (prev < 6 ? prev + 1 : prev)),
     []
   );
 
   const handleDecreaseFontSize = useCallback(
-    () => setFontSize((prev) => (prev > 1 ? prev - 1 : prev)),
+    () => setFontSize((prev) => (prev > 0 ? prev - 1 : prev)),
     []
   );
 

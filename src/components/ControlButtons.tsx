@@ -55,7 +55,7 @@ const FontSizeControls = memo(function FontSizeControls({
         variant="ghost"
         size="icon"
         onClick={onDecreaseFontSize}
-        disabled={fontSize === 1}
+        disabled={fontSize === 0}
         className={`rounded-full h-9 w-9 ${theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/10"} ${getTextColor(theme)} disabled:opacity-30`}
         title={getTranslation("decreaseFont", language)}
       >
@@ -65,7 +65,7 @@ const FontSizeControls = memo(function FontSizeControls({
         variant="ghost"
         size="icon"
         onClick={onIncreaseFontSize}
-        disabled={fontSize === 5}
+        disabled={fontSize === 6}
         className={`rounded-full h-9 w-9 ${theme === "dark" ? "hover:bg-white/10" : "hover:bg-black/10"} ${getTextColor(theme)} disabled:opacity-30`}
         title={getTranslation("increaseFont", language)}
       >

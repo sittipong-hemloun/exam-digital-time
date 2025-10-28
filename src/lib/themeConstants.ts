@@ -61,6 +61,13 @@ export const getThemeClasses = (theme: Theme): ThemeClasses => {
  */
 export const getFontSizeClasses = (fontSize: number): FontSizeClasses => {
   const sizes: Record<number, FontSizeClasses> = {
+    0: {
+      time: "text-6xl md:text-[4rem]",
+      date: "text-lg md:text-xl",
+      examInfo: "text-sm md:text-2xl",
+      rule: "text-xs md:text-lg",
+      countdown: "text-2xl md:text-3xl",
+    },
     1: {
       time: "text-7xl md:text-[5rem]",
       date: "text-xl md:text-2xl",
