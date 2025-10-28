@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(npm run build:iis:*)",
-      "Bash(npx prisma generate)"
+      "Bash(npx prisma generate)",
+      "Bash(pm2 list:*)",
+      "Bash(pm2 restart:*)",
+      "Bash(npm run build:*)",
+      "Bash(pm2 reload:*)",
+      "Bash(pm2 describe:*)",
+      "Bash(pm2 env:*)",
+      "Bash(pm2 delete:*)",
+      "Bash(pm2 start:*)",
+      "Bash(pm2 logs:*)",
+      "Bash(test:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []

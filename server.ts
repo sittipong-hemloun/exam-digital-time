@@ -19,7 +19,7 @@ import next from 'next'
 
 // Configuration
 const port = parseInt(process.env.PORT || '3000', 10)
-const hostname = process.env.HOSTNAME || '0.0.0.0'
+const hostname = process.env.HOSTNAME || 'localhost'
 const isDev = process.env.NODE_ENV !== 'production'
 
 // Create Next.js instance
