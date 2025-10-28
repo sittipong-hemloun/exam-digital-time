@@ -4,6 +4,7 @@
  */
 
 import { memo, useMemo } from "react";
+import { Pencil } from "lucide-react";
 import { getFontSizeClasses } from "@/lib/themeConstants";
 import { getTranslation, type Language } from "@/lib/translations";
 import type { ThemeClasses } from "@/lib/themeConstants";
@@ -15,6 +16,8 @@ interface ExamInfoDisplayProps {
   language: Language;
   themeClasses: ThemeClasses;
   hasExamInfo: boolean;
+  theme: string;
+  onEdit?: () => void;
 }
 
 export const ExamInfoDisplay = memo(function ExamInfoDisplay({
@@ -23,6 +26,8 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
   language,
   themeClasses,
   hasExamInfo,
+  theme,
+  onEdit,
 }: ExamInfoDisplayProps) {
   const fontSizeClasses = useMemo(
     () => getFontSizeClasses(fontSize),
@@ -36,8 +41,22 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
   return (
     <div className="w-full max-w-8xl px-4">
       <div
-        className={`${themeClasses.card} backdrop-blur-md rounded-2xl p-6 md:p-4 shadow-lg border ${themeClasses.cardBorder} transition-all duration-500`}
+        className={`${themeClasses.card} backdrop-blur-md rounded-2xl p-6 md:p-4 shadow-lg border ${themeClasses.cardBorder} transition-all duration-500 relative`}
       >
+        {/* Edit Button */}
+        {onEdit && (
+          <button
+            onClick={onEdit}
+            className={`absolute top-4 z-10 right-4 p-2 rounded-lg backdrop-blur-lg border transition-all duration-300 hover:scale-110 ${
+              theme === "dark"
+                ? "border-green-500 bg-green-600/80 text-white hover:bg-green-500 shadow-lg shadow-green-500/20"
+                : "border-green-600 bg-green-500/80 text-white hover:bg-green-400 shadow-lg shadow-green-400/20"
+            }`}
+            title={language === "th" ? "แก้ไขข้อมูลการสอบ" : "Edit Exam Information"}
+          >
+            <Pencil className="h-5 w-5" />
+          </button>
+        )}
         <div
           className={`grid grid-cols-1 md:grid-cols-12 gap-2 ${fontSizeClasses.examInfo} transition-all duration-300`}
         >

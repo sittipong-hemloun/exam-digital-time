@@ -8,6 +8,7 @@ import { ClockDisplay } from "@/components/ClockDisplay";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { ControlButtons } from "@/components/ControlButtons";
 import { AutocompleteSettingsDialog } from "@/components/AutocompleteSettingsDialog";
+import { EditExamInfoDialog } from "@/components/EditExamInfoDialog";
 import { ExamInfoDisplay } from "@/components/ExamInfoDisplay";
 import { FeedbackButton } from "@/components/FeedbackButton";
 import { Footer } from "@/components/Footer";
@@ -28,6 +29,7 @@ import { fetchRoomSuggestions } from "@/actions/examActions";
 export default function Home() {
   // UI State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [fontSize, setFontSize] = useState(3);
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("dark");
@@ -41,7 +43,7 @@ export default function Home() {
   // Custom Hooks
   const { currentTime } = useTimeSync();
   const { isFullscreen, toggleFullscreen, enterFullscreen } = useFullscreen();
-  const { examInfo, applyTestInfo } = useExamInfo();
+  const { examInfo, applyTestInfo, updateExamInfo } = useExamInfo();
   const { playCountdownAlert, initialize: initializeSound } = useNotificationSound({
     enabled: true,
     volume: 1.0,
@@ -113,6 +115,23 @@ export default function Home() {
     await enterFullscreen();
   }, [enterFullscreen]);
 
+  // Edit Dialog Handlers (memoized)
+  const handleEditExamInfo = useCallback(() => {
+    setIsEditDialogOpen(true);
+  }, []);
+
+  const handleConfirmEdit = useCallback(
+    (updatedInfo: typeof examInfo) => {
+      updateExamInfo(updatedInfo);
+      setIsEditDialogOpen(false);
+    },
+    [updateExamInfo]
+  );
+
+  const handleCancelEdit = useCallback(() => {
+    setIsEditDialogOpen(false);
+  }, []);
+
   const fontSizeClasses = getFontSizeClasses(fontSize);
   const themeClasses = getThemeClasses(theme);
 
@@ -160,7 +179,7 @@ export default function Home() {
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className={`absolute top-1/2 left-1/2 w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 ${themeClasses.decorativeGlow1} rounded-full blur-3xl opacity-50 transition-colors duration-500`}
+          className={`absolute top-1/2 left-1/2 w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 ${themeClasses.decorativeGlow2} rounded-full blur-3xl opacity-50 transition-colors duration-500`}
         ></div>
       </div>
 
@@ -216,6 +235,7 @@ export default function Home() {
             fontSize={fontSize}
             language={language}
             themeClasses={themeClasses}
+            theme={theme}
             hasExamInfo={!!(
               examInfo.courseCode ||
               examInfo.courseName ||
@@ -225,6 +245,7 @@ export default function Home() {
               examInfo.examRoom ||
               examInfo.remarks
             )}
+            onEdit={handleEditExamInfo}
           />
         </div>
 
@@ -249,6 +270,17 @@ export default function Home() {
         theme={theme}
         themeClasses={themeClasses}
         latestSemester={latestSemester || undefined}
+      />
+
+      {/* Edit Exam Info Dialog */}
+      <EditExamInfoDialog
+        isOpen={isEditDialogOpen}
+        examInfo={examInfo}
+        onConfirm={handleConfirmEdit}
+        onCancel={handleCancelEdit}
+        language={language}
+        theme={theme}
+        themeClasses={themeClasses}
       />
     </div>
   );

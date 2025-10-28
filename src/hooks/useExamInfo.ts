@@ -110,6 +110,12 @@ export const useExamInfo = () => {
     setExamInfo(newExamInfo);
   };
 
+  // Update exam info directly (for manual editing, not from DB)
+  const updateExamInfo = (newExamInfo: ExamInfo) => {
+    setExamInfo(newExamInfo);
+    setFormData(newExamInfo);
+  };
+
   return {
     examInfo,
     formData,
@@ -123,5 +129,6 @@ export const useExamInfo = () => {
     fetchExamData,
     applyTestInfo,
     mapTestInfoToExamInfo,
+    updateExamInfo,
   };
 };
