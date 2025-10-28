@@ -76,7 +76,7 @@ export const EditExamInfoDialog = memo(function EditExamInfoDialog({
         </DialogHeader>
 
         <ScrollableContainer maxHeight="max-h-96" theme={theme}>
-          <div className="space-y-4 pr-2">
+          <div className="space-y-4 px-2">
             {/* Course Code */}
             <div className="space-y-2">
               <Label
