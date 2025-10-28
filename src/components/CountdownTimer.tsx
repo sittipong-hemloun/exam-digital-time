@@ -98,7 +98,7 @@ export const CountdownTimer = memo(function CountdownTimer({
   );
 
   // Don't render if exam time is invalid or countdown is not active
-  if (!isValid || !countdown.isActive) {
+  if (!isValid) {
     return null;
   }
 

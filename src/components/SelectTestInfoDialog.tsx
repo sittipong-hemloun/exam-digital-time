@@ -82,17 +82,17 @@ export const SelectTestInfoDialog = memo(function SelectTestInfoDialog({
                   </div>
                   <div>
                     <div className={`font-semibold ${themeClasses.textPrimary}`}>
-                      {language === "th" ? "เวลาสอบ" : "Time"}
+                      {language === "th" ? "หมู่เรียน" : "Lecture Section"}
                     </div>
                     <div>
-                      {record.time_test} {record.time_am_pm || ""}
+                      {record.sec_lec1 || "-"}
                     </div>
                   </div>
                   <div>
                     <div className={`font-semibold ${themeClasses.textPrimary}`}>
-                      {language === "th" ? "ห้องสอบ" : "Room"}
+                      {language === "th" ? "หมู่ปฏิบัติ" : "Lab Section"}
                     </div>
-                    <div>{record.room_test || "-"}</div>
+                    <div>{record.sec_lab1 === "0" ? "-" : record.sec_lab1 || "-"}</div>
                   </div>
                 </div>
               </div>

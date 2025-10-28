@@ -34,7 +34,7 @@ export const FeedbackButton = memo(function FeedbackButton({
       title={getTranslation("feedback", language)}
     >
       <MessageCircle className="h-5 w-5" />
-      <span className="font-medium hidden sm:inline-block text-sm">
+      <span className="font-medium hidden sm:inline-block text-md">
         {getTranslation("feedback", language)}
       </span>
     </button>
