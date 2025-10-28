@@ -227,6 +227,7 @@ export default function Home() {
             {/* Countdown Timer - Only shown when exam time is set */}
             {examInfo.time && (
               <CountdownTimer
+                currentTime={currentTime}
                 examTime={examInfo.time}
                 fontSize={fontSize}
                 language={language}

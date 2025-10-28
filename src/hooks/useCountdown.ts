@@ -2,12 +2,13 @@
  * Custom hook for countdown timer with progress tracking
  */
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 
 export type CountdownStatus = "before-start" | "in-progress" | "finished";
 export type CountdownColor = "green" | "yellow" | "red";
 
 export interface CountdownConfig {
+  currentTime: Date; // Server-synced current time
   startTime?: Date;
   endTime?: Date;
   // Time thresholds in minutes for color changes
@@ -31,7 +32,7 @@ export interface CountdownResult {
   isActive: boolean;
 }
 
-const DEFAULT_CONFIG: Required<Omit<CountdownConfig, "startTime" | "endTime" | "onAlert">> = {
+const DEFAULT_CONFIG: Required<Omit<CountdownConfig, "currentTime" | "startTime" | "endTime" | "onAlert">> = {
   yellowThreshold: 30,
   redThreshold: 15,
   alertTimes: [30, 15, 5],
@@ -39,6 +40,7 @@ const DEFAULT_CONFIG: Required<Omit<CountdownConfig, "startTime" | "endTime" | "
 
 export const useCountdown = (config: CountdownConfig): CountdownResult => {
   const {
+    currentTime,
     startTime,
     endTime,
     yellowThreshold = DEFAULT_CONFIG.yellowThreshold,
@@ -47,20 +49,10 @@ export const useCountdown = (config: CountdownConfig): CountdownResult => {
     onAlert,
   } = config;
 
-  const [currentTime, setCurrentTime] = useState(new Date());
   const alertedTimes = useRef(new Set<number>());
 
-  // Update current time every second
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Calculate countdown values
-  const calculate = useCallback((): CountdownResult => {
+  // Calculate countdown values using useMemo for efficiency
+  const result = useMemo((): CountdownResult => {
     if (!startTime || !endTime) {
       return {
         status: "before-start",
@@ -142,5 +134,5 @@ export const useCountdown = (config: CountdownConfig): CountdownResult => {
     alertedTimes.current.clear();
   }, [startTime, endTime]);
 
-  return calculate();
+  return result;
 };

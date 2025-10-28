@@ -11,6 +11,7 @@ import { getTranslation, type Language } from "@/lib/translations";
 import type { ThemeClasses } from "@/lib/themeConstants";
 
 interface CountdownTimerProps {
+  currentTime: Date; // Server-synced current time
   examTime: string; // e.g., "09:00 - 12:00"
   fontSize: number;
   language: Language;
@@ -49,6 +50,7 @@ const getColorClasses = (
 };
 
 export const CountdownTimer = memo(function CountdownTimer({
+  currentTime,
   examTime,
   fontSize,
   language,
@@ -61,8 +63,9 @@ export const CountdownTimer = memo(function CountdownTimer({
     [examTime]
   );
 
-  // Use countdown hook
+  // Use countdown hook with server-synced time
   const countdown = useCountdown({
+    currentTime,
     startTime: startTime || undefined,
     endTime: endTime || undefined,
     yellowThreshold: 30,
