@@ -170,7 +170,7 @@ export const CountdownTimer = memo(function CountdownTimer({
         </div>
 
         {/* Progress Bar with Enhanced Effects - Only show during exam */}
-        {countdown.status === "in-progress" && (
+        {countdown.status === "in-progress" || countdown.status === "finished" && (
           <div className="w-full">
             {/* Progress Bar Container */}
             <div
@@ -179,20 +179,11 @@ export const CountdownTimer = memo(function CountdownTimer({
               {/* Gradient Progress Bar with Glow */}
               <div
                 className={`h-full ${colorClasses.progress} transition-all duration-1000 ease-linear ${colorClasses.glow} relative overflow-hidden`}
-                style={{ width: `${countdown.progress}%` }}
+                style={{ width: `${100 - countdown.progress}%` }}
               >
                 {/* Shimmer Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
               </div>
-            </div>
-
-            {/* Progress Percentage */}
-            <div className="mt-2 text-center">
-              <p
-                className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-60 font-medium`}
-              >
-                {Math.round(countdown.progress)}% {getTranslation("elapsed", language)}
-              </p>
             </div>
           </div>
         )}

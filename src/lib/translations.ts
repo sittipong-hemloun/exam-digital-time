@@ -51,7 +51,7 @@ const translations: TranslationMap = {
   examRules: { th: "กฎกติกาการสอบ", en: "Exam Rules" },
   examRuleSubmission: {
     th: "นิสิตสามารถส่งข้อสอบได้เมื่อเวลาผ่านไป 1 ชั่วโมง",
-    en: "Students can submit the exam papers after 1 hour of the starting time of the exam.",
+    en: "Able to submit exam after 1 hour of starting time",
   },
   sourceAttribution: {
     th: "ที่มา: คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2025). Retrieved from https://ms.src.ku.ac.th/time",
