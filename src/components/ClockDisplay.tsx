@@ -111,7 +111,7 @@ const ExamRulesDisplay = memo(function ExamRulesDisplay({
   themeClasses: ThemeClasses;
 }) {
   return (
-    <div className="mt-3 text-center">
+    <div className="text-center">
       <p
         className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-80 font-thin`}
       >
@@ -129,7 +129,7 @@ const GradientDivider = memo(function GradientDivider({
 }) {
   return (
     <div
-      className={`h-1 ${theme === "dark" ? "bg-gradient-to-r from-transparent via-green-500/30 to-transparent" : "bg-gradient-to-r from-transparent via-green-400/20 to-transparent"} mt-3`}
+      className={`h-1 w-full ${theme === "dark" ? "bg-gradient-to-r from-transparent via-green-500/30 to-transparent" : "bg-gradient-to-r from-transparent via-green-400/20 to-transparent"}`}
     ></div>
   );
 });
@@ -148,34 +148,32 @@ export const ClockDisplay = memo(function ClockDisplay({
   );
 
   return (
-    <div className="relative z-10">
-      <div className={`p-2 md:p-3 transition-colors duration-500`}>
-        {/* Date Display */}
-        <DateDisplay
-          currentTime={currentTime}
-          language={language}
-          fontSizeClasses={fontSizeClasses}
-          themeClasses={themeClasses}
-        />
+    <div className="flex flex-col items-center gap-3">
 
-        {/* Time Display */}
-        <TimeDisplay
-          hours={hours}
-          minutes={minutes}
-          seconds={seconds}
-          fontSizeClasses={fontSizeClasses}
-          themeClasses={themeClasses}
-        />
+      {/* Time Display */}
+      <TimeDisplay
+        hours={hours}
+        minutes={minutes}
+        seconds={seconds}
+        fontSizeClasses={fontSizeClasses}
+        themeClasses={themeClasses}
+      />
 
-        <GradientDivider theme={theme} />
+      {/* Date Display */}
+      <DateDisplay
+        currentTime={currentTime}
+        language={language}
+        fontSizeClasses={fontSizeClasses}
+        themeClasses={themeClasses}
+      />
+      <GradientDivider theme={theme} />
 
-        {/* Exam Rules */}
-        <ExamRulesDisplay
-          language={language}
-          fontSizeClasses={fontSizeClasses}
-          themeClasses={themeClasses}
-        />
-      </div>
+      {/* Exam Rules */}
+      <ExamRulesDisplay
+        language={language}
+        fontSizeClasses={fontSizeClasses}
+        themeClasses={themeClasses}
+      />
     </div>
   );
 });

@@ -111,39 +111,33 @@ export default function Home() {
   if (!isMounted) {
     return (
       <div
-        className={`min-h-screen ${themeClasses.background} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}
+        className={`h-screen w-screen ${themeClasses.background} flex items-center justify-center transition-colors duration-500`}
       >
-        <div className="relative z-10">
+        <div className="flex items-center justify-center gap-2 md:gap-4">
           <div
-            className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-12 shadow-glow border ${themeClasses.cardBorder}`}
+            className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
           >
-            <div className="flex items-center justify-center gap-2 md:gap-4 mb-4 md:mb-6">
-              <div
-                className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
-              >
-                --
-              </div>
-              <div
-                className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
-              >
-                :
-              </div>
-              <div
-                className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
-              >
-                --
-              </div>
-              <div
-                className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
-              >
-                :
-              </div>
-              <div
-                className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
-              >
-                --
-              </div>
-            </div>
+            --
+          </div>
+          <div
+            className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
+          >
+            :
+          </div>
+          <div
+            className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
+          >
+            --
+          </div>
+          <div
+            className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
+          >
+            :
+          </div>
+          <div
+            className={`${fontSizeClasses.time} font-mono font-bold ${themeClasses.textPrimary}`}
+          >
+            --
           </div>
         </div>
       </div>
@@ -152,61 +146,76 @@ export default function Home() {
 
   return (
     <div
-      className={`min-h-screen ${themeClasses.background} flex flex-col items-center justify-center p-4 relative overflow-hidden transition-colors duration-500`}
+      className={`h-screen w-screen ${themeClasses.background} overflow-hidden transition-colors duration-500`}
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* <div
+          className={`absolute top-1/2 left-1/2 w-[500px] h-[500px] ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`}
+        ></div> */}
         <div
-          className={`absolute top-1/4 left-1/2 w-[500px] h-[500px] ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`}
-        ></div>
-        <div
-          className={`absolute bottom-1/4 right-1/2 w-[500px] h-[500px] ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`}
-          style={{ animationDelay: "1s" }}
+          className={`absolute top-1/2 left-1/2 w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 ${themeClasses.decorativeGlow1} rounded-full blur-3xl opacity-50 transition-colors duration-500`}
         ></div>
       </div>
 
-      {/* Control Buttons */}
-      <ControlButtons
-        theme={theme}
-        language={language}
-        fontSize={fontSize}
-        isFullscreen={isFullscreen}
-        onDecreaseFontSize={handleDecreaseFontSize}
-        onIncreaseFontSize={handleIncreaseFontSize}
-        onToggleTheme={handleToggleTheme}
-        onToggleLanguage={handleToggleLanguage}
-        onToggleFullscreen={toggleFullscreen}
-        onOpenSettings={() => setIsDialogOpen(true)}
-      />
+      {/* Main Grid Layout */}
+      <div className="relative h-full w-full grid grid-rows-[auto_1fr_auto] p-6 gap-6">
+        {/* Top Bar - Control Buttons & Logo */}
+        <div className="flex items-start justify-between gap-4">
+          <Logo language={language} />
+          <ControlButtons
+            theme={theme}
+            language={language}
+            fontSize={fontSize}
+            isFullscreen={isFullscreen}
+            onDecreaseFontSize={handleDecreaseFontSize}
+            onIncreaseFontSize={handleIncreaseFontSize}
+            onToggleTheme={handleToggleTheme}
+            onToggleLanguage={handleToggleLanguage}
+            onToggleFullscreen={toggleFullscreen}
+            onOpenSettings={() => setIsDialogOpen(true)}
+          />
+        </div>
 
-      {/* Logo */}
-      <Logo language={language} />
+        {/* Center Content Area */}
+        <div className="flex flex-col items-center justify-center gap-4 overflow-auto">
+          {/* Main Clock Display */}
+          <ClockDisplay
+            currentTime={currentTime}
+            fontSize={fontSize}
+            language={language}
+            theme={theme}
+            themeClasses={themeClasses}
+          />
 
-      {/* Main Clock Display */}
-      <ClockDisplay
-        currentTime={currentTime}
-        fontSize={fontSize}
-        language={language}
-        theme={theme}
-        themeClasses={themeClasses}
-      />
+          {/* Exam Info Display */}
+          <ExamInfoDisplay
+            examInfo={examInfo}
+            fontSize={fontSize}
+            language={language}
+            themeClasses={themeClasses}
+            hasExamInfo={!!(
+              examInfo.courseCode ||
+              examInfo.courseName ||
+              examInfo.lecture ||
+              examInfo.lab ||
+              examInfo.time ||
+              examInfo.examRoom ||
+              examInfo.remarks
+            )}
+          />
+        </div>
 
-      {/* Exam Info Display */}
-      <ExamInfoDisplay
-        examInfo={examInfo}
-        fontSize={fontSize}
-        language={language}
-        themeClasses={themeClasses}
-        hasExamInfo={!!(
-          examInfo.courseCode ||
-          examInfo.courseName ||
-          examInfo.lecture ||
-          examInfo.lab ||
-          examInfo.time ||
-          examInfo.examRoom ||
-          examInfo.remarks
-        )}
-      />
+        {/* Bottom Bar - Footer & Feedback */}
+        <div className="flex items-end justify-between gap-4">
+          <Footer language={language} themeClasses={themeClasses} />
+          <FeedbackButton
+            language={language}
+            theme={theme}
+            googleFormUrl="https://docs.google.com/forms/d/e/1FAIpQLSdaURXq1amwJvATGI3wSHn3BAPlVrD_M_zppIeQ5jpoX251GQ/viewform"
+          />
+        </div>
+      </div>
 
       {/* Autocomplete Settings Dialog */}
       <AutocompleteSettingsDialog
@@ -219,16 +228,6 @@ export default function Home() {
         themeClasses={themeClasses}
         latestSemester={latestSemester || undefined}
       />
-
-      {/* Feedback Button */}
-      <FeedbackButton
-        language={language}
-        theme={theme}
-        googleFormUrl="https://docs.google.com/forms/d/e/1FAIpQLSdaURXq1amwJvATGI3wSHn3BAPlVrD_M_zppIeQ5jpoX251GQ/viewform"
-      />
-
-      {/* Footer with Source Attribution */}
-      <Footer language={language} themeClasses={themeClasses} />
     </div>
   );
 }

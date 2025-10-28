@@ -34,93 +34,93 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
   }
 
   return (
-    <div className="relative z-10 w-full max-w-8xl mx-auto px-4">
+    <div className="w-full max-w-8xl px-4">
       <div
-        className={`${themeClasses.card} backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border ${themeClasses.cardBorder} transition-colors duration-500`}
+        className={`${themeClasses.card} backdrop-blur-md rounded-2xl p-6 md:p-4 shadow-lg border ${themeClasses.cardBorder} transition-all duration-500`}
       >
         <div
-          className={`grid grid-cols-1 md:grid-cols-12 gap-8 ${fontSizeClasses.examInfo} transition-all duration-300`}
+          className={`grid grid-cols-1 md:grid-cols-12 gap-2 ${fontSizeClasses.examInfo} transition-all duration-300`}
         >
           {examInfo.courseCode && (
-            <div className="flex gap-2 col-span-full md:col-span-full">
+            <div className="flex flex-col gap-1 col-span-6">
               <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
-                {getTranslation("courseCode", language)}:
+                {getTranslation("courseCode", language)}
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
                 {examInfo.courseCode}
               </span>
             </div>
           )}
-          {examInfo.courseName && (
-            <div className="flex gap-2 col-span-full md:col-span-full">
+          {examInfo.time && (
+            <div className="flex flex-col gap-1 col-span-6">
               <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
-                {getTranslation("courseName", language)}:
+                {getTranslation("examTime", language)}
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
+                {examInfo.time}
+              </span>
+            </div>
+          )}
+          {examInfo.courseName && (
+            <div className="flex flex-col gap-1 col-span-12">
+              <span
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
+              >
+                {getTranslation("courseName", language)}
+              </span>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
                 {examInfo.courseName}
               </span>
             </div>
           )}
           {examInfo.lecture && (
-            <div className="flex gap-2 col-span-6">
+            <div className="flex flex-col gap-1 col-span-4">
               <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
-                {getTranslation("lecture", language)}:
+                {getTranslation("lecture", language)}
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
                 {examInfo.lecture}
               </span>
             </div>
           )}
           {examInfo.lab && (
-            <div className="flex gap-2 col-span-6">
+            <div className="flex flex-col gap-1 col-span-4">
               <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
-                {getTranslation("lab", language)}:
+                {getTranslation("lab", language)}
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
                 {examInfo.lab}
               </span>
             </div>
           )}
-          {examInfo.time && (
-            <div className="flex gap-2 col-span-6">
-              <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
-              >
-                {getTranslation("examTime", language)}:
-              </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
-                {examInfo.time}
-              </span>
-            </div>
-          )}
           {examInfo.examRoom && (
-            <div className="flex gap-2 col-span-6">
+            <div className="flex flex-col gap-1 col-span-4">
               <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
-                {getTranslation("examRoom", language)}:
+                {getTranslation("examRoom", language)}
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
                 {examInfo.examRoom}
               </span>
             </div>
           )}
           {examInfo.remarks && (
-            <div className="flex gap-2 md:col-span-12">
+            <div className="flex flex-col gap-1 col-span-full">
               <span
-                className={`font-semibold ${themeClasses.textPrimary} transition-colors duration-500`}
+                className={`text-2xl font-medium ${themeClasses.textPrimary} opacity-70 transition-colors duration-500`}
               >
-                {getTranslation("remarks", language)}:
+                {getTranslation("remarks", language)}
               </span>
-              <span className={`${themeClasses.text} opacity-90 transition-colors duration-500 ml-4`}>
+              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
                 {examInfo.remarks}
               </span>
             </div>
