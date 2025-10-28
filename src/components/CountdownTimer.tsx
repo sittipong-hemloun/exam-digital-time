@@ -51,7 +51,7 @@ const getColorClasses = (
         progressGradient: "bg-yellow-500",
         glow: "shadow-[0_0_20px_rgba(234,179,8,0.7)]",
         bgAccent: "bg-yellow-500/10",
-        animation: "animate-pulse",
+        animation: "",
       };
     case "red":
       return {
@@ -61,7 +61,7 @@ const getColorClasses = (
         progressGradient: "bg-red-500",
         glow: "shadow-[0_0_25px_rgba(239,68,68,0.9)]",
         bgAccent: "bg-red-500/10",
-        animation: "animate-pulse",
+        animation: "",
       };
   }
 };
@@ -125,7 +125,7 @@ export const CountdownTimer = memo(function CountdownTimer({
             {/* Glowing center dot */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
               <div
-                className={`w-3 h-3 rounded-full ${theme === "dark" ? "bg-green-500" : "bg-green-600"} shadow-lg ${theme === "dark" ? "shadow-green-500/50" : "shadow-green-600/50"} animate-pulse`}
+                className={`w-3 h-3 rounded-full ${theme === "dark" ? "bg-green-500" : "bg-green-600"} shadow-lg ${theme === "dark" ? "shadow-green-500/50" : "shadow-green-600/50"}`}
               ></div>
             </div>
           </div>

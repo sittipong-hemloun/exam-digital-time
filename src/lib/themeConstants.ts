@@ -96,6 +96,13 @@ export const getFontSizeClasses = (fontSize: number): FontSizeClasses => {
       rule: "text-2xl md:text-4xl",
       countdown: "text-7xl md:text-8xl",
     },
+    6: {
+      time: "text-[14rem] md:text-[10rem]",
+      date: "text-6xl md:text-7xl",
+      examInfo: "text-4xl md:text-8xl",
+      rule: "text-3xl md:text-5xl",
+      countdown: "text-8xl md:text-9xl",
+    },
   };
   return sizes[fontSize as keyof typeof sizes] || sizes[3];
 };
