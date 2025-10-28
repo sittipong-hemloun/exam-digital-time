@@ -57,6 +57,24 @@ const translations: TranslationMap = {
     th: "ที่มา: คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2025). Retrieved from https://ms.src.ku.ac.th/time",
     en: "Source: Faculty of Management Sciences, Kasetsart University Sriracha Campus. (2025). Retrieved from https://ms.src.ku.ac.th/time",
   },
+  timeRemaining: { th: "เวลาที่เหลือ", en: "Time Remaining" },
+  examInProgress: { th: "กำลังสอบ", en: "Exam in Progress" },
+  examFinished: { th: "หมดเวลาสอบ", en: "Exam Finished" },
+  elapsed: { th: "ผ่านไปแล้ว", en: "Elapsed" },
+  warningTimeRunningOut: { th: "เวลาใกล้หมดแล้ว", en: "Time Running Out" },
+  criticalTimeLow: { th: "เวลาใกล้หมดมาก!", en: "Critical: Time Almost Up!" },
+  voiceAnnouncement30min: {
+    th: "เหลือเวลาอีก 30 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
+    en: "30 minutes remaining. Please check your answer sheet before submitting. Thank you.",
+  },
+  voiceAnnouncement15min: {
+    th: "เหลือเวลาอีก 15 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
+    en: "15 minutes remaining. Please check your answer sheet before submitting. Thank you.",
+  },
+  voiceAnnouncement5min: {
+    th: "เหลือเวลาอีก 5 นาที กรุณาตรวจสอบกระดาษคำตอบของท่านก่อนส่ง ขอบคุณครับ",
+    en: "5 minutes remaining. Please check your answer sheet before submitting. Thank you.",
+  },
 };
 
 /**

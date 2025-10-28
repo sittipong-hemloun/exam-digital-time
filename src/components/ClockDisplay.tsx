@@ -92,7 +92,7 @@ const DateDisplay = memo(function DateDisplay({
   return (
     <div className="text-center">
       <p
-        className={`${fontSizeClasses.date} ${themeClasses.text} opacity-80 font-medium`}
+        className={`${fontSizeClasses.date} ${themeClasses.text} font-medium`}
       >
         {formattedDate}
       </p>
@@ -113,7 +113,7 @@ const ExamRulesDisplay = memo(function ExamRulesDisplay({
   return (
     <div className="text-center">
       <p
-        className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-80 font-thin`}
+        className={`${fontSizeClasses.rule} ${themeClasses.text} opacity-70 font-thin`}
       >
         {getTranslation("examRuleSubmission", language)}
       </p>

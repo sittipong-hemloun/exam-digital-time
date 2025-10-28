@@ -66,18 +66,16 @@ export const ScrollableContainer = memo(function ScrollableContainer({
       {/* Scroll Indicator - appears at bottom if content is scrollable */}
       {isScrollable && showScrollHint && (
         <div
-          className={`absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t ${
-            theme === "dark"
+          className={`absolute bottom-0 left-0 right-0 h-12 pointer-events-none bg-gradient-to-t ${theme === "dark"
               ? "from-gray-900 via-gray-900/70 to-transparent"
               : "from-white via-white/70 to-transparent"
-          } transition-opacity duration-500`}
+            } transition-opacity duration-500`}
         >
           <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-1">
             {/* Scroll indicator text */}
             <span
-              className={`text-xs font-medium opacity-70 ${
-                theme === "dark" ? "text-gray-400" : "text-gray-600"
-              }`}
+              className={`text-xs font-medium opacity-70 ${theme === "dark" ? "text-gray-400" : "text-gray-600"
+                }`}
             >
               {typeof window !== "undefined" && navigator.language.startsWith("th")
                 ? "เลื่อนเพื่อดูเพิ่มเติม"

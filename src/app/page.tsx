@@ -5,6 +5,7 @@ import { useEffect, useState, useCallback } from "react";
 // Components
 import { Logo } from "@/components/Logo";
 import { ClockDisplay } from "@/components/ClockDisplay";
+import { CountdownTimer } from "@/components/CountdownTimer";
 import { ControlButtons } from "@/components/ControlButtons";
 import { AutocompleteSettingsDialog } from "@/components/AutocompleteSettingsDialog";
 import { ExamInfoDisplay } from "@/components/ExamInfoDisplay";
@@ -15,6 +16,7 @@ import { Footer } from "@/components/Footer";
 import { useTimeSync } from "@/hooks/useTimeSync";
 import { useFullscreen } from "@/hooks/useFullscreen";
 import { useExamInfo } from "@/hooks/useExamInfo";
+import { useNotificationSound } from "@/hooks/useNotificationSound";
 
 // Utilities
 import { getThemeClasses, getFontSizeClasses } from "@/lib/themeConstants";
@@ -40,6 +42,11 @@ export default function Home() {
   const { currentTime } = useTimeSync();
   const { isFullscreen, toggleFullscreen, enterFullscreen } = useFullscreen();
   const { examInfo, applyTestInfo } = useExamInfo();
+  const { playCountdownAlert } = useNotificationSound({
+    enabled: true,
+    volume: 1.0,
+    language: language
+  });
 
   // Initialize mounted state on client and fetch latest semester
   useEffect(() => {
@@ -150,9 +157,6 @@ export default function Home() {
     >
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* <div
-          className={`absolute top-1/2 left-1/2 w-[500px] h-[500px] ${themeClasses.decorativeGlow2} rounded-full blur-3xl transition-colors duration-500`}
-        ></div> */}
         <div
           className={`absolute top-1/2 left-1/2 w-[800px] h-[800px] -translate-x-1/2 -translate-y-1/2 ${themeClasses.decorativeGlow1} rounded-full blur-3xl opacity-50 transition-colors duration-500`}
         ></div>
@@ -179,14 +183,56 @@ export default function Home() {
 
         {/* Center Content Area */}
         <div className="flex flex-col items-center justify-center gap-4 overflow-auto">
-          {/* Main Clock Display */}
-          <ClockDisplay
-            currentTime={currentTime}
-            fontSize={fontSize}
-            language={language}
-            theme={theme}
-            themeClasses={themeClasses}
-          />
+          {/* Clock and Countdown Container */}
+          <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16 w-full">
+            {/* Main Clock Display */}
+            <ClockDisplay
+              currentTime={currentTime}
+              fontSize={fontSize}
+              language={language}
+              theme={theme}
+              themeClasses={themeClasses}
+            />
+
+            {/* Decorative Divider - Only shown when countdown is active */}
+            {examInfo.time && (
+              <div className="flex items-center justify-center">
+                {/* Vertical divider for desktop, horizontal for mobile */}
+                <div className="relative flex items-center justify-center">
+                  {/* Mobile: Horizontal Divider */}
+                  <div className="lg:hidden w-64 h-px relative">
+                    <div
+                      className={`absolute inset-0 ${theme === "dark" ? "bg-gradient-to-r from-transparent via-green-500/50 to-transparent" : "bg-gradient-to-r from-transparent via-green-600/40 to-transparent"}`}
+                    ></div>
+                  </div>
+
+                  {/* Desktop: Vertical Divider */}
+                  <div className="hidden lg:block h-64 w-px relative">
+                    <div
+                      className={`absolute inset-0 ${theme === "dark" ? "bg-gradient-to-b from-transparent via-green-500/50 to-transparent" : "bg-gradient-to-b from-transparent via-green-600/40 to-transparent"}`}
+                    ></div>
+                    {/* Glowing center dot */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <div
+                        className={`w-3 h-3 rounded-full ${theme === "dark" ? "bg-green-500" : "bg-green-600"} shadow-lg ${theme === "dark" ? "shadow-green-500/50" : "shadow-green-600/50"} animate-pulse`}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Countdown Timer - Only shown when exam time is set */}
+            {examInfo.time && (
+              <CountdownTimer
+                examTime={examInfo.time}
+                fontSize={fontSize}
+                language={language}
+                themeClasses={themeClasses}
+                onAlert={playCountdownAlert}
+              />
+            )}
+          </div>
 
           {/* Exam Info Display */}
           <ExamInfoDisplay
