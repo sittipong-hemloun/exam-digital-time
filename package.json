@@ -21,6 +21,7 @@
     "pm2:monit": "pm2 monit",
     "pm2:status": "pm2 status",
     "pm2:delete": "pm2 delete exam-digital-time",
+    "deploy": "bash scripts/deploy.sh",
     "lint": "next lint",
     "preview": "next start",
     "test": "jest",
