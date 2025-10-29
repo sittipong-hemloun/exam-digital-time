@@ -45,7 +45,7 @@ export default function Home() {
   const { isFullscreen, toggleFullscreen, enterFullscreen } = useFullscreen();
   const { examInfo, applyTestInfo, updateExamInfo } = useExamInfo();
   const { playCountdownAlert, initialize: initializeSound } = useNotificationSound({
-    enabled: true,
+    enabled: false, // ปิดไว้ชั่วคราว - ยังทำงานผิดพลาด
     volume: 1.0,
     language: language
   });
