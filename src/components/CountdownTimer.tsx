@@ -170,7 +170,7 @@ export const CountdownTimer = memo(function CountdownTimer({
         </div>
 
         {/* Progress Bar with Enhanced Effects - Only show during exam */}
-        {countdown.status === "in-progress" || countdown.status === "finished" && (
+        {(countdown.status === "in-progress" || countdown.status === "finished") && (
           <div className="w-full">
             {/* Progress Bar Container */}
             <div
