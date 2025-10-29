@@ -121,3 +121,62 @@ export const syncServerTime = async (timeoutMs = 3000): Promise<number> => {
     return 0;
   }
 };
+
+/**
+ * Check if exam time has ended (for testing with custom current time)
+ * @param timeTest - Time string in format "HH.MM-HH.MM" (e.g., "12.00-14.00")
+ * @param currentHour - Current hour (0-23)
+ * @param currentMinute - Current minute (0-59)
+ * @returns true if current time is after the end time
+ */
+export function isExamTimeEndedWithTime(
+  timeTest: string,
+  currentHour: number,
+  currentMinute: number
+): boolean {
+  try {
+    const timeMatch = timeTest.match(/(\d{1,2})\.(\d{2})-(\d{1,2})\.(\d{2})/);
+    if (!timeMatch) return false;
+
+    const endHour = parseInt(timeMatch[3], 10);
+    const endMinute = parseInt(timeMatch[4], 10);
+
+    if (currentHour > endHour) return true;
+    if (currentHour === endHour && currentMinute > endMinute) return true;
+
+    return false;
+  } catch (error) {
+    console.error("Error parsing time_test:", error);
+    return false;
+  }
+}
+
+/**
+ * Format time from "12.00-15.00" to "12:00-15:00"
+ * @param time - Time string with dots
+ * @returns Formatted time string with colons
+ */
+export function formatTimeWithColons(time: string): string {
+  if (!time) return "";
+  return time.replace(/\./g, ":");
+}
+
+/**
+ * Format exam room by removing seat count "(X ที่)"
+ * @param room - Room string with optional seat count
+ * @returns Room string without seat count
+ */
+export function formatExamRoom(room: string): string {
+  if (!room) return "";
+  return room.replace(/\s*\([^)]*ที่\)\s*/g, "").trim();
+}
+
+/**
+ * Split field value by " / " separator
+ * @param value - Field value potentially with separator
+ * @returns Array of split values
+ */
+export function splitFieldBySeparator(value: string): string[] {
+  if (!value) return [];
+  return value.split(" / ").map((v) => v.trim());
+}

@@ -13,7 +13,8 @@
       "Bash(pm2 start:*)",
       "Bash(pm2 logs:*)",
       "Bash(test:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm test:*)"
     ],
     "deny": [],
     "ask": []
