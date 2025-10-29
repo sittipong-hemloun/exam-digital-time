@@ -46,6 +46,12 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
     return examInfo.examRoom.replace(/\s*\([^)]*ที่\)\s*/g, "").trim();
   }, [examInfo.examRoom]);
 
+  // Split multi-line fields (separated by " / ") for display
+  const splitField = (value: string) => {
+    if (!value) return [];
+    return value.split(" / ").map((v) => v.trim());
+  };
+
   if (!hasExamInfo) {
     return null;
   }
@@ -81,9 +87,11 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("courseCode", language)}
               </span>
-              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
-                {examInfo.courseCode}
-              </span>
+              <div className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
+                {splitField(examInfo.courseCode).map((code, idx) => (
+                  <div key={idx}>{code}</div>
+                ))}
+              </div>
             </div>
           )}
           {examInfo.time && (
@@ -105,9 +113,11 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("courseName", language)}
               </span>
-              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
-                {examInfo.courseName}
-              </span>
+              <div className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
+                {splitField(examInfo.courseName).map((name, idx) => (
+                  <div key={idx}>{name}</div>
+                ))}
+              </div>
             </div>
           )}
           {examInfo.lecture && (
@@ -117,9 +127,11 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("lecture", language)}
               </span>
-              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
-                {examInfo.lecture}
-              </span>
+              <div className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
+                {splitField(examInfo.lecture).map((lec, idx) => (
+                  <div key={idx}>{lec}</div>
+                ))}
+              </div>
             </div>
           )}
           {examInfo.lab && (
@@ -129,9 +141,11 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
               >
                 {getTranslation("lab", language)}
               </span>
-              <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
-                {examInfo.lab}
-              </span>
+              <div className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
+                {splitField(examInfo.lab).map((lab, idx) => (
+                  <div key={idx}>{lab}</div>
+                ))}
+              </div>
             </div>
           )}
           {examInfo.examRoom && (

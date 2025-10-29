@@ -232,7 +232,7 @@ export async function fetchRoomSuggestions(
       };
     }
 
-    // Fetch distinct rooms using Prisma ORM
+    // Fetch rooms with time_test to filter out past exams
     const testRecords = await prisma.test_table.findMany({
       where: {
         sm_yr: latestRecord.sm_yr,
@@ -246,16 +246,44 @@ export async function fetchRoomSuggestions(
       },
       select: {
         room_test: true,
+        time_test: true,
       },
       orderBy: {
         room_test: "asc",
       },
-      distinct: ["room_test"],
     });
 
-    const roomList = testRecords
-      .map((r) => r.room_test)
-      .filter((r) => r !== null) as string[];
+    // Helper function to check if exam has ended
+    const isExamEnded = (timeTest: string): boolean => {
+      try {
+        const timeMatch = timeTest.match(/(\d{1,2})\.(\d{2})-(\d{1,2})\.(\d{2})/);
+        if (!timeMatch) return false;
+
+        const endHour = parseInt(timeMatch[3], 10);
+        const endMinute = parseInt(timeMatch[4], 10);
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        if (currentHour > endHour) return true;
+        if (currentHour === endHour && currentMinute > endMinute) return true;
+
+        return false;
+      } catch {
+        return false;
+      }
+    };
+
+    // Filter out rooms where all exams have ended, then get distinct rooms
+    const activeRooms = new Set<string>();
+    for (const record of testRecords) {
+      if (record.room_test && !isExamEnded(record.time_test)) {
+        activeRooms.add(record.room_test);
+      }
+    }
+
+    const roomList = Array.from(activeRooms).sort();
 
     return {
       rooms: roomList,

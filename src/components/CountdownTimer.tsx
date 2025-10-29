@@ -118,7 +118,7 @@ export const CountdownTimer = memo(function CountdownTimer({
           </div>
 
           {/* Desktop: Vertical Divider */}
-          <div className="hidden lg:block h-64 w-px relative">
+          <div className="hidden lg:block h-64 w-[5px] relative">
             <div
               className={`absolute inset-0 ${theme === "dark" ? "bg-gradient-to-b from-transparent via-green-500/50 to-transparent" : "bg-gradient-to-b from-transparent via-green-600/40 to-transparent"}`}
             ></div>

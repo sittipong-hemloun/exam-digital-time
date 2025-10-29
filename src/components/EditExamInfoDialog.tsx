@@ -239,11 +239,7 @@ export const EditExamInfoDialog = memo(function EditExamInfoDialog({
           </Button>
           <Button
             onClick={handleConfirm}
-            className={`text-base px-6 h-11 rounded-lg text-white ${
-              theme === "dark"
-                ? "bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-500 hover:to-blue-500"
-                : "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-400 hover:to-blue-400"
-            } transition-all duration-300 shadow-lg`}
+            className={`text-base px-8 h-11 rounded-lg bg-gradient-to-r ${themeClasses.gradient} text-white font-semibold hover:opacity-95 shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50`}
           >
             {getTranslation("confirm", language)}
           </Button>

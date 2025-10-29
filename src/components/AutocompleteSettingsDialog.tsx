@@ -53,6 +53,31 @@ export const AutocompleteSettingsDialog = memo(
     const [isSearching, setIsSearching] = useState(false);
     const [showSelectDialog, setShowSelectDialog] = useState(false);
 
+    // Check if exam time has passed
+    const isExamTimePassed = useCallback((timeTest: string) => {
+      try {
+        // Parse time_test format: "12.00-14.00" or "12.00-14.00 น."
+        const timeMatch = timeTest.match(/(\d{1,2})\.(\d{2})-(\d{1,2})\.(\d{2})/);
+        if (!timeMatch) return false;
+
+        const endHour = parseInt(timeMatch[3], 10);
+        const endMinute = parseInt(timeMatch[4], 10);
+
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+
+        // Compare end time with current time
+        if (currentHour > endHour) return true;
+        if (currentHour === endHour && currentMinute > endMinute) return true;
+
+        return false;
+      } catch (error) {
+        console.error("Error parsing time_test:", error);
+        return false;
+      }
+    }, []);
+
     const handleSelectRoom = useCallback(
       async (room: string) => {
         if (!latestSemester) {
@@ -84,18 +109,23 @@ export const AutocompleteSettingsDialog = memo(
 
           const records = result.records || [];
 
-          if (records.length === 0) {
+          // Filter out exams that have already ended
+          const activeRecords = records.filter(
+            (record) => !isExamTimePassed(record.time_test)
+          );
+
+          if (activeRecords.length === 0) {
             alert(
               language === "th"
-                ? "ไม่พบข้อมูลสอบ"
-                : "No exam records found"
+                ? "ไม่พบข้อมูลสอบ หรือการสอบทั้งหมดหมดเวลาแล้ว"
+                : "No active exam records found or all exams have ended"
             );
-          } else if (records.length === 1) {
-            onConfirm(records[0]);
+          } else if (activeRecords.length === 1) {
+            onConfirm(activeRecords[0]);
             setRoomValue("");
             onOpenChange(false);
           } else {
-            setSearchResults(records);
+            setSearchResults(activeRecords);
             setShowSelectDialog(true);
           }
         } catch (error) {
@@ -109,24 +139,51 @@ export const AutocompleteSettingsDialog = memo(
           setIsSearching(false);
         }
       },
-      [latestSemester, language, onConfirm, onOpenChange]
+      [latestSemester, language, onConfirm, onOpenChange, isExamTimePassed]
     );
 
-    const handleSelectTestInfo = (testInfo: TestInfo) => {
-      // Use remarks from dialog if provided
-      if (remarks.trim()) {
-        // Append to existing remarks if any
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const existingRemarks = (testInfo as any).remarks || "";
-        const updatedRemarks =
-          existingRemarks && remarks
-            ? existingRemarks + "\n" + remarks
-            : remarks || existingRemarks;
-        const updatedTestInfo = { ...testInfo, remarks: updatedRemarks };
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onConfirm(updatedTestInfo as any);
+    const handleSelectTestInfo = (testInfos: TestInfo[]) => {
+      // Merge multiple test infos into one
+      if (testInfos.length === 1) {
+        const testInfo = testInfos[0];
+        // Use remarks from dialog if provided
+        if (remarks.trim()) {
+          // Append to existing remarks if any
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const existingRemarks = (testInfo as any).remarks || "";
+          const updatedRemarks =
+            existingRemarks && remarks
+              ? existingRemarks + "\n" + remarks
+              : remarks || existingRemarks;
+          const updatedTestInfo = { ...testInfo, remarks: updatedRemarks };
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onConfirm(updatedTestInfo as any);
+        } else {
+          onConfirm(testInfo);
+        }
       } else {
-        onConfirm(testInfo);
+        // Multiple test infos - merge them
+        const mergedInfo: TestInfo = {
+          ...testInfos[0],
+          cs_code: testInfos.map((t) => t.cs_code).join(" / "),
+          course_name: testInfos
+            .map((t) => t.course_name || t.course_nam || "-")
+            .join(" / "),
+          course_nam: null,
+          sec_lec1: testInfos.map((t) => t.sec_lec1 || "-").join(" / "),
+          sec_lab1: testInfos
+            .map((t) => (t.sec_lab1 === "0" ? "-" : t.sec_lab1 || "-"))
+            .join(" / "),
+        };
+
+        if (remarks.trim()) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const updatedTestInfo = { ...mergedInfo, remarks: remarks } as any;
+          onConfirm(updatedTestInfo);
+        } else {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onConfirm(mergedInfo as any);
+        }
       }
       setRoomValue("");
       setRemarks("");
