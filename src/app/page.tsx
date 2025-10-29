@@ -30,7 +30,7 @@ export default function Home() {
   // UI State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [fontSize, setFontSize] = useState(3);
+  const [fontSize, setFontSize] = useState(5);
   const [language, setLanguage] = useState<Language>("th");
   const [theme, setTheme] = useState<Theme>("dark");
   const [isMounted, setIsMounted] = useState(false);
@@ -190,6 +190,7 @@ export default function Home() {
           <Logo language={language} />
           <ControlButtons
             theme={theme}
+            ThemeClasses={themeClasses}
             language={language}
             fontSize={fontSize}
             isFullscreen={isFullscreen}

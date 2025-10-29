@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Settings, Plus, Minus, Sun, Moon, Maximize, Minimize } from "lucide-react";
 import { getTranslation, type Language } from "@/lib/translations";
 import { LanguageFlag } from "@/components/LanguageFlag";
-import type { Theme } from "@/lib/themeConstants";
+import type { Theme, ThemeClasses } from "@/lib/themeConstants";
 
 interface ControlButtonsProps {
   theme: Theme;
+  ThemeClasses: ThemeClasses;
   language: Language;
   fontSize: number;
   isFullscreen: boolean;
@@ -35,21 +36,22 @@ const getTextColor = (theme: Theme): string => {
 const FontSizeControls = memo(function FontSizeControls({
   fontSize,
   theme,
+  ThemeClasses,
   language,
   onDecreaseFontSize,
   onIncreaseFontSize,
 }: {
   fontSize: number;
   theme: Theme;
+  ThemeClasses: ThemeClasses;
   language: Language;
   onDecreaseFontSize: () => void;
   onIncreaseFontSize: () => void;
 }) {
   return (
     <div
-      className={`flex gap-2 backdrop-blur-lg rounded-full px-3 py-2 border border-white/20 ${
-        theme === "dark" ? "bg-white/5" : "bg-black/5"
-      } transition-colors duration-500`}
+      className={`flex gap-2 backdrop-blur-lg rounded-full px-3 py-2 border ${ThemeClasses.cardBorder} ${theme === "dark" ? "bg-white/5" : "bg-black/5"
+        } transition-colors duration-500`}
     >
       <Button
         variant="ghost"
@@ -79,23 +81,24 @@ const FontSizeControls = memo(function FontSizeControls({
 const LanguageToggle = memo(function LanguageToggle({
   language,
   theme,
+  ThemeClasses,
   onToggleLanguage,
 }: {
   language: Language;
   theme: Theme;
+  ThemeClasses: ThemeClasses;
   onToggleLanguage: () => void;
 }) {
   const textColor = getTextColor(theme);
   const buttonBg = getButtonBgClasses(theme);
 
   return (
-    <div className={`rounded-full px-2 py-2 backdrop-blur-lg border border-white/20 ${buttonBg} flex items-center gap-1`}>
+    <div className={`rounded-full px-2 py-2 backdrop-blur-lg border ${ThemeClasses.cardBorder} ${buttonBg} flex items-center gap-1`}>
       <Button
         variant="ghost"
         onClick={onToggleLanguage}
-        className={`rounded-full px-3 h-10 gap-2 ${textColor} hover:bg-white/10 flex items-center font-medium transition-all duration-300 ${
-          language === "th" ? `${theme === "dark" ? "bg-white/10" : "bg-black/10"}` : ""
-        }`}
+        className={`rounded-full px-3 h-10 gap-2 ${textColor} hover:bg-white/10 flex items-center font-medium transition-all duration-300 ${language === "th" ? `${theme === "dark" ? "bg-white/10" : "bg-black/10"}` : ""
+          }`}
         title={getTranslation("changeLanguage", language)}
       >
         <LanguageFlag language="th" className="w-5 h-4" />
@@ -107,9 +110,8 @@ const LanguageToggle = memo(function LanguageToggle({
       <Button
         variant="ghost"
         onClick={onToggleLanguage}
-        className={`rounded-full px-3 h-10 gap-2 ${textColor} hover:bg-white/10 flex items-center font-medium transition-all duration-300 ${
-          language === "en" ? `${theme === "dark" ? "bg-white/10" : "bg-black/10"}` : ""
-        }`}
+        className={`rounded-full px-3 h-10 gap-2 ${textColor} hover:bg-white/10 flex items-center font-medium transition-all duration-300 ${language === "en" ? `${theme === "dark" ? "bg-white/10" : "bg-black/10"}` : ""
+          }`}
         title={getTranslation("changeLanguage", language)}
       >
         <LanguageFlag language="en" className="w-5 h-4" />
@@ -122,10 +124,12 @@ const LanguageToggle = memo(function LanguageToggle({
 // Memoized theme toggle
 const ThemeToggle = memo(function ThemeToggle({
   theme,
+  ThemeClasses,
   language,
   onToggleTheme,
 }: {
   theme: Theme;
+  ThemeClasses: ThemeClasses;
   language: Language;
   onToggleTheme: () => void;
 }) {
@@ -137,9 +141,8 @@ const ThemeToggle = memo(function ThemeToggle({
       variant="ghost"
       size="icon"
       onClick={onToggleTheme}
-      className={`rounded-full h-14 w-14 ${buttonBg} ${
-        theme === "dark" ? "text-yellow-400" : textColor
-      } border border-white/20 backdrop-blur-lg`}
+      className={`rounded-full h-14 w-14 ${buttonBg} ${theme === "dark" ? "text-yellow-400" : textColor
+        } border ${ThemeClasses.cardBorder} backdrop-blur-lg`}
       title={getTranslation("changeTheme", language)}
     >
       {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -151,11 +154,13 @@ const ThemeToggle = memo(function ThemeToggle({
 const FullscreenToggle = memo(function FullscreenToggle({
   isFullscreen,
   theme,
+  ThemeClasses,
   language,
   onToggleFullscreen,
 }: {
   isFullscreen: boolean;
   theme: Theme;
+  ThemeClasses: ThemeClasses;
   language: Language;
   onToggleFullscreen: () => void;
 }) {
@@ -166,7 +171,7 @@ const FullscreenToggle = memo(function FullscreenToggle({
     <Button
       variant="ghost"
       onClick={onToggleFullscreen}
-      className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border border-white/20 backdrop-blur-lg flex items-center`}
+      className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border ${ThemeClasses.cardBorder} backdrop-blur-lg flex items-center`}
       title={
         isFullscreen
           ? getTranslation("exitFullscreen", language)
@@ -195,10 +200,12 @@ const FullscreenToggle = memo(function FullscreenToggle({
 // Memoized settings button
 const SettingsButton = memo(function SettingsButton({
   theme,
+  ThemeClasses,
   language,
   onOpenSettings,
 }: {
   theme: Theme;
+  ThemeClasses: ThemeClasses;
   language: Language;
   onOpenSettings: () => void;
 }) {
@@ -209,7 +216,7 @@ const SettingsButton = memo(function SettingsButton({
     <Button
       variant="ghost"
       onClick={onOpenSettings}
-      className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border border-white/20 backdrop-blur-lg flex items-center`}
+      className={`rounded-full px-4 h-14 gap-2 ${buttonBg} ${textColor} border ${ThemeClasses.cardBorder} backdrop-blur-lg flex items-center`}
       title={getTranslation("settings", language)}
     >
       <Settings className="h-5 w-5" />
@@ -222,6 +229,7 @@ const SettingsButton = memo(function SettingsButton({
 
 export const ControlButtons = memo(function ControlButtons({
   theme,
+  ThemeClasses,
   language,
   fontSize,
   isFullscreen,
@@ -237,28 +245,32 @@ export const ControlButtons = memo(function ControlButtons({
       <FontSizeControls
         fontSize={fontSize}
         theme={theme}
+        ThemeClasses={ThemeClasses}
         language={language}
         onDecreaseFontSize={onDecreaseFontSize}
         onIncreaseFontSize={onIncreaseFontSize}
       />
 
-      <ThemeToggle theme={theme} language={language} onToggleTheme={onToggleTheme} />
+      <ThemeToggle theme={theme} ThemeClasses={ThemeClasses} language={language} onToggleTheme={onToggleTheme} />
 
       <LanguageToggle
         language={language}
         theme={theme}
+        ThemeClasses={ThemeClasses}
         onToggleLanguage={onToggleLanguage}
       />
 
       <FullscreenToggle
         isFullscreen={isFullscreen}
         theme={theme}
+        ThemeClasses={ThemeClasses}
         language={language}
         onToggleFullscreen={onToggleFullscreen}
       />
 
       <SettingsButton
         theme={theme}
+        ThemeClasses={ThemeClasses}
         language={language}
         onOpenSettings={onOpenSettings}
       />
