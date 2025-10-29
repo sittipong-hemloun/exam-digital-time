@@ -9,7 +9,7 @@ echo "🚀 Starting deployment process..."
 
 # Step 1: Git pull
 echo ""
-echo "📥 Step 1/3: Pulling latest code from git..."
+echo "📥 Step 1/5: Pulling latest code from git..."
 git pull
 
 if [ $? -ne 0 ]; then
@@ -19,9 +19,21 @@ fi
 
 echo "✅ Git pull completed successfully"
 
-# Step 2: Build
+# Step 2: Install dependencies
 echo ""
-echo "🔨 Step 2/3: Building project..."
+echo "📦 Step 2/5: Installing dependencies..."
+npm install
+
+if [ $? -ne 0 ]; then
+  echo "❌ npm install failed. Aborting deployment."
+  exit 1
+fi
+
+echo "✅ Dependencies installed successfully"
+
+# Step 3: Build
+echo ""
+echo "🔨 Step 3/5: Building project..."
 npm run build
 
 if [ $? -ne 0 ]; then
@@ -31,17 +43,30 @@ fi
 
 echo "✅ Build completed successfully"
 
-# Step 3: Reload PM2
+# Step 4: Generate Prisma Client
 echo ""
-echo "🔄 Step 3/3: Reloading PM2..."
-pm2 reload exam-digital-time
+echo "🗄️  Step 4/5: Generating Prisma client..."
+pm2 stop exam-digital-time
+npx prisma generate
 
 if [ $? -ne 0 ]; then
-  echo "❌ PM2 reload failed."
+  echo "❌ Prisma generate failed. Aborting deployment."
   exit 1
 fi
 
-echo "✅ PM2 reload completed successfully"
+echo "✅ Prisma client generated successfully"
+
+# Step 5: Reload PM2
+echo ""
+echo "🔄 Step 5/5: Reloading PM2..."
+pm2 start exam-digital-time
+
+if [ $? -ne 0 ]; then
+  echo "❌ PM2 start failed."
+  exit 1
+fi
+
+echo "✅ PM2 reloaded successfully"
 
 # Done
 echo ""
