@@ -34,6 +34,18 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
     [fontSize]
   );
 
+  // Format time from "12.00-15.00" to "12:00-15:00"
+  const formattedTime = useMemo(() => {
+    if (!examInfo.time) return "";
+    return examInfo.time.replace(/\./g, ":");
+  }, [examInfo.time]);
+
+  // Format exam room by removing "(... ที่)" pattern
+  const formattedExamRoom = useMemo(() => {
+    if (!examInfo.examRoom) return "";
+    return examInfo.examRoom.replace(/\s*\([^)]*ที่\)\s*/g, "").trim();
+  }, [examInfo.examRoom]);
+
   if (!hasExamInfo) {
     return null;
   }
@@ -82,7 +94,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
                 {getTranslation("examTime", language)}
               </span>
               <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
-                {examInfo.time}
+                {formattedTime}
               </span>
             </div>
           )}
@@ -130,7 +142,7 @@ export const ExamInfoDisplay = memo(function ExamInfoDisplay({
                 {getTranslation("examRoom", language)}
               </span>
               <span className={`${themeClasses.text} font-semibold transition-colors duration-500`}>
-                {examInfo.examRoom}
+                {formattedExamRoom}
               </span>
             </div>
           )}
