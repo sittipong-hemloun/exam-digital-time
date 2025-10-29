@@ -54,7 +54,7 @@ const translations: TranslationMap = {
     en: "Able to submit exam after 1 hour of starting time",
   },
   sourceAttribution: {
-    th: "ที่มา: คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2025). Retrieved from https://ms.src.ku.ac.th/time",
+    th: "ต้นฉบับ: คณะวิทยาการจัดการ มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา. (2025). Retrieved from https://ms.src.ku.ac.th/time",
     en: "Source: Faculty of Management Sciences, Kasetsart University Sriracha Campus. (2025). Retrieved from https://ms.src.ku.ac.th/time",
   },
   timeRemaining: { th: "เวลาที่เหลือ", en: "Time Remaining" },
