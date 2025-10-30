@@ -1,0 +1,149 @@
+name: Deploy to IIS Server
+
+on:
+  push:
+    branches:
+      - main  # Deploy when pushing to main branch
+  workflow_dispatch:  # Allow manual trigger from GitHub UI
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Build application
+        run: npm run build:iis
+        env:
+          NODE_ENV: production
+      
+      - name: Create deployment package
+        run: |
+          mkdir -p deployment
+          cp -r out/* deployment/
+          cp web.config deployment/ 2>/dev/null || echo "web.config not found, skipping"
+          cd deployment && tar -czf ../deployment.tar.gz . && cd ..
+      
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-package
+          path: deployment.tar.gz
+          retention-days: 7
+
+  deploy-to-iis:
+    name: Deploy to IIS
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deployment-package
+      
+      - name: Upload deployment package to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.IIS_SERVER_HOST }}
+          username: ${{ secrets.IIS_SERVER_USER }}
+          key: ${{ secrets.IIS_SERVER_SSH_KEY }}
+          port: ${{ secrets.IIS_SERVER_PORT || 22 }}
+          source: "deployment.tar.gz"
+          target: "C:/Temp/"
+      
+      - name: Deploy to IIS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.IIS_SERVER_HOST }}
+          username: ${{ secrets.IIS_SERVER_USER }}
+          key: ${{ secrets.IIS_SERVER_SSH_KEY }}
+          port: ${{ secrets.IIS_SERVER_PORT || 22 }}
+          script_stop: true
+          command_timeout: 10m
+          script: |
+            # PowerShell script to deploy to IIS
+            powershell -Command "
+            \$ErrorActionPreference = 'Stop'
+            \$AppName = 'exam-digital-time'
+            \$DeployPath = 'C:\inetpub\wwwroot\exam-digital-time'
+            \$BackupPath = 'C:\inetpub\backups\exam-digital-time-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
+            \$TempPackage = 'C:\Temp\deployment.tar.gz'
+            
+            Write-Host '🚀 Starting IIS deployment...'
+            
+            # Create backup directory if not exists
+            if (-not (Test-Path 'C:\inetpub\backups')) {
+              New-Item -Path 'C:\inetpub\backups' -ItemType Directory | Out-Null
+            }
+            
+            # Backup existing deployment
+            if (Test-Path \$DeployPath) {
+              Write-Host '📦 Creating backup...'
+              Copy-Item -Path \$DeployPath -Destination \$BackupPath -Recurse
+              Write-Host '✅ Backup created at:' \$BackupPath
+            }
+            
+            # Stop IIS App Pool
+            Write-Host '⏸️  Stopping IIS Application Pool...'
+            Import-Module WebAdministration
+            Stop-WebAppPool -Name \$AppName -ErrorAction SilentlyContinue
+            Start-Sleep -Seconds 3
+            
+            # Clear deployment directory
+            Write-Host '🗑️  Clearing deployment directory...'
+            if (Test-Path \$DeployPath) {
+              Remove-Item -Path \$DeployPath\* -Recurse -Force -ErrorAction SilentlyContinue
+            } else {
+              New-Item -Path \$DeployPath -ItemType Directory | Out-Null
+            }
+            
+            # Extract deployment package
+            Write-Host '📂 Extracting deployment package...'
+            tar -xzf \$TempPackage -C \$DeployPath
+            
+            # Clean up temp file
+            Remove-Item -Path \$TempPackage -Force -ErrorAction SilentlyContinue
+            
+            # Start IIS App Pool
+            Write-Host '▶️  Starting IIS Application Pool...'
+            Start-WebAppPool -Name \$AppName
+            Start-Sleep -Seconds 2
+            
+            # Verify deployment
+            \$poolState = (Get-WebAppPoolState -Name \$AppName).Value
+            if (\$poolState -eq 'Started') {
+              Write-Host '✅ Deployment completed successfully!'
+              Write-Host '📊 Application Pool Status:' \$poolState
+            } else {
+              Write-Host '❌ Application Pool failed to start'
+              exit 1
+            }
+            "
+      
+      - name: Deployment Summary
+        if: always()
+        run: |
+          if [ ${{ job.status }} == 'success' ]; then
+            echo "✅ Deployment to IIS completed successfully"
+            echo "📍 Server: ${{ secrets.IIS_SERVER_HOST }}"
+            echo "📁 Path: C:\inetpub\wwwroot\exam-digital-time"
+          else
+            echo "❌ Deployment to IIS failed"
+            exit 1
+          fi
